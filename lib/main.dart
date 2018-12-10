@@ -48,7 +48,7 @@ class MyHomePage extends StatefulWidget {
           margin: EdgeInsets.all(10.0),
           width: 250,
           child: Form(child: TextField()),),
-
+//
         RaisedButton(onPressed: (){
           Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
           child: Text('Student'),),

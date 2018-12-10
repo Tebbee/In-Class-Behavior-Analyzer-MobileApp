@@ -15,7 +15,7 @@ class InstructorMapView extends StatelessWidget {
     );
   }
 }
-
+//
 class InstructorMapPage extends StatefulWidget {
   InstructorMapPage({Key key, this.title}) : super(key: key);
 
