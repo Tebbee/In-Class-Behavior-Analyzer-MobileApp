@@ -1,6 +1,6 @@
 import 'package:behavior_analyzer/StudentDemographicsPage.dart';
 import 'package:behavior_analyzer/StudentSurveyExample.dart';
-import 'package:behavior_analyzer/main.dart';
+import 'package:behavior_analyzer/InitialOpenedApp.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(StudentMainView());

@@ -1,7 +1,7 @@
 import 'package:behavior_analyzer/InstructorDemographicsView.dart';
 import 'package:behavior_analyzer/InstructorMapView.dart';
 import 'package:behavior_analyzer/InstructorSurveyView.dart';
-import 'package:behavior_analyzer/main.dart';
+import 'package:behavior_analyzer/InitialOpenedApp.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(InstructorMainView());
