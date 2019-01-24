@@ -48,6 +48,9 @@ class RegisterPageState extends State<RegisterPage> {
         testString = "Password cannot be blank";
         return;
       }
+
+      // No password validation
+
       for (counter = 0; counter < studentUsernameList.length; counter++) {
         if (usernameTextBox.toLowerCase() ==
             studentUsernameList[counter].toLowerCase()) {
