@@ -48,21 +48,26 @@ class RegisterPageState extends State<RegisterPage> {
         testString = "Password cannot be blank";
         return;
       }
-
-      // No password validation
-
-      for (counter = 0; counter < studentUsernameList.length; counter++) {
-        if (usernameTextBox.toLowerCase() ==
-            studentUsernameList[counter].toLowerCase()) {
-          return;
-        }
+      if (usernameTextBox.length < 6){
+        testString = "Username must be at least 7 characters";
+        return;
       }
-      for (counter = 0; counter < instructorUsernameList.length; counter++) {
-        if (usernameTextBox.toLowerCase() ==
-            instructorUsernameList[counter].toLowerCase()) {
-          return;
-        }
+      if (passwordTextBox.length <= 8){
+        testString = "Username must be at least 8 characters";
+        return;
       }
+      if (emailTextBox.isEmpty){
+        testString = "We need an email to send this to!";
+        return;
+      }
+      else{
+        if (emailList.contains(emailTextBox.toString())){
+          testString ="sent";
+          studentUsernameList.add(usernameTextBox.toString());
+      }
+
+      }
+
     }
     );}
 
