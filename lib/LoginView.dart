@@ -100,13 +100,9 @@ class LoginPageState extends State<LoginPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     new Container(
-                      margin: EdgeInsets.all(5.0),
-                      child: new RaisedButton(
-                        onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => LoginView()));},
-                        child: new Text("Login", style: new TextStyle(color: Colors.red,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                        color: Colors.white,
-                        elevation: 0,
-                      ),
+                      margin: EdgeInsets.all(25.0),
+                      child: new Text("Login", style: new TextStyle(color: Colors.red,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                      color: Colors.white,
                     ),
                     new Container(
                       margin: EdgeInsets.all(5.0),

@@ -1,5 +1,3 @@
-import 'package:behavior_analyzer/InstructorMainView.dart';
-import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:behavior_analyzer/RegisterView.dart';
 import 'package:behavior_analyzer/LoginView.dart';
 import 'package:behavior_analyzer/FeedbackView.dart';
@@ -30,44 +28,6 @@ class MyHomePage extends StatefulWidget {
   }
 
   class _MyHomePageState extends State<MyHomePage> {
-    List<String> studentUsernameList = ["student"];
-    List<String> studentPasswordList = ["student"];
-    List<String> instructorUsernameList = ["teacher"];
-    List<String> instructorPasswordList = ["teacher"];
-    String usernameTextBox = "";
-    String passwordTextBox = "";
-    String testString = "";
-    int counter;
-
-    void loginButton(){
-      setState(() {
-      if (usernameTextBox.isEmpty){
-        testString = "Username cannot be blank";
-        return;
-      }
-      if (passwordTextBox.isEmpty){
-        testString = "Password cannot be blank";
-        return;
-      }
-      for (counter = 0; counter < studentUsernameList.length; counter++){
-        if (usernameTextBox.toLowerCase() == studentUsernameList[counter].toLowerCase()){
-          if(studentPasswordList[counter] == passwordTextBox){
-            Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
-            return;
-          }
-        }
-      }
-      for (counter = 0; counter < instructorUsernameList.length; counter++){
-        if (usernameTextBox.toLowerCase() == instructorUsernameList[counter].toLowerCase()){
-          if(instructorPasswordList[counter] == passwordTextBox){
-            Navigator.push(context,new MaterialPageRoute(builder: (context) => InstructorMainView()));
-            return;
-          }
-        }
-      }
-    });
-    }
-
   @override
   Widget build(BuildContext context) {
 
@@ -89,32 +49,6 @@ class MyHomePage extends StatefulWidget {
         ),
         new Text("Ball State University",
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0), textAlign: TextAlign.center,),
-        new Text(testString,
-        style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red)),
-
-       /* new TextField(
-          decoration: new InputDecoration(
-              hintText: "Username"),
-              textAlign: TextAlign.center,
-              key: loginButtonChange(),
-              onSubmitted: (String usernameSubmission){
-            setState((){
-              usernameTextBox = usernameSubmission;
-            });},
-        ),
-
-        new TextField(
-          decoration: new InputDecoration(
-              hintText: "Password"),
-              obscureText: true,
-              textAlign: TextAlign.center,
-              key: loginButtonChange(),
-              onSubmitted: (String passwordSubmission){
-            setState((){
-              passwordTextBox = passwordSubmission;
-            });},
-
-        ),*/
 
         new Row(
             mainAxisAlignment: MainAxisAlignment.center,

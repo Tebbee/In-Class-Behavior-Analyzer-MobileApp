@@ -28,9 +28,9 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends State<RegisterPage> {
-  List<String> studentUsernameList = ["student"];
-  List<String> instructorUsernameList = ["teacher"];
-  List<String> emailList = ["student@bsu"];
+  List<String> usernameList = ["student"];
+  List<String> passwordList = ["student"];
+  List<String> emailList = ["student@bsu.edu"];
 
   String usernameTextBox = "";
   String passwordTextBox = "";
@@ -42,24 +42,41 @@ class RegisterPageState extends State<RegisterPage> {
     setState(() {
       if (usernameTextBox.isEmpty) {
         testString = "Username cannot be blank";
-        return;
-      }
+        return;}
+
+      if (usernameTextBox.length < 6){
+        testString = "Username must be at least 7 characters";
+        return;}
+
+      for(String userName in usernameList){
+        if (usernameTextBox.toLowerCase() == userName.toLowerCase()){
+          testString = "Username already taken, please choose another.";}
+          return;}
+
       if (passwordTextBox.isEmpty) {
         testString = "Password cannot be blank";
-        return;
-      }
-      for (counter = 0; counter < studentUsernameList.length; counter++) {
+        return;}
+
+      if (passwordTextBox.length <= 8){
+        testString = "Username must be at least 8 characters";
+        return;}
+
+      if (emailTextBox.isEmpty){
+        testString = "We need an email to send this to!";
+        return;}
+
+      for (String email in emailList){
+        if (emailTextBox.toString().toLowerCase() == email.toString().toLowerCase()){
+          testString = "This email was already used, try the 'Forgot password' option under 'Login'";}
+          return;}
+
+
+      for (counter = 0; counter < usernameList.length; counter++) {
         if (usernameTextBox.toLowerCase() ==
-            studentUsernameList[counter].toLowerCase()) {
-          return;
-        }
+            usernameList[counter].toLowerCase()) {
+          return;}
       }
-      for (counter = 0; counter < instructorUsernameList.length; counter++) {
-        if (usernameTextBox.toLowerCase() ==
-            instructorUsernameList[counter].toLowerCase()) {
-          return;
-        }
-      }
+
     }
     );}
 
@@ -103,17 +120,12 @@ class RegisterPageState extends State<RegisterPage> {
                         color: Colors.red,
                       ),
                     ),
-
                     new Container(
-                      margin: EdgeInsets.all(5.0),
-                      child: new RaisedButton(
-                        onPressed: registerButton,
-                        child: new Text("Register", style: new TextStyle(color: Colors.red,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                        color: Colors.white,
-                        elevation: 0,
-
-                      ),
+                      margin: EdgeInsets.all(15.0),
+                      child: new Text("Register", style: new TextStyle(color: Colors.red,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                      color: Colors.white,
                     ),
+
                     new Container(
                       margin: EdgeInsets.all(5.0),
                       child: new RaisedButton(
@@ -160,7 +172,7 @@ class RegisterPageState extends State<RegisterPage> {
                     new Container(
                       margin: EdgeInsets.all(5.0),
                       child: new RaisedButton(
-                        onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));},
+                        onPressed:registerButton,
                         child: new Text("Register", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                         color: Colors.red,
                       ),

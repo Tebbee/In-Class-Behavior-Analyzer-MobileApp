@@ -1,4 +1,5 @@
-import 'package:behavior_analyzer/InitialOpenedApp.dart';
+import 'package:behavior_analyzer/LoginView.dart';
+import 'package:behavior_analyzer/RegisterView.dart';
 import 'package:behavior_analyzer/SubmissionView.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +17,6 @@ class FeedbackView extends StatelessWidget {
   }
 }
 
-
-
 class FeedbackPage extends StatefulWidget {
   FeedbackPage({Key key, this.title}) : super(key: key);
 
@@ -29,13 +28,6 @@ class FeedbackPage extends StatefulWidget {
 class FeedbackPageState extends State<FeedbackPage> {
   @override
   Widget build(BuildContext context) {
-    String testString;
-    List<String> FeedbackList = [""];
-
-    submitButton(){
-
-    }
-
     return Scaffold(
         resizeToAvoidBottomPadding: true,
         appBar: AppBar(
@@ -43,52 +35,81 @@ class FeedbackPageState extends State<FeedbackPage> {
         ),
         body:
         SingleChildScrollView(
-        child: new Container(
-          margin: EdgeInsets.all(10.0),
-          child: new Column(
+            child: new Container(
+              margin: EdgeInsets.all(10.0),
+              child: new Column(
 
 
-              children: <Widget>[
+                  children: <Widget>[
+                    Card(child: Image.asset('assets/Benny2.jpg'),
+                      margin: EdgeInsets.all(10.0),
+                      elevation: 0,
 
-                new Text("Welcome to the feedback page. Here, all of your opinions can be heard and possible fixes can be scrutinized.\n"
-                    "All submissions are 100% anonymous as well.",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15.0), textAlign: TextAlign.center, softWrap: true,),
+                    ),
+                    new Text("Ball State University",
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0), textAlign: TextAlign.center,),
 
-                new TextField(
-                  decoration: new InputDecoration(
-                      hintText: "Feedback"),
-                  textAlign: TextAlign.center,
-                  onSubmitted: (String usernameSubmission){
-                    setState((){
-                      testString = usernameSubmission;
-                    });},
-                ),
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          margin: EdgeInsets.all(5.0),
+                          child: new RaisedButton(
+                            onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => LoginView()));},
+                            child: new Text("Login", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                            color: Colors.red,
+                          ),
+                        ),
 
+                        new Container(
+                          margin: EdgeInsets.all(5.0),
+                          child: new RaisedButton(
+                            onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => RegisterView()));},
+                            child: new Text("Register", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                            color: Colors.red,
+                          ),
+                        ),
 
-                new Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: new RaisedButton(
-                    onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));},
-                    child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                    color: Colors.red,
-                    elevation: 0,
-                  ),
-                ),
-                new Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: new RaisedButton(
-                    onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));},
-                    child: new Text("Back", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                    color: Colors.red,
-                  ),
-                ),
-              ]
-          ),
-        )
+                        new Container(
+                          margin: EdgeInsets.all(15.0),
+                          child: new Text("Feedback", style: new TextStyle(color: Colors.red,fontStyle: FontStyle.italic,fontSize: 15.0),textAlign: TextAlign.center,),
+                          color: Colors.white,
+                        ),
+
+                      ],
+                    ),
+
+                    new Text("Welcome to the feedback page. \nAll input is 100% anonymous. \nPlease insert any comments/concerns you wish.",
+                      style: new TextStyle(fontSize: 20,
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,),
+                      textAlign: TextAlign.center,),
+                    new TextField(
+                      decoration: new InputDecoration(
+                          hintText: "Feedback"),
+                      textAlign: TextAlign.center,
+                      onSubmitted: (String usernameSubmission){
+                        setState((){
+                         // usernameTextBox = usernameSubmission;
+                        });},
+                    ),
+                    new Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        new Container(
+                          margin: EdgeInsets.all(5.0),
+                          child: new RaisedButton(
+                            onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));},
+                            child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                            color: Colors.red,
+                          ),
+                        ),
+                      ],
+                    )
+                  ]
+              ),
+            )
         )
     );
-
   }
-
-
 }

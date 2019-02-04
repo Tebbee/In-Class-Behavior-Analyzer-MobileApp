@@ -16,8 +16,6 @@ class ForgotPasswordView extends StatelessWidget {
   }
 }
 
-
-
 class ForgotPasswordPage extends StatefulWidget {
   ForgotPasswordPage({Key key, this.title}) : super(key: key);
 
@@ -29,8 +27,15 @@ class ForgotPasswordPage extends StatefulWidget {
 class ForgotPasswordPageState extends State<ForgotPasswordPage> {
   String emailTextBox = "";
   String usernameTextBox = "";
+  String testString = "";
 
-  requestPassword(){
+  void submit() {
+    if (emailTextBox.isEmpty & usernameTextBox.isEmpty){
+      testString = "Please insert a Username or Email";
+    }
+    else{
+      Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));
+    }
 
   }
 
@@ -46,7 +51,8 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
             child: new Column(
                 children: <Widget>[
 
-         new Text("Please fill out on option below", style: new TextStyle(fontSize: 20,),),
+         new Text("Please fill out one option below",
+           style: new TextStyle(fontSize: 20,),),
             new TextField(
             decoration: new InputDecoration(
                 hintText: "Email"),
@@ -58,8 +64,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
         ),
         new Text("Or", style: new TextStyle(fontSize: 20,),),
         new TextField(
-            decoration: new InputDecoration(
-                hintText: "Username"),
+            decoration: new InputDecoration(hintText: "Username"),
             obscureText: true,
             textAlign: TextAlign.center,
             onSubmitted: (String usernameSubmission){
@@ -70,7 +75,7 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
         new Container(
           margin: EdgeInsets.all(5.0),
           child: new RaisedButton(
-          onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));},
+          onPressed: submit,
           child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
           color: Colors.red,
         ),
@@ -82,7 +87,9 @@ class ForgotPasswordPageState extends State<ForgotPasswordPage> {
              child: new Text("Back", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
              color: Colors.red,
            ),
-         )
+         ),
+         new Text(testString,
+           style: new TextStyle(fontSize: 20,),),
                 ]
             )
         )
