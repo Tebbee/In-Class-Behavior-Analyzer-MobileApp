@@ -79,7 +79,7 @@ class FeedbackPageState extends State<FeedbackPage> {
                       ],
                     ),
 
-                    new Text("Welcome to the feedback page. \nAll input is 100% anonymous. \nPlease insert any comments/concerns you wish.",
+                    new Text("Welcome to the feedback page. \nAll input is 100% anonymous. \nPlease insert any comments or concerns you wish.",
                       style: new TextStyle(fontSize: 20,
                         color: Colors.black,
                         fontWeight: FontWeight.bold,),
@@ -88,7 +88,7 @@ class FeedbackPageState extends State<FeedbackPage> {
                       decoration: new InputDecoration(
                           hintText: "Feedback"),
                       textAlign: TextAlign.center,
-                      onSubmitted: (String usernameSubmission){
+                      onChanged: (String usernameSubmission){
                         setState((){
                          // usernameTextBox = usernameSubmission;
                         });},

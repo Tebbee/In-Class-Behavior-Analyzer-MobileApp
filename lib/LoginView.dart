@@ -3,6 +3,7 @@ import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:behavior_analyzer/RegisterView.dart';
 import 'package:behavior_analyzer/FeedbackView.dart';
 import 'package:behavior_analyzer/ForgotPasswordView.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 
 void main() => runApp(LoginView());
@@ -30,10 +31,6 @@ class LoginPage extends StatefulWidget {
 }
 
 class LoginPageState extends State<LoginPage> {
-  List<String> studentUsernameList = ["student"];
-  List<String> studentPasswordList = ["student"];
-  List<String> instructorUsernameList = ["teacher"];
-  List<String> instructorPasswordList = ["teacher"];
   String usernameTextBox = "";
   String passwordTextBox = "";
   String testString = "";
@@ -43,28 +40,18 @@ class LoginPageState extends State<LoginPage> {
     setState(() {
       if (usernameTextBox.isEmpty){
         testString = "Username cannot be blank";
-        return;
-      }
+        return;}
+
       if (passwordTextBox.isEmpty){
         testString = "Password cannot be blank";
-        return;
-      }
-      for (counter = 0; counter < studentUsernameList.length; counter++){
-        if (usernameTextBox.toLowerCase() == studentUsernameList[counter].toLowerCase()){
-          if(studentPasswordList[counter] == passwordTextBox){
-            Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
-            return;
-          }
-        }
-      }
-      for (counter = 0; counter < instructorUsernameList.length; counter++){
-        if (usernameTextBox.toLowerCase() == instructorUsernameList[counter].toLowerCase()){
-          if(instructorPasswordList[counter] == passwordTextBox){
-            Navigator.push(context,new MaterialPageRoute(builder: (context) => InstructorMainView()));
-            return;
-          }
-        }
-      }
+        return;}
+
+
+      var client = new http.Client();
+      client.post(
+          "http://192.168.0.45:8000/api/login/",
+          body: {"username": usernameTextBox, "password": passwordTextBox})
+          .then((response) => testString =(response.body));
     });
   }
 
@@ -126,7 +113,7 @@ class LoginPageState extends State<LoginPage> {
                   decoration: new InputDecoration(
                       hintText: "Username"),
                   textAlign: TextAlign.center,
-                  onSubmitted: (String usernameSubmission){
+                  onChanged: (String usernameSubmission){
                     setState((){
                       usernameTextBox = usernameSubmission;
                     });},
@@ -137,7 +124,7 @@ class LoginPageState extends State<LoginPage> {
                       hintText: "Password"),
                   obscureText: true,
                   textAlign: TextAlign.center,
-                  onSubmitted: (String passwordSubmission){
+                  onChanged: (String passwordSubmission){
                     setState((){
                       passwordTextBox = passwordSubmission;
                     });},
@@ -153,6 +140,7 @@ class LoginPageState extends State<LoginPage> {
                       child: new Text("Login", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                       color: Colors.red,
                     ),),
+
                 new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(

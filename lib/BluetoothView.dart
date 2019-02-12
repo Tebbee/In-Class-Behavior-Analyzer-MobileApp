@@ -11,7 +11,7 @@ class BluetoothView extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: BluetoothPage(title: 'Register Page'),
+      home: BluetoothPage(title: 'Bluetooth Page'),
     );
   }
 }
@@ -27,22 +27,19 @@ class BluetoothPage extends StatefulWidget {
 }
 
 class BluetoothPageState extends State<BluetoothPage> {
-  String BluetoothDevices = "hello";
-  String BluetoothStatus = "Stopped";
+  String BluetoothDevices = "";
+  String BluetoothStatus = "";
+
+  var ids = new List<String>();
 
  Future start() async {
    BluetoothStatus = "Scanning";
    FlutterBlue flutterBlue = FlutterBlue.instance;
    flutterBlue.isOn.then((value1)  {
-       print(value1);
+       BluetoothStatus = (value1.toString());
  }) ;
 
    print("Starting");
-
-   /// Start scanning
-
-   var ids = new List<String>();
-
    var scanSubscription = flutterBlue.scan().listen((scanResult) {
      if (!ids.contains(scanResult.device.id.id)) {
      print("Found " + scanResult.device.id.id);
@@ -60,16 +57,21 @@ class BluetoothPageState extends State<BluetoothPage> {
    //});
 //print(scanSubscription);
 
-
-
  }
  void stop(){
    BluetoothStatus = "Stopped";
-    print("stopped");
-  //
+   return;}
 
- }
+  void refresh(){
+    for(var value in ids){
+      BluetoothDevices = BluetoothDevices + value+"\n";
+    }
+    BluetoothStatus = "REFRESHED";
+    return;
 
+    //
+
+  }
 
 
 
@@ -82,8 +84,11 @@ class BluetoothPageState extends State<BluetoothPage> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: new Container(
+
+        body: SingleChildScrollView(
+        child: new Container(
           margin: EdgeInsets.all(10.0),
+
           child: new Column(
 
 
@@ -113,10 +118,18 @@ class BluetoothPageState extends State<BluetoothPage> {
                     color: Colors.red,
                   ),
                 ),
+                new Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: new RaisedButton(
+                    onPressed: refresh,
+                    child: new Text("Refresh", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                    color: Colors.red,
+                  ),
+                ),
                 new Text(BluetoothDevices),
       ]
     )
     )
-    );
-  }
+    ));
+    }
 }
