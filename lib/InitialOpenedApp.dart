@@ -4,9 +4,9 @@ import 'package:behavior_analyzer/FeedbackView.dart';
 import 'package:behavior_analyzer/BluetoothView.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+void main() => runApp(InitialOpenedApp());
 
-class MyApp extends StatelessWidget {
+class InitialOpenedApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

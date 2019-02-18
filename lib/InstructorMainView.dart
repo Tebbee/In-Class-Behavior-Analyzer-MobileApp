@@ -3,6 +3,7 @@ import 'package:behavior_analyzer/InstructorMapView.dart';
 import 'package:behavior_analyzer/InstructorSurveyView.dart';
 import 'package:behavior_analyzer/InitialOpenedApp.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 void main() => runApp(InstructorMainView());
 class InstructorMainView extends StatelessWidget {
@@ -17,7 +18,6 @@ class InstructorMainView extends StatelessWidget {
     );
   }
 }
-
 
 
 class InstructorPage extends StatefulWidget {
@@ -49,13 +49,24 @@ class InstructorPageState extends State<InstructorPage> {
               RaisedButton(onPressed: (){
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => InstructorMapView()));},
                 child:Text("Class Map"),),
-              RaisedButton(onPressed: (){
-                Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));},
-                child:Text("Log Out"),),
+              new Container(
+                margin: EdgeInsets.all(5.0),
+                child: new RaisedButton(
+                onPressed:logoutButton,
+                child: new Text("Logout", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                color: Colors.red,)
+              )
 
-            ]),
+            ],
       ),
+    )
     );
-//
+
   }
+  void logoutButton(){
+    var url = "http://192.168.0.45:8000/api/logut/";
+    http.get(url)
+        .then((response) {
+        Navigator.push(context,new MaterialPageRoute(builder: (context) => InitialOpenedApp()));
+    });}
 }

@@ -44,7 +44,7 @@ class SubmissionPageState extends State<SubmissionPage> {
           new Container(
             margin: EdgeInsets.all(5.0),
             child: new RaisedButton(
-              onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));},
+              onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => InitialOpenedApp()));},
               child: new Text("Home", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
               color: Colors.red,
             ),

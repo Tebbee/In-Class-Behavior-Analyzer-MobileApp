@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
 
+
 void main() => runApp(BluetoothView());
+
 class BluetoothView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,6 @@ class BluetoothView extends StatelessWidget {
 }
 
 
-
 class BluetoothPage extends StatefulWidget {
   BluetoothPage({Key key, this.title}) : super(key: key);
 
@@ -26,54 +27,100 @@ class BluetoothPage extends StatefulWidget {
   BluetoothPageState createState() => BluetoothPageState();
 }
 
+
 class BluetoothPageState extends State<BluetoothPage> {
   String BluetoothDevices = "";
   String BluetoothStatus = "";
-
+  String AvailabilityTextBox = "";
   var ids = new List<String>();
+  var BeaconNumberOne;
+  var BeaconNumberTwo;
+  var BeaconNumberThree;
+
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+
 
  Future start() async {
-   BluetoothStatus = "Scanning";
-   FlutterBlue flutterBlue = FlutterBlue.instance;
-   flutterBlue.isOn.then((value1)  {
-       BluetoothStatus = (value1.toString());
- }) ;
-
-   print("Starting");
-   var scanSubscription = flutterBlue.scan().listen((scanResult) {
+   print("I STARTED");
+   var bluetoothScan;
+   bluetoothScan = flutterBlue.scan().listen((scanResult)
+   {
      if (!ids.contains(scanResult.device.id.id)) {
-     print("Found " + scanResult.device.id.id);
-     ids.add(scanResult.device.id.id);
-     if (scanResult.device.id.id == "98:01:A7:8F:AC:40") {
-     print("Found my MAC!");
-     }}
+       print("Found " + scanResult.device.id.id);
+       ids.add(scanResult.device.id.id);
+     }
+     return new Future.delayed(const Duration(seconds: 5), () {
+       bluetoothScan.cancel();
+       print("I STOPPED");
      });
-//   BluetoothDevice device;
- //  List<BluetoothService> services = await device.discoverServices();
-  // services.forEach((service) {
-     //print(service);
-     //print(device);
-     // do something with service
-   //});
-//print(scanSubscription);
+   });
+   setState(() {
+     flutterBlue.isOn.then((value1) {
+       BluetoothStatus = (value1.toString());
+     });
+
+
+     AvailabilityTextBox = flutterBlue.isAvailable.toString();
+
+
+   }
+       );
+ }
+
+  stop(){
+   setState(() {
+     ids.clear();
+     BluetoothDevices = "";
+   });
+
 
  }
- void stop(){
-   BluetoothStatus = "Stopped";
-   return;}
+
+
 
   void refresh(){
-    for(var value in ids){
-      BluetoothDevices = BluetoothDevices + value+"\n";
-    }
-    BluetoothStatus = "REFRESHED";
-    return;
+   setState(() {
+     for (var value in ids) {
+       if(BluetoothDevices.indexOf(value)<0) {
+         BluetoothDevices = BluetoothDevices + value + "\n";
+       }
+     }
 
-    //
+     BluetoothStatus = "BlueTooth Devices:";
+     return;
 
+     //
+   });
   }
 
+  button() async{
+    FlutterBlue flutterBlue = FlutterBlue.instance;
+    BluetoothDevice device;
 
+
+    setState((){
+
+   print(BluetoothDeviceState.connected);
+
+
+   print("HERE");
+   var deviceConnection = flutterBlue.connect(device).listen((s) {
+     print("INSIDE");
+     if(s == BluetoothDeviceState.connected) {
+       print("IM HERE");
+       print(device.toString());
+     }
+   });
+
+   /// Disconnect from device
+   deviceConnection.cancel();
+
+
+
+   BluetoothStatus = flutterBlue.isOn.toString();
+   AvailabilityTextBox = flutterBlue.isAvailable.toString();
+  });
+ }
 
 
 
@@ -102,6 +149,8 @@ class BluetoothPageState extends State<BluetoothPage> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                   textAlign: TextAlign.center,),
                 new Text(BluetoothStatus),
+                new Text(BluetoothDevices),
+                new Text(AvailabilityTextBox),
                 new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
@@ -114,7 +163,7 @@ class BluetoothPageState extends State<BluetoothPage> {
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
                     onPressed: stop,
-                    child: new Text("Stop", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                    child: new Text("Clear History", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: Colors.red,
                   ),
                 ),
@@ -126,7 +175,14 @@ class BluetoothPageState extends State<BluetoothPage> {
                     color: Colors.red,
                   ),
                 ),
-                new Text(BluetoothDevices),
+                new Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: new RaisedButton(
+                    onPressed: button,
+                    child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                    color: Colors.red,
+                  ),
+                ),
       ]
     )
     )

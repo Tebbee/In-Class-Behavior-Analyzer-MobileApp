@@ -29,15 +29,61 @@ class RegisterPage extends StatefulWidget {
 }
 
 class RegisterPageState extends State<RegisterPage> {
-  List<String> usernameList = ["student"];
-  List<String> passwordList = ["student"];
-  List<String> emailList = ["student@bsu.edu"];
 
   String usernameTextBox = "";
   String passwordTextBox = "";
   String testString = "";
   String emailTextBox = "";
   int counter;
+
+  void registerButton(){
+    setState(() {
+      testString = "";
+      if (usernameTextBox.toString().isEmpty) {
+        testString = "Username cannot be blank";
+        return;}
+
+      if (usernameTextBox.toString().length < 6){
+        testString = "Username must be at least 7 characters";
+        return;}
+
+      for (String letter in usernameTextBox.split("")){
+        if (letter == "."){
+          testString = "The username cannot have a '.' ";
+          return;
+        }
+        if (letter == "@"){
+          testString = "The username cannot have a '@";
+          return;
+        }}
+
+      if (passwordTextBox.toString().isEmpty) {
+        testString = "Password cannot be blank";
+        return;}
+
+      if (passwordTextBox.length < 8){
+        testString = "Password must be at least 8 characters";
+        return;}
+
+      if (emailTextBox.isEmpty){
+        testString = "We need an email to send this to!";
+        return;}
+
+
+      var url = "http://192.168.0.235:8000/api/register/";
+      http.post(url, body: {"username": usernameTextBox, "password": passwordTextBox, "email": emailTextBox})
+          .then((response) {
+        if (response.body.contains("200")){
+          Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));
+        }
+        if (response.body.contains("6")){
+          testString = "The password is not strong enough, it may be too similar to your username";        }
+      });
+    }
+    );
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -143,63 +189,5 @@ class RegisterPageState extends State<RegisterPage> {
 
 
   }
-  void registerButton(){
-    setState(() {
-      testString = "";
-      if (usernameTextBox.toString().isEmpty) {
-        testString = "Username cannot be blank";
-        return;}
-
-      if (usernameTextBox.toString().length < 6){
-        testString = "Username must be at least 7 characters";
-        return;}
-
-      for(String userName in usernameList){
-        if (usernameTextBox.toLowerCase() == userName.toLowerCase()){
-          testString = "Username already taken, please choose another.";
-          return;}
-        break;}
-
-      for (String letter in usernameTextBox.split("")){
-        if (letter == "."){
-          testString = "The username cannot have a '.' ";
-          return;
-        }
-        if (letter == "@"){
-          testString = "The username cannot have a '@";
-          return;
-        }}
-
-      if (passwordTextBox.toString().isEmpty) {
-        testString = "Password cannot be blank";
-        return;}
-
-      if (passwordTextBox.length < 8){
-        testString = "Password must be at least 8 characters";
-        return;}
-
-      if (emailTextBox.isEmpty){
-        testString = "We need an email to send this to!";
-        return;}
-
-
-
-
-      var url = "http://192.168.0.45:8000/api/register/";
-      http.post(url, body: {"username": usernameTextBox, "password": passwordTextBox, "email": emailTextBox})
-          .then((response) {
-        testString= ("Response body: ${response.body}");
-        if (response.body.contains("200")){
-          Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));
-        }
-      });
-
-
-
-
-
-    }
-
-    );}
 
 }

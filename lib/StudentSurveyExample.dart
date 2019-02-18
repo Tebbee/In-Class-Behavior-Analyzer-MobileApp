@@ -62,7 +62,8 @@ class StudentSurveyState extends State<StudentSurveyPage> {
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child:Text("Exit to main page"),),
 
-            ]),
+            ]
+        ),
       ),
     );
 

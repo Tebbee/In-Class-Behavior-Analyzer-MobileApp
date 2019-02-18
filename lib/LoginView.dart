@@ -49,7 +49,7 @@ class LoginPageState extends State<LoginPage> {
 
       var client = new http.Client();
       client.post(
-          "http://192.168.0.45:8000/api/login/",
+          "http://icba.benlawson.info//api/login/",
           body: {"username": usernameTextBox, "password": passwordTextBox})
           .then((response) => testString =(response.body));
     });
