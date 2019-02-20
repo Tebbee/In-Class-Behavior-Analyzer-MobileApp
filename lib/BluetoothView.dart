@@ -31,88 +31,134 @@ class BluetoothPage extends StatefulWidget {
 
 
 class BluetoothPageState extends State<BluetoothPage> {
-  String BluetoothDevices = "";
-  String BluetoothStatus = "";
-  String AvailabilityTextBox = "";
+  String bluetoothDevices = "";
+  String bluetoothStatus = "";
   var ids = new List<String>();
-  var BeaconNumberOne;
-  var BeaconNumberTwo;
-  var BeaconNumberThree;
+
+  String beaconNumberOne = "88:3F:4A:E5:F6:E2";
+  int beaconOneRssiValue;
+  double beaconOneRssiDistance;
+  List beaconNumberOneValueList = new List<double>();
+  List beaconNumberOneAveragesList = new List<double>();
+
+  String beaconNumberTwo = "";
+  int beaconTwoRssiValue;
+  double beaconTwoRssiDistance;
+  List beaconNumberTwoValueList = new List<double>();
+  List beaconNumberTwoAveragesList = new List<double>();
+
+  String beaconNumberThree = "";
+  int beaconThreeRssiValue;
+  double beaconThreeRssiDistance;
+  List beaconNumberThreeValueList = new List<double>();
+  List beaconNumberThreeAveragesList = new List<double>();
   var bluetoothScan;
-  int rssiValue;
-  double rssiDistance;
-  var beacon = new List<double>();
+
+
   double totalbeaconList = 0.0;
   int counter = 0;
 
-
-
   FlutterBlue flutterBlue = FlutterBlue.instance;
- Future start() async {
+
+  
+ Future beaconOne() async {
    print("I STARTED");
-
-   bluetoothScan = flutterBlue.scan().listen((scanResult)
-
-   {
-     if (!ids.contains(scanResult.device.id.id)) {
-      // print("Found " + scanResult.device.id.id);
-       ids.add(scanResult.device.id.id);
-     }
-
-     rssiValue = scanResult.rssi;
-     rssiDistance = pow(10,(-55 - rssiValue.toDouble()) / (10 * 2));
+   bluetoothScan = flutterBlue.scan().listen((scanResult) {
+   //  if (!ids.contains(scanResult.device.id.id)) {
+   //    ids.add(scanResult.device.id.id);
+   //  }
+     beaconOneRssiValue = scanResult.rssi;
+     beaconOneRssiDistance = pow(10,(-55 - beaconOneRssiValue.toDouble()) / (10 * 2));
      if (scanResult.device.id.id == "88:3F:4A:E5:F6:E2") {
-       print("The mac address is:" + scanResult.device.id.id);
-       print("The distance is: " + rssiDistance.toString() + " meters\n");
-     }
-     if (scanResult.device.id.id == "88:3F:4A:E5:F6:E2"){
-       beacon.add(rssiDistance);
+       print("Beacon One is: " + beaconOneRssiDistance.toString() + " meters away\n");
+       beaconNumberOneValueList.add(beaconOneRssiDistance);
        counter++;
      }
-
-
-     return new Future.delayed(const Duration(seconds: 3), () {
+     return new Future.delayed(const Duration(seconds: 5), () {
        bluetoothScan.cancel();
-
      });
    });
    setState(() {
      flutterBlue.isOn.then((value1) {
-       BluetoothStatus = (value1.toString());
+       bluetoothStatus = (value1.toString());
      });
-
-
-
-
    }
-       );
+   );
  }
+
+  Future beaconTwo() async {
+    print("I STARTED");
+    bluetoothScan = flutterBlue.scan().listen((scanResult) {
+      //  if (!ids.contains(scanResult.device.id.id)) {
+      //    ids.add(scanResult.device.id.id);
+      //  }
+      beaconTwoRssiValue = scanResult.rssi;
+      beaconTwoRssiDistance = pow(10,(-55 - beaconTwoRssiValue.toDouble()) / (10 * 2));
+      if (scanResult.device.id.id == "XX:XX:XX:XX:XX:XX") {
+        print("Beacon Two is: " + beaconTwoRssiDistance.toString() + " meters away\n");
+        beaconNumberTwoValueList.add(beaconTwoRssiDistance);
+        counter++;
+      }
+      return new Future.delayed(const Duration(seconds: 5), () {
+        bluetoothScan.cancel();
+      });
+    });
+    setState(() {
+      flutterBlue.isOn.then((value1) {
+        bluetoothStatus = (value1.toString());
+      });
+    }
+    );
+  }
+  Future beaconThree() async {
+    print("I STARTED");
+    bluetoothScan = flutterBlue.scan().listen((scanResult) {
+      //  if (!ids.contains(scanResult.device.id.id)) {
+      //    ids.add(scanResult.device.id.id);
+      //  }
+      beaconThreeRssiValue = scanResult.rssi;
+      beaconThreeRssiDistance = pow(10,(-55 - beaconThreeRssiValue.toDouble()) / (10 * 2));
+      if (scanResult.device.id.id == "XX:XX:XX:XX:XX:XX") {
+        print("Beacon Three is: " + beaconThreeRssiDistance.toString() + " meters away\n");
+        beaconNumberThreeValueList.add(beaconThreeRssiDistance);
+        counter++;
+      }
+      return new Future.delayed(const Duration(seconds: 5), () {
+        bluetoothScan.cancel();
+      });
+    });
+    setState(() {
+      flutterBlue.isOn.then((value1) {
+        bluetoothStatus = (value1.toString());
+      });
+    }
+    );
+  }
 
   stop(){
    setState(() {
      ids.clear();
      counter = 0;
-     BluetoothDevices = "";
+     bluetoothDevices = "";
      totalbeaconList = 0.0;
-     BluetoothStatus = "";
-     beacon.clear();
+     bluetoothStatus = "";
+     beaconNumberOneValueList.clear();
    });
-
-
+   
  }
 
   void refresh(){
    setState(() {
      totalbeaconList = 0;
-     for (var value in beacon) {
-         BluetoothDevices = BluetoothDevices + value.toString().substring(0,3) + "\n";
+     for (var value in beaconNumberOneValueList) {
+         bluetoothDevices = bluetoothDevices + value.toString() + "\n";
      }
-     for(var value in beacon){
+     for(var value in beaconNumberOneValueList){
        totalbeaconList = totalbeaconList + value;
      }
-     BluetoothStatus = ("Beacon list = " + totalbeaconList.toString().substring(0,3)
+     bluetoothStatus = ("Beacon list = " + totalbeaconList.toString().substring(0,3)
          + "\ncounter was "+ counter.toString()
-         + "\nequals: " +(totalbeaconList/counter).toString().substring(0,3));
+         + "\nequals: " +(totalbeaconList/counter).toString());
      return;
 
      //
@@ -121,8 +167,6 @@ class BluetoothPageState extends State<BluetoothPage> {
 
   button() async{
     setState((){
-
-
    print("HERE");
   });
  }
@@ -153,13 +197,29 @@ class BluetoothPageState extends State<BluetoothPage> {
                 new Text("Ball State University",
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
                   textAlign: TextAlign.center,),
-                new Text(BluetoothStatus),
-                new Text(BluetoothDevices),
+                new Text(bluetoothStatus),
+                new Text(bluetoothDevices),
                 new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
-                    onPressed: start,
-                    child: new Text("Start", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                    onPressed: beaconOne,
+                    child: new Text("Beacon One", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                    color: Colors.red,
+                  ),
+                ),
+                new Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: new RaisedButton(
+                    onPressed: beaconTwo,
+                    child: new Text("Beacon two", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                    color: Colors.red,
+                  ),
+                ),
+                new Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: new RaisedButton(
+                    onPressed: beaconThree,
+                    child: new Text("Beacon Three", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: Colors.red,
                   ),
                 ),
