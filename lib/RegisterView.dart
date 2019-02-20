@@ -70,7 +70,7 @@ class RegisterPageState extends State<RegisterPage> {
         return;}
 
 
-      var url = "http://192.168.0.235:8000/api/register/";
+      var url = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com./api/register";
       http.post(url, body: {"username": usernameTextBox, "password": passwordTextBox, "email": emailTextBox})
           .then((response) {
         if (response.body.contains("200")){
@@ -175,7 +175,11 @@ class RegisterPageState extends State<RegisterPage> {
                       margin: EdgeInsets.all(5.0),
                       child: new RaisedButton(
                         onPressed:registerButton,
-                        child: new Text("Register", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                        child: new Text("Register",
+                            style: new TextStyle(
+                                color: Colors.white,
+                                fontStyle: FontStyle.italic,
+                                fontSize: 15.0)),
                         color: Colors.red,
                       ),
                     ),

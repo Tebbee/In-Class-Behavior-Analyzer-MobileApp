@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
@@ -36,22 +38,42 @@ class BluetoothPageState extends State<BluetoothPage> {
   var BeaconNumberOne;
   var BeaconNumberTwo;
   var BeaconNumberThree;
+  var bluetoothScan;
+  int rssiValue;
+  double rssiDistance;
+  var beacon = new List<double>();
+  double totalbeaconList = 0.0;
+  int counter = 0;
+
+
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-
-
  Future start() async {
    print("I STARTED");
-   var bluetoothScan;
+
    bluetoothScan = flutterBlue.scan().listen((scanResult)
+
    {
      if (!ids.contains(scanResult.device.id.id)) {
-       print("Found " + scanResult.device.id.id);
+      // print("Found " + scanResult.device.id.id);
        ids.add(scanResult.device.id.id);
      }
-     return new Future.delayed(const Duration(seconds: 5), () {
+
+     rssiValue = scanResult.rssi;
+     rssiDistance = pow(10,(-55 - rssiValue.toDouble()) / (10 * 2));
+     if (scanResult.device.id.id == "88:3F:4A:E5:F6:E2") {
+       print("The mac address is:" + scanResult.device.id.id);
+       print("The distance is: " + rssiDistance.toString() + " meters\n");
+     }
+     if (scanResult.device.id.id == "88:3F:4A:E5:F6:E2"){
+       beacon.add(rssiDistance);
+       counter++;
+     }
+
+
+     return new Future.delayed(const Duration(seconds: 3), () {
        bluetoothScan.cancel();
-       print("I STOPPED");
+
      });
    });
    setState(() {
@@ -60,7 +82,6 @@ class BluetoothPageState extends State<BluetoothPage> {
      });
 
 
-     AvailabilityTextBox = flutterBlue.isAvailable.toString();
 
 
    }
@@ -70,23 +91,28 @@ class BluetoothPageState extends State<BluetoothPage> {
   stop(){
    setState(() {
      ids.clear();
+     counter = 0;
      BluetoothDevices = "";
+     totalbeaconList = 0.0;
+     BluetoothStatus = "";
+     beacon.clear();
    });
 
 
  }
 
-
-
   void refresh(){
    setState(() {
-     for (var value in ids) {
-       if(BluetoothDevices.indexOf(value)<0) {
-         BluetoothDevices = BluetoothDevices + value + "\n";
-       }
+     totalbeaconList = 0;
+     for (var value in beacon) {
+         BluetoothDevices = BluetoothDevices + value.toString().substring(0,3) + "\n";
      }
-
-     BluetoothStatus = "BlueTooth Devices:";
+     for(var value in beacon){
+       totalbeaconList = totalbeaconList + value;
+     }
+     BluetoothStatus = ("Beacon list = " + totalbeaconList.toString().substring(0,3)
+         + "\ncounter was "+ counter.toString()
+         + "\nequals: " +(totalbeaconList/counter).toString().substring(0,3));
      return;
 
      //
@@ -94,31 +120,10 @@ class BluetoothPageState extends State<BluetoothPage> {
   }
 
   button() async{
-    FlutterBlue flutterBlue = FlutterBlue.instance;
-    BluetoothDevice device;
-
-
     setState((){
-
-   print(BluetoothDeviceState.connected);
 
 
    print("HERE");
-   var deviceConnection = flutterBlue.connect(device).listen((s) {
-     print("INSIDE");
-     if(s == BluetoothDeviceState.connected) {
-       print("IM HERE");
-       print(device.toString());
-     }
-   });
-
-   /// Disconnect from device
-   deviceConnection.cancel();
-
-
-
-   BluetoothStatus = flutterBlue.isOn.toString();
-   AvailabilityTextBox = flutterBlue.isAvailable.toString();
   });
  }
 
@@ -150,7 +155,6 @@ class BluetoothPageState extends State<BluetoothPage> {
                   textAlign: TextAlign.center,),
                 new Text(BluetoothStatus),
                 new Text(BluetoothDevices),
-                new Text(AvailabilityTextBox),
                 new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(

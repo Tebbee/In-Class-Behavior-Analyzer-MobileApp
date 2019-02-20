@@ -1,4 +1,3 @@
-import 'package:behavior_analyzer/InstructorMainView.dart';
 import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:behavior_analyzer/RegisterView.dart';
 import 'package:behavior_analyzer/FeedbackView.dart';
@@ -49,10 +48,13 @@ class LoginPageState extends State<LoginPage> {
 
       var client = new http.Client();
       client.post(
-          "http://icba.benlawson.info//api/login/",
+          "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/login",
           body: {"username": usernameTextBox, "password": passwordTextBox})
           .then((response) => testString =(response.body));
     });
+    if (testString.contains("200")){
+      Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
+    }
   }
 
   @override
@@ -70,8 +72,6 @@ class LoginPageState extends State<LoginPage> {
         new Container(
           margin: EdgeInsets.all(10.0),
           child: new Column(
-
-
               children: <Widget>[
                 Card(child: Image.asset('assets/Benny2.jpg'),
                   margin: EdgeInsets.all(10.0),
@@ -137,7 +137,8 @@ class LoginPageState extends State<LoginPage> {
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
                       onPressed: loginButton,
-                      child: new Text("Login", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                      child: new Text("Login",
+                          style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                       color: Colors.red,
                     ),),
 
@@ -145,8 +146,12 @@ class LoginPageState extends State<LoginPage> {
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
                     onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => ForgotPasswordView()));},
-                      child: new Text("Forgot Password", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                      color: Colors.red,
+                      child: new Text("Forgot Password",
+                          style: new TextStyle(
+                              color: Colors.white,
+                              fontStyle: FontStyle.italic,
+                              fontSize: 15.0)),
+                    color: Colors.red,
                     ),),
                   ],
                 )

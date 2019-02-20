@@ -25,38 +25,140 @@ class StudentDemographicsPage extends StatefulWidget {
 }
 
 class StudentDemographicsState extends State<StudentDemographicsPage> {
+  String ageTextBox = "";
+  var genderDropDownList;
+  var gradeYearDropDownList;
+  var ethnicityDropDownList;
+  var raceDropDownList;
+  String majorTextBox = "";
+
+
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
+      body: SingleChildScrollView(
+      child: Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.all(10.0),
+                margin: EdgeInsets.all(0.0),
                 width: 350,
-                child: Form(child: Text("Insert Question Here")),),
+                alignment: Alignment.center,
+                child: Form(child: Text("Age")),),
               Container(
-                margin: EdgeInsets.all(10.0),
-                width: 350,
+                margin: EdgeInsets.all(0.0),
+                width: 50,
+                alignment: Alignment.center,
                 child: Form(child: TextField()),
               ),
               Container(
                 margin: EdgeInsets.all(10.0),
-                width: 350, child: Form(child: Text("Insert Question Here")),
+                width: 350,
+                alignment: Alignment.center,
+                child: Form(
+                  child: Text("Gender:")),
+              ),
+              Container(
+                margin: EdgeInsets.all(5.0),
+                width: 200,
+                alignment: Alignment.center,
+                child: new DropdownButton<String>(
+                  items: <String>['Male', 'Female', 'Other', 'Prefer not to say'].map((String value) {
+                    return new DropdownMenuItem<String>(
+                      value: value,
+                      child: new Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (_) {},
+                )
               ),
               Container(
                 margin: EdgeInsets.all(10.0),
                 width: 350,
-                child: Form(child: TextField()),
+                alignment: Alignment.center,
+                child: Form(
+                    child: Text("Grade year:")),
+              ),
+              Container(
+                  margin: EdgeInsets.all(5.0),
+                  width: 200,
+                  alignment: Alignment.center,
+                  child: new DropdownButton<String>(
+                    items: <String>['Freshman', 'Sophomore', 'Junior', 'Senior', 'Senior+', 'Graduate','Other','Prefer not to say'].map((String value) {
+                      return new DropdownMenuItem<String>(
+                        value: value,
+                        child: new Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (_) {},
+                  )
               ),
               Container(
                 margin: EdgeInsets.all(10.0),
-                width: 350, child: Form(child: Text("More need to be implemented")),
+                width: 350,
+                alignment: Alignment.center,
+                child: Form(
+                    child: Text("Ethnicity:")),
               ),
+              Container(
+                  margin: EdgeInsets.all(5.0),
+                  width: 400,
+                  alignment: Alignment.center,
+                  child: new DropdownButton<String>(
+                    items: <String>['Hispanic or Latino or Spanish Origin', 'Not Hispanic or Latino or Spanish Origin', 'Other', 'Prefer Not To Say'].map((String value) {
+                      return new DropdownMenuItem<String>(
+                        value: value,
+                        child: new Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (_) {},
+                  )
+              ),
+              Container(
+                margin: EdgeInsets.all(10.0),
+                width: 400,
+                alignment: Alignment.center,
+                child: Form(
+                    child: Text("Race:")),
+              ),
+              Container(
+                  margin: EdgeInsets.all(5.0),
+                  width: 400,
+                  alignment: Alignment.center,
+                  child: new DropdownButton<String>(
+                    items: <String>['American Indian or Alaska Native', 'Asian', 'Black or African-American', 'Native Hawaiian or Other Pacific Islander','White','Other','Prefer Not To Say'].map((String value) {
+                      return new DropdownMenuItem<String>(
+                        value: value,
+                        child: new Text(value),
+                      );
+                    }).toList(),
+                    onChanged: (_) {},
+                  )
+              ),
+              Container(
+                margin: EdgeInsets.all(10.0),
+                width: 400,
+                alignment: Alignment.center,
+                child: Form(
+                    child: Text("Major:")),
+              ),
+              Container(
+                margin: EdgeInsets.all(0.0),
+                width: 300,
+                alignment: Alignment.center,
+                child: Form(
+                    child: TextField()),
+              ),
+
               RaisedButton(onPressed: (){
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
                 print("Submitted");},
@@ -68,8 +170,8 @@ class StudentDemographicsState extends State<StudentDemographicsPage> {
 
             ]),
       ),
+    )
     );
-//
   }
 }
 

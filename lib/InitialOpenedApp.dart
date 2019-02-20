@@ -28,9 +28,30 @@ class MyHomePage extends StatefulWidget {
   }
 
   class _MyHomePageState extends State<MyHomePage> {
+
+
+  loginButton(){
+
+
+
+  }
+
+  registerButton(){
+
+
+  }
+
+  feedbackButton(){
+
+
+  }
+
+
+
+
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       resizeToAvoidBottomPadding: true,
       appBar: AppBar(
@@ -56,7 +77,7 @@ class MyHomePage extends StatefulWidget {
               new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
-                  onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => LoginView()));},
+                  onPressed: loginButton,
                   child: new Text("Login", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: Colors.red,
                 ),
@@ -85,10 +106,14 @@ class MyHomePage extends StatefulWidget {
           child: new Text("Bluetooth", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 20.0)),
           color: Colors.red,
         ),
+
+
+
+
+
+
             ]
         )
-
-
 
     ,));
 

@@ -61,7 +61,7 @@ class StudentPageState extends State<StudentPage> {
 
   }
   void logoutButton(){
-    var url = "http://192.168.0.235:8000/api/logut/";
+    var url = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/logout";
     http.get(url)
         .then((response) {
       Navigator.push(context,new MaterialPageRoute(builder: (context) => InitialOpenedApp()));},);
