@@ -26,12 +26,11 @@ class StudentDemographicsPage extends StatefulWidget {
 
 class StudentDemographicsState extends State<StudentDemographicsPage> {
   String ageTextBox = "";
-  var genderDropDownList;
+  var genderDropDownList = "Prefer not to say";
   var gradeYearDropDownList;
   var ethnicityDropDownList;
   var raceDropDownList;
   String majorTextBox = "";
-
 
 
 
@@ -50,44 +49,47 @@ class StudentDemographicsState extends State<StudentDemographicsPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                margin: EdgeInsets.all(0.0),
                 width: 350,
                 alignment: Alignment.center,
-                child: Form(child: Text("Age")),),
+                child: Text("Age")),
               Container(
-                margin: EdgeInsets.all(0.0),
                 width: 50,
                 alignment: Alignment.center,
-                child: Form(child: TextField()),
-              ),
+                child: TextField(textAlign: TextAlign.center,
+                  onChanged: (String ageSubmission){
+                    ageTextBox = ageSubmission;
+                  },
+                )),
+
               Container(
                 margin: EdgeInsets.all(10.0),
                 width: 350,
                 alignment: Alignment.center,
-                child: Form(
                   child: Text("Gender:")),
-              ),
+
               Container(
-                margin: EdgeInsets.all(5.0),
-                width: 200,
+                width: 180,
                 alignment: Alignment.center,
                 child: new DropdownButton<String>(
-                  items: <String>['Male', 'Female', 'Other', 'Prefer not to say'].map((String value) {
+                  items: <String>['Male', 'Female', 'Other', 'Prefer not to say'].map((String selection) {
                     return new DropdownMenuItem<String>(
-                      value: value,
-                      child: new Text(value),
+                      value: selection,
+                      child: new Text(selection),
                     );
                   }).toList(),
-                  onChanged: (_) {},
-                )
+                  onChanged: (String newSelection) {
+                    setState(() {
+                      genderDropDownList=newSelection;
+                    });
+                  },
+                  value: genderDropDownList)
+
               ),
               Container(
                 margin: EdgeInsets.all(10.0),
                 width: 350,
                 alignment: Alignment.center,
-                child: Form(
                     child: Text("Grade year:")),
-              ),
               Container(
                   margin: EdgeInsets.all(5.0),
                   width: 200,
@@ -167,7 +169,6 @@ class StudentDemographicsState extends State<StudentDemographicsPage> {
               RaisedButton(onPressed: (){
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child:Text("Exit to main page"),),
-
             ]),
       ),
     )

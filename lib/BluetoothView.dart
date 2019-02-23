@@ -52,21 +52,17 @@ class BluetoothPageState extends State<BluetoothPage> {
   double beaconThreeRssiDistance;
   List beaconNumberThreeValueList = new List<double>();
   List beaconNumberThreeAveragesList = new List<double>();
+
   var bluetoothScan;
-
-
   double totalbeaconList = 0.0;
   int counter = 0;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
-
   
- Future beaconOne() async {
+  Future beaconOne() async {
    print("I STARTED");
    bluetoothScan = flutterBlue.scan().listen((scanResult) {
-   //  if (!ids.contains(scanResult.device.id.id)) {
-   //    ids.add(scanResult.device.id.id);
-   //  }
+
      beaconOneRssiValue = scanResult.rssi;
      beaconOneRssiDistance = pow(10,(-55 - beaconOneRssiValue.toDouble()) / (10 * 2));
      if (scanResult.device.id.id == "88:3F:4A:E5:F6:E2") {
@@ -85,7 +81,6 @@ class BluetoothPageState extends State<BluetoothPage> {
    }
    );
  }
-
   Future beaconTwo() async {
     print("I STARTED");
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
@@ -146,7 +141,6 @@ class BluetoothPageState extends State<BluetoothPage> {
    });
    
  }
-
   void refresh(){
    setState(() {
      totalbeaconList = 0;
@@ -164,7 +158,6 @@ class BluetoothPageState extends State<BluetoothPage> {
      //
    });
   }
-
   button() async{
     setState((){
    print("HERE");

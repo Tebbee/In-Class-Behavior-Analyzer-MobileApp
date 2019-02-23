@@ -3,8 +3,7 @@ import 'package:behavior_analyzer/RegisterView.dart';
 import 'package:behavior_analyzer/SubmissionView.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(FeedbackView());
-class FeedbackView extends StatelessWidget {
+class FeedbackForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(

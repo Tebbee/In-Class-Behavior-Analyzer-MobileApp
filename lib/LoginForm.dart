@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-//import 'ForgotPasswordPage.dart';
+import 'ForgotPasswordPage.dart';
 import 'AppConsts.dart';
 import 'APIManager.dart';
 
-class LoginView extends StatefulWidget {
+class LoginForm extends StatefulWidget {
   @override
   LoginState createState() => LoginState();
 }
 
-class LoginState extends State<LoginView> {
+class LoginState extends State<LoginForm> {
   static const String MODULE_NAME = 'login_form';
 
   TextEditingController usernameController = new TextEditingController();
@@ -31,8 +31,8 @@ class LoginState extends State<LoginView> {
         new TextFormField(
           controller: usernameController,
           decoration: InputDecoration(
-              labelText: 'Username:',
-              labelStyle: TextStyle(color: AppResources.labelTextColor)
+            labelText: 'Username:',
+            labelStyle: TextStyle(color: AppResources.labelTextColor)
           ),
         ),
 
@@ -42,8 +42,8 @@ class LoginState extends State<LoginView> {
           controller: passwordController,
           obscureText: true,
           decoration: InputDecoration(
-              labelText: 'Password:',
-              labelStyle: TextStyle(color: AppResources.labelTextColor)
+            labelText: 'Password:',
+            labelStyle: TextStyle(color: AppResources.labelTextColor)
           ),
         ),
 
@@ -103,7 +103,7 @@ class LoginState extends State<LoginView> {
   }
 
   void forgotPasswordClick() {
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
   }
 
 }
