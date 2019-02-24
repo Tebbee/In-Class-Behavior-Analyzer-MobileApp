@@ -1,6 +1,5 @@
-import 'package:behavior_analyzer/LoginView.dart';
 import 'package:behavior_analyzer/RegisterView.dart';
-import 'package:behavior_analyzer/SubmissionView.dart';
+import 'package:behavior_analyzer/SubmissionForm.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackForm extends StatelessWidget {
@@ -54,7 +53,6 @@ class FeedbackPageState extends State<FeedbackPage> {
                         new Container(
                           margin: EdgeInsets.all(5.0),
                           child: new RaisedButton(
-                            onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => LoginView()));},
                             child: new Text("Login", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                             color: Colors.red,
                           ),
@@ -98,7 +96,7 @@ class FeedbackPageState extends State<FeedbackPage> {
                         new Container(
                           margin: EdgeInsets.all(5.0),
                           child: new RaisedButton(
-                            onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));},
+                            //onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));},
                             child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                             color: Colors.red,
                           ),

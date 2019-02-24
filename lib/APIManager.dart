@@ -6,7 +6,8 @@ class APIManager {
   static String SESSION_ID = "";
   static String SESSION_COOKIE = "";
   //static final String BASE_URL = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/";
-  static final String BASE_URL = "http://172.16.107.249:8000/api/";
+  static final String BASE_URL = "http://192.168.0.27:8000/api/";
+
 
   static bool isUserLoggedIn() {
     return SESSION_ID.isNotEmpty;
@@ -14,15 +15,16 @@ class APIManager {
 
   static void parseLoginResponse(http.Response res) {
     String cookieString = res.headers['set-cookie'];
-    SESSION_ID = res.headers['set-cookie'].split("sessionid=")[1].split(";")[0];
-    SESSION_COOKIE = cookieString.substring(cookieString.indexOf("sessionid"), cookieString.length);
+    SESSION_ID=(res.body.split(" ")[4].replaceAll('"', '').replaceAll("}", ""));
+   // SESSION_ID = res.headers['set-cookie'].split("sessionid=")[1].split(";")[0];
+   // SESSION_COOKIE = cookieString.substring(cookieString.indexOf("sessionid"), cookieString.length);
   }
 
   static Future<http.Response> login(String username, String password) async {
     print(LOG_NAME + ': Making login request...');
 
     return await http.post(
-      BASE_URL + "login",
+      BASE_URL + "auth/login",
       body: {'username': username, 'password': password},
     );
 
@@ -30,7 +32,6 @@ class APIManager {
 
   static Future<http.Response> logout() async {
     print(LOG_NAME + ': Making logout request...');
-
     SESSION_ID = "";
 
     return await http.post(
@@ -41,7 +42,7 @@ class APIManager {
   static Future<http.Response> register(String username, String password, String email, String firstName, String lastName) async {
     print(LOG_NAME + ': Making register request...');
 
-    Map<String, dynamic> bodyValues = {'username': username, 'password': password, 'email': email};
+    Map<String, dynamic> bodyValues = {'username': username, 'password': password, 'email': email, 'first_name':firstName, 'last_name': lastName};
 
     if (firstName != null) {
       bodyValues['first_name'] = firstName;
@@ -50,10 +51,8 @@ class APIManager {
     if (lastName != null) {
       bodyValues['last_name'] = lastName;
     }
-
-    return await http.post(
-      BASE_URL + 'register',
-      body: bodyValues,
+    return await http.post(BASE_URL+'auth/register',
+      body: bodyValues
     );
   }
 
@@ -132,5 +131,14 @@ class APIManager {
     return await http.post(
       BASE_URL + 'demographic/form',
     );
+  }
+
+  static Future<http.Response> locationSubmission(double x,double y) async {
+    print(LOG_NAME + ': Making location get request.....');
+
+    return await http.get(
+        BASE_URL + 'position/create?x='+x.toString()+'&y='+y.toString()
+    );
+
   }
 }

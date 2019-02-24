@@ -1,3 +1,4 @@
+import 'package:behavior_analyzer/StudentDemographicsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -26,7 +27,8 @@ class LoginState extends State<LoginForm> {
       );
     }
 
-    return Container(padding: new EdgeInsets.all(20.0), child: Column(
+    return Container(padding: new EdgeInsets.all(20.0),
+        child: Column(
       children: <Widget>[
         new TextFormField(
           controller: usernameController,
@@ -96,12 +98,13 @@ class LoginState extends State<LoginForm> {
       setState(() {
         isReady = true;
       });
-      print(res.body);
       APIManager.parseLoginResponse(res);
+      if(APIManager.SESSION_ID != null){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDemographicsPage()));
 
+      }
     });
   }
-
   void forgotPasswordClick() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
   }

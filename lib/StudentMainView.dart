@@ -1,3 +1,4 @@
+import 'package:behavior_analyzer/AppConsts.dart';
 import 'package:behavior_analyzer/RegisterView.dart';
 import 'package:behavior_analyzer/StudentDemographicsPage.dart';
 import 'package:behavior_analyzer/StudentSurveyExample.dart';
@@ -16,14 +17,13 @@ class StudentMainView extends StatelessWidget {
     return MaterialApp(
       title: 'Behavior Analyzer',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: AppResources.buttonBackColor
       ),
       home: StudentPage(title: 'Student Home Page'),
     );
   }
 }
 
-//
 
 class StudentPage extends StatefulWidget {
   StudentPage({Key key, this.title}) : super(key: key);

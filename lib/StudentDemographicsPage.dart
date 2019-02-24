@@ -33,10 +33,6 @@ class StudentDemographicsState extends State<StudentDemographicsPage> {
   String majorTextBox = "";
 
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

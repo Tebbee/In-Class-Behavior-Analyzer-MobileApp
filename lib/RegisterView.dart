@@ -1,6 +1,5 @@
-import 'package:behavior_analyzer/LoginView.dart';
 import 'package:behavior_analyzer/FeedbackForm.dart';
-import 'package:behavior_analyzer/SubmissionView.dart';
+import 'package:behavior_analyzer/SubmissionForm.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -74,7 +73,7 @@ class RegisterPageState extends State<RegisterPage> {
       http.post(url, body: {"username": usernameTextBox, "password": passwordTextBox, "email": emailTextBox})
           .then((response) {
         if (response.body.contains("200")){
-          Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));
+         // Navigator.push(context,new MaterialPageRoute(builder: (context) => SubmissionView()));
         }
         if (response.body.contains("6")){
           testString = "The password is not strong enough, it may be too similar to your username";        }
@@ -118,7 +117,6 @@ class RegisterPageState extends State<RegisterPage> {
                     new Container(
                       margin: EdgeInsets.all(5.0),
                       child: new RaisedButton(
-                        onPressed: (){Navigator.push(context,new MaterialPageRoute(builder: (context) => LoginView()));},
                         child: new Text("Login", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                         color: Colors.red,
                       ),

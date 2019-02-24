@@ -39,6 +39,13 @@ class PasswordResetState extends State<PasswordResetForm> {
         child: Column(
           children: <Widget>[
             Text(
+              "A code has been sent to your email\n\n",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                  color: AppResources.labelTextColor, fontSize: 18.0),
+            ),
+
+            Text(
               "Password Reset",
               textAlign: TextAlign.center,
               style: TextStyle(
