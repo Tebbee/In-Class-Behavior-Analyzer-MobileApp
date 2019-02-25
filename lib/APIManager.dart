@@ -14,7 +14,7 @@ class APIManager {
   }
 
   static void parseLoginResponse(http.Response res) {
-    String cookieString = res.headers['set-cookie'];
+    //String cookieString = res.headers['set-cookie'];
     SESSION_ID=(res.body.split(" ")[4].replaceAll('"', '').replaceAll("}", ""));
    // SESSION_ID = res.headers['set-cookie'].split("sessionid=")[1].split(";")[0];
    // SESSION_COOKIE = cookieString.substring(cookieString.indexOf("sessionid"), cookieString.length);
@@ -32,10 +32,10 @@ class APIManager {
 
   static Future<http.Response> logout() async {
     print(LOG_NAME + ': Making logout request...');
-    SESSION_ID = "";
+
 
     return await http.post(
-      BASE_URL + "logout",
+      BASE_URL + "auth/logout?session_id="+SESSION_ID,
     );
   }
 
@@ -134,11 +134,10 @@ class APIManager {
   }
 
   static Future<http.Response> locationSubmission(double x,double y) async {
-    print(LOG_NAME + ': Making location get request.....');
-
+    print(LOG_NAME + ': Making location get request...');
+    print(SESSION_ID);
     return await http.get(
-        BASE_URL + 'position/create?x='+x.toString()+'&y='+y.toString()
+        BASE_URL + 'position/create?session_id='+SESSION_ID.toString()+"&x="+x.toString()+'&y='+y.toString()
     );
-
   }
 }

@@ -32,7 +32,7 @@ class DemographicFormState extends State<DemographicForm> {
   void initState() {
     super.initState();
     APIManager.demographicForm().then((response) {
-      populateFormChoices(response);
+      //populateFormChoices(response);
       setState(() {
         isReady = true;
       });

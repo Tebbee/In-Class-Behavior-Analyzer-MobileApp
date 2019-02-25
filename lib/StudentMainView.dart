@@ -1,7 +1,9 @@
-import 'package:behavior_analyzer/AppConsts.dart';
+import 'package:behavior_analyzer/APIManager.dart';
+import 'package:behavior_analyzer/DemographicForm.dart';
 import 'package:behavior_analyzer/RegisterView.dart';
 import 'package:behavior_analyzer/StudentDemographicsPage.dart';
 import 'package:behavior_analyzer/StudentSurveyExample.dart';
+import 'package:behavior_analyzer/main.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'package:http/http.dart' as http;
@@ -15,15 +17,15 @@ class StudentMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Behavior Analyzer',
-      theme: ThemeData(
-        primarySwatch: AppResources.buttonBackColor
+      home: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        body: SafeArea(
+            child: StudentPage(title: 'Student Main Page'),
+        ),
       ),
-      home: StudentPage(title: 'Student Home Page'),
     );
   }
 }
-
 
 class StudentPage extends StatefulWidget {
   StudentPage({Key key, this.title}) : super(key: key);
@@ -44,6 +46,9 @@ class StudentPageState extends State<StudentPage> {
   List beaconNumberOneAveragesList = new List<double>();
   int counter = 0;
   double beaconOneTotal=0.0;
+  var outlierChecker = 0;
+  var totalbeaconList = 0.0;
+
 
 
   @override
@@ -61,7 +66,7 @@ class StudentPageState extends State<StudentPage> {
               Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyView()));},
             child:Text("Survey Questions"),),
             RaisedButton(onPressed: (){
-              Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentDemographicsView()));},
+              Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));},
             child:Text("Demographic Information"),),
             new Container(
                 margin: EdgeInsets.all(5.0),
@@ -87,15 +92,15 @@ class StudentPageState extends State<StudentPage> {
             ]
               ),
       ),
+
         );
 
   }
 
   void logoutButton(){
-    var url = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/logout";
-    http.get(url)
-        .then((response) {
-      Navigator.push(context,new MaterialPageRoute(builder: (context) => RegisterView()));},);
+    APIManager.logout();
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
+    APIManager.SESSION_ID = "";
     }
 
   Future beaconOne() async {
@@ -109,28 +114,26 @@ class StudentPageState extends State<StudentPage> {
         beaconNumberOneValueList.add(beaconOneRssiDistance);
         counter++;
       }
-      new Future.delayed(const Duration(seconds: 5), () {
+      new Future.delayed(const Duration(seconds: 10), () {
         bluetoothScan.cancel();
     });
       });
-
-
-}beaconOneSubmit() {
+}
+  beaconOneSubmit() {
     setState(() {
-      var totalbeaconList = 0.0;
       for (var value in beaconNumberOneValueList) {
         totalbeaconList = totalbeaconList + value;
+        outlierChecker++;
       }
       print("Beacon list = " + totalbeaconList.toString().substring(0, 3)
           + "\ncounter was " + counter.toString()
           + "\nequals: " + (totalbeaconList / counter).toString());
-
-
-      var url = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com./api/position/create?";
-      http.post(url, body: {"x": totalbeaconList/counter, "y": 0})
-          .then((response) {
-
-    });
+      APIManager.locationSubmission((totalbeaconList/counter).roundToDouble(), 0.0).then((res) {
+        setState(() {
+          print(res.body);
+        });
+        print(APIManager.SESSION_ID);
+      });
   });
 }
 }

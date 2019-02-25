@@ -1,4 +1,5 @@
-import 'package:behavior_analyzer/StudentDemographicsPage.dart';
+import 'package:behavior_analyzer/StudentMainView.dart';
+import 'DemographicForm.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -72,38 +73,41 @@ class LoginState extends State<LoginForm> {
   }
 
   void loginToServer() {
-    String username = usernameController.text;
-    String password = passwordController.text;
+      String username = usernameController.text;
+      String password = passwordController.text;
 
-    if (username == "" || username == null) {
-      AppResources.showErrorDialog(MODULE_NAME, 'No username!', context);
-      return;
-    }
-
-    if (password == "" || password == null) {
-      AppResources.showErrorDialog(MODULE_NAME, 'No password!', context);
-      return;
-    }
-
-    if (APIManager.isUserLoggedIn()) {
-      AppResources.showErrorDialog(MODULE_NAME, 'User already logged in!', context);
-      //return;
-    }
-
-    setState(() {
-      isReady = false;
-    });
-
-    APIManager.login(username, password).then((res) {
-      setState(() {
-        isReady = true;
-      });
-      APIManager.parseLoginResponse(res);
-      if(APIManager.SESSION_ID != null){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => StudentDemographicsPage()));
-
+      if (username == "" || username == null) {
+        AppResources.showErrorDialog(MODULE_NAME, 'No username!', context);
+        return;
       }
-    });
+
+      if (password == "" || password == null) {
+        AppResources.showErrorDialog(MODULE_NAME, 'No password!', context);
+        return;
+      }
+
+      if (APIManager.isUserLoggedIn()) {
+        AppResources.showErrorDialog(MODULE_NAME, 'User already logged in!', context);
+        //return;
+      }
+
+      setState(() {
+        isReady = false;
+      });
+      print(APIManager.SESSION_ID);
+      APIManager.login(username, password).then((res) {
+
+        APIManager.parseLoginResponse(res);
+        if(APIManager.SESSION_ID != null){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
+          setState(() {
+            isReady = true;
+          });
+        }
+        else{
+          AppResources.showErrorDialog(MODULE_NAME, "ERROR, contact", context);
+        }
+      });
   }
   void forgotPasswordClick() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
