@@ -25,6 +25,7 @@ class StudentMainView extends StatelessWidget {
       ),
     );
   }
+
 }
 
 class StudentPage extends StatefulWidget {
@@ -48,11 +49,13 @@ class StudentPageState extends State<StudentPage> {
   double beaconOneTotal=0.0;
   var outlierChecker = 0;
   var totalbeaconList = 0.0;
+  String blueToothStatus = "hello";
 
 
 
   @override
   Widget build(BuildContext context) {
+    blueToothStatus = "hello";
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -62,8 +65,9 @@ class StudentPageState extends State<StudentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
+
             RaisedButton(onPressed: (){
-              Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyView()));},
+              Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyExample()));},
             child:Text("Survey Questions"),),
             RaisedButton(onPressed: (){
               Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));},
@@ -89,6 +93,7 @@ class StudentPageState extends State<StudentPage> {
                   child: new Text("Bluetooth Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: Colors.blue,)
             ),
+            new Text(blueToothStatus),
             ]
               ),
       ),
@@ -114,11 +119,13 @@ class StudentPageState extends State<StudentPage> {
         beaconNumberOneValueList.add(beaconOneRssiDistance);
         counter++;
       }
+
       new Future.delayed(const Duration(seconds: 10), () {
         bluetoothScan.cancel();
     });
       });
 }
+
   beaconOneSubmit() {
     setState(() {
       for (var value in beaconNumberOneValueList) {
@@ -130,9 +137,10 @@ class StudentPageState extends State<StudentPage> {
           + "\nequals: " + (totalbeaconList / counter).toString());
       APIManager.locationSubmission((totalbeaconList/counter).roundToDouble(), 0.0).then((res) {
         setState(() {
+          print(APIManager.SESSION_ID);
           print(res.body);
+
         });
-        print(APIManager.SESSION_ID);
       });
   });
 }

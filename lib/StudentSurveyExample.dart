@@ -2,9 +2,9 @@ import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-void main() => runApp(StudentSurveyView());
+void main() => runApp(StudentSurveyExample());
 
-class StudentSurveyView extends StatelessWidget {
+class StudentSurveyExample extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -26,6 +26,7 @@ class StudentSurveyPage extends StatefulWidget {
 }
 
 class StudentSurveyState extends State<StudentSurveyPage> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

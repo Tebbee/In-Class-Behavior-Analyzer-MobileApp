@@ -1,9 +1,10 @@
 import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-void main() => runApp(StudentDemographicsView());
+void main() => runApp(StudentSurveyView());
 
-class StudentDemographicsView extends StatelessWidget {
+class StudentSurveyView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -11,150 +12,45 @@ class StudentDemographicsView extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.red,
       ),
-      home: StudentDemographicsPage(title: 'Student Demographics Page'),
+      home: StudentSurveyPage(title: 'Student Survey Page'),
     );
   }
 }
-
-class StudentDemographicsPage extends StatefulWidget {
-  StudentDemographicsPage({Key key, this.title}) : super(key: key);
+//
+class StudentSurveyPage extends StatefulWidget {
+  StudentSurveyPage({Key key, this.title}) : super(key: key);
 
   final String title;
   @override
-  StudentDemographicsState createState() => StudentDemographicsState();
+  StudentSurveyState createState() => StudentSurveyState();
 }
 
-class StudentDemographicsState extends State<StudentDemographicsPage> {
-  String ageTextBox = "";
-  var genderDropDownList = "Prefer not to say";
-  var gradeYearDropDownList;
-  var ethnicityDropDownList;
-  var raceDropDownList;
-  String majorTextBox = "";
-
-
+class StudentSurveyState extends State<StudentSurveyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: SingleChildScrollView(
-      child: Center(
+      body: Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Container(
-                width: 350,
-                alignment: Alignment.center,
-                child: Text("Age")),
-              Container(
-                width: 50,
-                alignment: Alignment.center,
-                child: TextField(textAlign: TextAlign.center,
-                  onChanged: (String ageSubmission){
-                    ageTextBox = ageSubmission;
-                  },
-                )),
-
+              Text("Inserted Question Here"),
               Container(
                 margin: EdgeInsets.all(10.0),
                 width: 350,
-                alignment: Alignment.center,
-                  child: Text("Gender:")),
-
-              Container(
-                width: 180,
-                alignment: Alignment.center,
-                child: new DropdownButton<String>(
-                  items: <String>['Male', 'Female', 'Other', 'Prefer not to say'].map((String selection) {
-                    return new DropdownMenuItem<String>(
-                      value: selection,
-                      child: new Text(selection),
-                    );
-                  }).toList(),
-                  onChanged: (String newSelection) {
-                    setState(() {
-                      genderDropDownList=newSelection;
-                    });
-                  },
-                  value: genderDropDownList)
-
+                child: Form(child: TextField()),
               ),
+              Text("Inserted Question Here"),
               Container(
                 margin: EdgeInsets.all(10.0),
                 width: 350,
-                alignment: Alignment.center,
-                    child: Text("Grade year:")),
-              Container(
-                  margin: EdgeInsets.all(5.0),
-                  width: 200,
-                  alignment: Alignment.center,
-                  child: new DropdownButton<String>(
-                    items: <String>['Freshman', 'Sophomore', 'Junior', 'Senior', 'Senior+', 'Graduate','Other','Prefer not to say'].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: new Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (_) {},
-                  )
+                child: Form(child: TextField()),
               ),
               Container(
                 margin: EdgeInsets.all(10.0),
-                width: 350,
-                alignment: Alignment.center,
-                child: Form(
-                    child: Text("Ethnicity:")),
-              ),
-              Container(
-                  margin: EdgeInsets.all(5.0),
-                  width: 400,
-                  alignment: Alignment.center,
-                  child: new DropdownButton<String>(
-                    items: <String>['Hispanic or Latino or Spanish Origin', 'Not Hispanic or Latino or Spanish Origin', 'Other', 'Prefer Not To Say'].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: new Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (_) {},
-                  )
-              ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                width: 400,
-                alignment: Alignment.center,
-                child: Form(
-                    child: Text("Race:")),
-              ),
-              Container(
-                  margin: EdgeInsets.all(5.0),
-                  width: 400,
-                  alignment: Alignment.center,
-                  child: new DropdownButton<String>(
-                    items: <String>['American Indian or Alaska Native', 'Asian', 'Black or African-American', 'Native Hawaiian or Other Pacific Islander','White','Other','Prefer Not To Say'].map((String value) {
-                      return new DropdownMenuItem<String>(
-                        value: value,
-                        child: new Text(value),
-                      );
-                    }).toList(),
-                    onChanged: (_) {},
-                  )
-              ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                width: 400,
-                alignment: Alignment.center,
-                child: Form(
-                    child: Text("Major:")),
-              ),
-              Container(
-                margin: EdgeInsets.all(0.0),
-                width: 300,
-                alignment: Alignment.center,
-                child: Form(
-                    child: TextField()),
+                width: 350, child: Form(child: Text("More need to be implemented")),
               ),
 
               RaisedButton(onPressed: (){
@@ -165,10 +61,11 @@ class StudentDemographicsState extends State<StudentDemographicsPage> {
               RaisedButton(onPressed: (){
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child:Text("Exit to main page"),),
-            ]),
+
+            ]
+        ),
       ),
-    )
     );
+
   }
 }
-

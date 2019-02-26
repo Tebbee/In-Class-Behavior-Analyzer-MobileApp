@@ -1,5 +1,4 @@
 import 'package:behavior_analyzer/RegisterView.dart';
-import 'package:behavior_analyzer/SubmissionForm.dart';
 import 'package:flutter/material.dart';
 
 class FeedbackForm extends StatelessWidget {
@@ -78,7 +77,6 @@ class FeedbackPageState extends State<FeedbackPage> {
 
                     new Text("Welcome to the feedback page. \nAll input is 100% anonymous. \nPlease insert any comments or concerns you wish.",
                       style: new TextStyle(fontSize: 20,
-                        color: Colors.black,
                         fontWeight: FontWeight.bold,),
                       textAlign: TextAlign.center,),
                     new TextField(

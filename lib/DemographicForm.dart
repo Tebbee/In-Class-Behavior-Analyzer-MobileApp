@@ -76,7 +76,7 @@ class DemographicFormState extends State<DemographicForm> {
                       SizedBox(height: 15.0,),
 
                       Text('Gender:', style: new TextStyle(color: AppResources.labelTextColor),),
-                      DropdownButton<GenderLookup>(
+    /*  DropdownButton<GenderLookup>(
                         isExpanded: true,
                         items: genders.map((GenderLookup g) {
                           return new DropdownMenuItem(child: new Text(g.name), value: g);
@@ -87,12 +87,12 @@ class DemographicFormState extends State<DemographicForm> {
                             selectedGender = val;
                           });
                         },
-                      ),
+                      ),*/
 
                       SizedBox(height: 15.0,),
 
                       Text('Grade Year:', style: new TextStyle(color: AppResources.labelTextColor),),
-                      DropdownButton<GradeYearLookup>(
+                  /*    DropdownButton<GradeYearLookup>(
                         isExpanded: true,
                         items: gradeYears.map((GradeYearLookup g) {
                           return new DropdownMenuItem(child: new Text(g.name), value: g);
@@ -103,12 +103,12 @@ class DemographicFormState extends State<DemographicForm> {
                             selectedGradeYear = val;
                           });
                         },
-                      ),
+                      ),*/
 
                       SizedBox(height: 15.0,),
 
                       Text('Race:', style: new TextStyle(color: AppResources.labelTextColor),),
-                      DropdownButton<RaceLookup>(
+                  /*    DropdownButton<RaceLookup>(
                         isExpanded: true,
                         items: races.map((RaceLookup g) {
                           return new DropdownMenuItem(child: new Text(g.name), value: g);
@@ -119,12 +119,12 @@ class DemographicFormState extends State<DemographicForm> {
                             selectedRace = val;
                           });
                         },
-                      ),
+                      ),*/
 
                       SizedBox(height: 15.0,),
 
                       Text('Ethnicity:', style: new TextStyle(color: AppResources.labelTextColor),),
-                      DropdownButton<EthnicityLookup>(
+                    /*  DropdownButton<EthnicityLookup>(
                         isExpanded: true,
                         items: ethnicities.map((EthnicityLookup g) {
                           return new DropdownMenuItem(child: new Text(g.name), value: g);
@@ -135,7 +135,7 @@ class DemographicFormState extends State<DemographicForm> {
                             selectedEthnicity = val;
                           });
                         },
-                      ),
+                      ),*/
 
                       SizedBox(height:15.0,),
 

@@ -16,6 +16,8 @@ class APIManager {
   static void parseLoginResponse(http.Response res) {
     //String cookieString = res.headers['set-cookie'];
     SESSION_ID=(res.body.split(" ")[4].replaceAll('"', '').replaceAll("}", ""));
+    print(res.body);
+    print(SESSION_ID);
    // SESSION_ID = res.headers['set-cookie'].split("sessionid=")[1].split(";")[0];
    // SESSION_COOKIE = cookieString.substring(cookieString.indexOf("sessionid"), cookieString.length);
   }
@@ -27,7 +29,6 @@ class APIManager {
       BASE_URL + "auth/login",
       body: {'username': username, 'password': password},
     );
-
   }
 
   static Future<http.Response> logout() async {

@@ -32,6 +32,7 @@ class SubmissionState extends State<SubmissionForm> {
     }
     return Container(
         padding: EdgeInsets.all(20.0),
+
         alignment: Alignment.center,
         child: Column(
           children: <Widget>[

@@ -94,10 +94,23 @@ class LoginState extends State<LoginForm> {
       setState(() {
         isReady = false;
       });
-      print(APIManager.SESSION_ID);
       APIManager.login(username, password).then((res) {
-
+        print(res.body);
+        print(APIManager.SESSION_ID);
         APIManager.parseLoginResponse(res);
+        if (APIManager.SESSION_ID == "104,") {
+          AppResources.showErrorDialog(MODULE_NAME, "ERROR, no user detected", context);
+          setState(() {
+            isReady = true;
+          });
+          return;
+        }
+        if (APIManager.SESSION_ID == "105,") {
+          AppResources.showErrorDialog(MODULE_NAME, "ERROR, wrong password", context);
+          setState(() {
+            isReady = true;
+          });
+          return;}
         if(APIManager.SESSION_ID != null){
           Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
           setState(() {
@@ -105,7 +118,7 @@ class LoginState extends State<LoginForm> {
           });
         }
         else{
-          AppResources.showErrorDialog(MODULE_NAME, "ERROR, contact", context);
+          AppResources.showErrorDialog(MODULE_NAME, "ERROR, contact administration", context);
         }
       });
   }
