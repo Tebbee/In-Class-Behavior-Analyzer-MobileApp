@@ -1,7 +1,5 @@
 import 'package:behavior_analyzer/SessionStartForm.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'ForgotPasswordPage.dart';
 import 'AppConsts.dart';
 import 'APIManager.dart';

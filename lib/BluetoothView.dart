@@ -163,10 +163,17 @@ class BluetoothPageState extends State<BluetoothPage> {
     double x2 = secondBeacon[0];
     double y1 = firstBeacon[1];
     double y2 = secondBeacon[1];
-    double Distance = sqrt(pow(2,x2-x1) + pow(2,y2-y1));
+    if (x1 >= x2) {
+      if (y1 >= y2) {double Distance = sqrt(pow(2, x1 - x2) + pow(2, y1 - y2)) / 2;}
+      if (y1 < y2) {double Distance = sqrt(pow(2, x1 - x2) + pow(2, y2 - y1)) / 2;}
+    }
+    if (x1 < x2) {
+      if (y1 >= y2) {double Distance = sqrt(pow(2, x2 - x1) + pow(2, y1 - y2)) / 2;}
+      if (y1 < y2) {double Distance = sqrt(pow(2, x2 - x1) + pow(2, y2 - y1)) / 2;}
+    }
+
 
  }
-
 
 
   @override
