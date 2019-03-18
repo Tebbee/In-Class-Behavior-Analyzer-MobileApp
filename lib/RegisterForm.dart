@@ -1,14 +1,7 @@
-
-import 'package:behavior_analyzer/DemographicForm.dart';
-import 'package:behavior_analyzer/ForgotPasswordPage.dart';
-import 'package:behavior_analyzer/SubmissionForm.dart';
+import 'package:behavior_analyzer/main.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'APIManager.dart';
 import 'AppConsts.dart';
-import 'StudentDemographicsPage.dart';
-
 
 class RegisterForm extends StatefulWidget {
   @override
@@ -152,7 +145,7 @@ class RegisterState extends State<RegisterForm> {
         isReady = true;
         print(res.body);
       });
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));});
+      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));});
   }
 
 

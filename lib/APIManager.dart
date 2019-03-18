@@ -6,7 +6,7 @@ class APIManager {
   static String SESSION_ID = "";
   static String SESSION_COOKIE = "";
   //static final String BASE_URL = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/";
-  static final String BASE_URL = "http://192.168.0.27:8000/api/";
+  static final String BASE_URL = "http://192.168.0.70:8000/api/";
 
 
   static bool isUserLoggedIn() {

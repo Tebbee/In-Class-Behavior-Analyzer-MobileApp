@@ -1,14 +1,13 @@
 import 'package:behavior_analyzer/APIManager.dart';
 import 'package:behavior_analyzer/DemographicForm.dart';
-import 'package:behavior_analyzer/RegisterView.dart';
-import 'package:behavior_analyzer/StudentDemographicsPage.dart';
 import 'package:behavior_analyzer/StudentSurveyExample.dart';
 import 'package:behavior_analyzer/main.dart';
+import 'package:behavior_analyzer/BluetoothView.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:http/http.dart' as http;
 import 'dart:math';
 import 'dart:async';
+import 'AppConsts.dart';
 
 
 void main() => runApp(StudentMainView());
@@ -19,6 +18,7 @@ class StudentMainView extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
+        backgroundColor: AppResources.buttonBackColor,
         body: SafeArea(
             child: StudentPage(title: 'Student Main Page'),
         ),
@@ -38,9 +38,9 @@ class StudentPage extends StatefulWidget {
 
 class StudentPageState extends State<StudentPage> {
 
+  bool isReady = true;
   FlutterBlue flutterBlue = FlutterBlue.instance;
   var bluetoothScan;
-  String beaconNumberOne = "88:3F:4A:E5:F6:E2";
   int beaconOneRssiValue;
   double beaconOneRssiDistance;
   List beaconNumberOneValueList = new List<double>();
@@ -52,13 +52,13 @@ class StudentPageState extends State<StudentPage> {
   String blueToothStatus = "hello";
 
 
-
   @override
   Widget build(BuildContext context) {
-    blueToothStatus = "hello";
+    blueToothStatus = "";
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: AppResources.buttonBackColor,
       ),
       body: Center(
         child: Column(
@@ -82,7 +82,7 @@ class StudentPageState extends State<StudentPage> {
             new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
-                  onPressed: beaconOne,
+                  onPressed: bluetooth,
                   child: new Text("Bluetooth On", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: Colors.blue,)
             ),
@@ -119,8 +119,16 @@ class StudentPageState extends State<StudentPage> {
         beaconNumberOneValueList.add(beaconOneRssiDistance);
         counter++;
       }
+      if (scanResult.device.id.id == "88:3F:4A:E5:FA:7C"){
+        print("Beacon Two is: " + beaconOneRssiDistance.toString() + " meters away\n");
+        counter++;
+      }
+      if (scanResult.device.id.id == "88:3F:4A:E5:FD:C5"){
+        print("Beacon Three is: " + beaconOneRssiDistance.toString() + " meters away\n");
+        counter++;
+      }
 
-      new Future.delayed(const Duration(seconds: 10), () {
+      new Future.delayed(const Duration(seconds: 4), () {
         bluetoothScan.cancel();
     });
       });
@@ -144,4 +152,7 @@ class StudentPageState extends State<StudentPage> {
       });
   });
 }
-}
+
+  void bluetooth() {
+    Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}
+  }

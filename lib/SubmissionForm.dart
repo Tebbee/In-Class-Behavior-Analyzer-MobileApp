@@ -1,65 +1,72 @@
+import 'package:behavior_analyzer/main.dart';
 import 'package:flutter/material.dart';
-import 'main.dart';
 import 'AppConsts.dart';
 
-class SubmissionForm extends StatefulWidget {
-  final VoidCallback onComplete;
 
-  const SubmissionForm({Key key, this.onComplete}): super(key:key);
+void main() => runApp(SubmissionForm());
 
-  SubmissionState createState() => SubmissionState(onComplete);
-}
-
-class SubmissionState extends State<SubmissionForm> {
-  VoidCallback onComplete;
-
-  SubmissionState(VoidCallback complete) {
-    onComplete = complete;
-  }
-  static final String MODULE_NAME = 'Submission_form';
-
-  TextEditingController resetCodeController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
-
-  bool isReady = true;
-
+class SubmissionForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    if (!isReady) {
-      return Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-    return Container(
-        padding: EdgeInsets.all(20.0),
-
-        alignment: Alignment.center,
-        child: Column(
-          children: <Widget>[
-            Text(
-              "You have successfully created an account!",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: AppResources.labelTextColor, fontSize: 30.0),
-            ),
-
-            SizedBox(height: 20.0,),
-            RaisedButton(
-              onPressed: submissionView,
-              color: AppResources.buttonBackColor,
-              textColor: AppResources.buttonTextColor,
-              child: Text("Main Menu"),
-            )
-          ],
-        )
+    return MaterialApp(
+      home: Scaffold(
+        resizeToAvoidBottomPadding: false,
+        body: SafeArea(
+          child: SubmissionPage(title: ''),
+        ),
+      ),
     );
   }
 
+}
 
-  void submissionView() {
-    setState(() {
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));});
+class SubmissionPage extends StatefulWidget {
+  SubmissionPage({Key key, this.title}) : super(key: key);
+
+  final String title;
+  @override
+  SubmissionPageState createState() => SubmissionPageState();
+}
+
+class SubmissionPageState extends State<SubmissionPage> {
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(widget.title),
+        backgroundColor: AppResources.buttonBackColor,
+      ),
+      body: Center(
+        child: Column(
+
+            children: <Widget>[
+        new Container(
+              margin: EdgeInsets.all(25.0),
+              child: new Text(
+                "You have successfully created an account!",
+                style: new TextStyle(color: AppResources.labelTextColor,fontStyle: FontStyle.italic, fontSize: 30.0),
+                textAlign: TextAlign.center,
+              )),
+              new Container(
+                  margin: EdgeInsets.all(5.0),
+                  child: new RaisedButton(
+                    onPressed:logoutButton,
+                    child: new Text("Login Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                    color: AppResources.buttonBackColor,)
+              ),
+
+            ]
+        ),
+      ),
+
+    );
 
   }
+
+  void logoutButton(){
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
+  }
+
 
 }

@@ -1,5 +1,4 @@
-import 'package:behavior_analyzer/StudentMainView.dart';
-import 'DemographicForm.dart';
+import 'package:behavior_analyzer/SessionStartForm.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -112,7 +111,7 @@ class LoginState extends State<LoginForm> {
           });
           return;}
         if(APIManager.SESSION_ID != null){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => SessionStartForm()));
           setState(() {
             isReady = true;
           });
@@ -122,6 +121,7 @@ class LoginState extends State<LoginForm> {
         }
       });
   }
+
   void forgotPasswordClick() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
   }
