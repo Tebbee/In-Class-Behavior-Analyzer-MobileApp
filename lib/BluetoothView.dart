@@ -5,6 +5,7 @@ import 'dart:async';
 import 'AppConsts.dart';
 
 
+
 void main() => runApp(BluetoothView());
 
 class BluetoothView extends StatelessWidget {
@@ -40,11 +41,11 @@ class BluetoothPageState extends State<BluetoothPage> {
   String beaconTwo = "88:3F:4A:E5:FA:7C";
   String beaconThree = "88:3F:4A:E5:FD:C5";
 
-  var beaconOneCoords = [0,0];
-  var beaconTwoCoords = [0,2.5];
-  var beaconThreeCoords = [2.5,0];
+  var beaconOneCoords = [0.0,0.0];
+  var beaconTwoCoords = [0.0,0.0];
+  var beaconThreeCoords = [0.0,0.0];
 
-  int beaconRssiValue;
+  double beaconRssiValue;
   double beaconRssiDistance;
 
   List beaconNumberOneValueList = new List<double>();
@@ -65,10 +66,11 @@ class BluetoothPageState extends State<BluetoothPage> {
   int counterThree = 0;
 
   FlutterBlue flutterBlue = FlutterBlue.instance;
+  final double EPSILON = 0.000001;
 
   Future beaconScan() async {
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
-      beaconRssiValue = scanResult.rssi;
+      beaconRssiValue = scanResult.rssi.toDouble();
       beaconRssiDistance = pow(10,(-55 - beaconRssiValue.toDouble()) / (10 * 2));
       if (scanResult.device.id.id == beaconOne) {
         print("Beacon One is: " + beaconRssiDistance.toString() + " meters away\n");
@@ -116,9 +118,6 @@ class BluetoothPageState extends State<BluetoothPage> {
 
   void beaconAveraging(){
    setState(() {
-     print(beaconNumberOneValueList);
-     print(beaconNumberTwoValueList);
-     print(beaconNumberThreeValueList);
      for(var value in beaconNumberOneValueList){
        totalBeaconOneList = totalBeaconOneList + value;
      }
@@ -145,37 +144,98 @@ class BluetoothPageState extends State<BluetoothPage> {
   }
   button() async{
     setState((){
-   print(beaconTwoCoords[1].toDouble());
+      beaconPositioning();
+      beaconDistance(beaconOneCoords,beaconTwoCoords,beaconThreeCoords,
+     //  4.93,4.14,3.501);
+       totalBeaconOneList/counterOne,
+       totalBeaconTwoList/counterTwo,
+       totalBeaconThreeList/counterThree);
   });
  }
 
-
+  ///
+  /// Tests if ANY of the beacons were not able to pull a Distance. If not, they will rerun the scanning protocol
+  ///
  beaconPositioning(){
     if ((totalBeaconOneList/counterOne) == 0 || (totalBeaconTwoList/counterTwo) == 0 || (totalBeaconThreeList/counterThree) == 0){
-      beaconAveraging();
+      beaconScan();
     }
-
-
  }
 
- beaconDistance(firstBeacon, secondBeacon){
+ beaconDistance(firstBeacon, secondBeacon, thirdBeacon, beaconOneDistance, beaconTwoDistance, beaconThreeDistance){
     double x1 = firstBeacon[0];
     double x2 = secondBeacon[0];
     double y1 = firstBeacon[1];
     double y2 = secondBeacon[1];
-    if (x1 >= x2) {
-      if (y1 >= y2) {double Distance = sqrt(pow(2, x1 - x2) + pow(2, y1 - y2)) / 2;}
-      if (y1 < y2) {double Distance = sqrt(pow(2, x1 - x2) + pow(2, y2 - y1)) / 2;}
-    }
-    if (x1 < x2) {
-      if (y1 >= y2) {double Distance = sqrt(pow(2, x2 - x1) + pow(2, y1 - y2)) / 2;}
-      if (y1 < y2) {double Distance = sqrt(pow(2, x2 - x1) + pow(2, y2 - y1)) / 2;}
-    }
-
+    double x3 = thirdBeacon[0];
+    double y3 = thirdBeacon[1];
+    calculateThreeCircleIntersection(x1, y1, beaconOneDistance, x2, y2, beaconTwoDistance, x3, y3, beaconThreeDistance);
 
  }
 
+ calculateThreeCircleIntersection(
+      double x0, double y0, double r0,
+      double x1, double y1, double r1,
+      double x2, double y2, double r2) {
+    double a, dx, dy, d, h, rx, ry;
+    double point2_x, point2_y;
 
+    dx = x1 - x0;
+    dy = y1 - y0;
+
+    d = sqrt((dy*dy) + (dx*dx));
+
+    if (d > (r0 + r1))
+    {
+      print("THEY DID NOT COLLIDE");
+      return false;
+    }
+    if (d < max(r0,r1)-min(r0,r1))
+    {
+      print("ONE CIRCLE IS INSIDE THE OTHER");
+      return false;
+    }
+    a = ((r0*r0) - (r1*r1) + (d*d)) / (2.0 * d) ;
+
+    point2_x = x0 + (dx * a/d);
+    point2_y = y0 + (dy * a/d);
+
+    h = sqrt((r0*r0) - (a*a));
+
+    rx = -dy * (h/d);
+    ry = dx * (h/d);
+
+    double intersectionPoint1_x = point2_x + rx;
+    double intersectionPoint2_x = point2_x - rx;
+    double intersectionPoint1_y = point2_y + ry;
+    double intersectionPoint2_y = point2_y - ry;
+
+    print("INTERSECTION Circle1 AND Circle2: (" + intersectionPoint1_x.toString() + "," + intersectionPoint1_y.toString() + ") AND (" + intersectionPoint2_x.toString() + "," + intersectionPoint2_y.toString() + ")");
+
+    dx = intersectionPoint1_x - x2;
+    dy = intersectionPoint1_y - y2;
+    double d1 = sqrt((dy*dy) + (dx*dx));
+
+    dx = intersectionPoint2_x - x2;
+    dy = intersectionPoint2_y - y2;
+    double d2 = sqrt((dy*dy) + (dx*dx));
+
+
+    if(max(d1, r2)-min(d1,r2) < EPSILON) {
+      print("INTERSECTION Circle1 AND Circle2 AND Circle3: (" + intersectionPoint1_x.toString() + "," + intersectionPoint1_y.toString() + ")");
+    }
+    else if(max(d2 , r2)-min(d2,r2) < EPSILON) {
+      print("INTERSECTION Circle1 AND Circle2 AND Circle3: (" + intersectionPoint2_x.toString() + "," + intersectionPoint2_y.toString() + ")"); //here was an error
+    }
+    else {
+      print("INTERSECTION Circle1 AND Circle2 AND Circle3: NONE");
+    }
+    return true;
+  }
+
+  ///
+  /// Builds the Apps appearance: Text boxes, buttons, etc.
+  ///
   @override
   Widget build(BuildContext context) {
     return Scaffold(

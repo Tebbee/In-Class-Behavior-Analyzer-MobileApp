@@ -1,4 +1,4 @@
-import 'package:behavior_analyzer/main.dart';
+import 'package:behavior_analyzer/SubmissionForm.dart';
 import 'package:flutter/material.dart';
 import 'APIManager.dart';
 import 'AppConsts.dart';
@@ -47,7 +47,6 @@ class RegisterState extends State<RegisterForm> {
           obscureText: true,
           decoration: InputDecoration(
             labelStyle: TextStyle(color: AppResources.labelTextColor),
-            //hintText: 'Password...',
             labelText: 'Password:',
           ),
         ),
@@ -145,7 +144,7 @@ class RegisterState extends State<RegisterForm> {
         isReady = true;
         print(res.body);
       });
-      Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));});
+      Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));});
   }
 
 

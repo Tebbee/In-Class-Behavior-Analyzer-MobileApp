@@ -1,3 +1,4 @@
+import 'package:behavior_analyzer/APIManager.dart';
 import 'package:flutter/material.dart';
 import 'ForgotPasswordForm.dart';
 import 'PasswordResetForm.dart';
@@ -35,7 +36,6 @@ class ForgotPasswordState extends State<ForgotPasswordPage> {
                 icon: Icon(Icons.close),
                 onPressed: closePage,
               ),
-
               states[currentState],
             ],
           )

@@ -17,6 +17,8 @@ class LoginState extends State<LoginForm> {
 
   bool isReady = true;
 
+  ///
+  /// Building the page on the App. (The text boxes, pictures, buttons)
   @override
   Widget build(BuildContext context) {
     if (!isReady) {
@@ -69,6 +71,7 @@ class LoginState extends State<LoginForm> {
 
   }
 
+  /// Activates the Login function from the APIManager.dart
   void loginToServer() {
       String username = usernameController.text;
       String password = passwordController.text;
@@ -120,6 +123,7 @@ class LoginState extends State<LoginForm> {
       });
   }
 
+  ///Activates the ForgotPasswordForm
   void forgotPasswordClick() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ForgotPasswordPage()));
   }

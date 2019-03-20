@@ -76,10 +76,10 @@ class DemographicFormState extends State<DemographicForm> {
                       SizedBox(height: 15.0,),
 
                       Text('Gender:', style: new TextStyle(color: AppResources.labelTextColor),),
-    /*  DropdownButton<GenderLookup>(
+            /*        DropdownButton<GenderLookup>(
                         isExpanded: true,
-                        items: genders.map((GenderLookup g) {
-                          return new DropdownMenuItem(child: new Text(g.name), value: g);
+                        items: genders.map((GenderLookup gender) {
+                          return new DropdownMenuItem(child: new Text(gender.name), value: gender);
                         }).toList(),
                         value: selectedGender,
                         onChanged: (val){

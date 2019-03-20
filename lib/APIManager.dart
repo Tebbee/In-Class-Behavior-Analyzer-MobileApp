@@ -8,7 +8,6 @@ class APIManager {
   //static final String BASE_URL = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/";
   static final String BASE_URL = "http://192.168.0.70:8000/api/";
 
-
   static bool isUserLoggedIn() {
     return SESSION_ID.isNotEmpty;
   }
@@ -136,7 +135,6 @@ class APIManager {
 
   static Future<http.Response> locationSubmission(double x,double y) async {
     print(LOG_NAME + ': Making location get request...');
-    print(SESSION_ID);
     return await http.get(
         BASE_URL + 'position/create?session_id='+SESSION_ID.toString()+"&x="+x.toString()+'&y='+y.toString()
     );
