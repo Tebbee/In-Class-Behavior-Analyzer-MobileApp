@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'package:behavior_analyzer/APIManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
@@ -35,6 +36,7 @@ class BluetoothPageState extends State<BluetoothPage> {
   String bluetoothOneStatus = "";
   String bluetoothTwoStatus = "";
   String bluetoothThreeStatus = "";
+  String MODULE_NAME = "Bluetooth Error";
   var ids = new List<String>();
 
   String beaconOne = "88:3F:4A:E5:F6:E2";
@@ -42,8 +44,8 @@ class BluetoothPageState extends State<BluetoothPage> {
   String beaconThree = "88:3F:4A:E5:FD:C5";
 
   var beaconOneCoords = [0.0,0.0];
-  var beaconTwoCoords = [0.0,0.0];
-  var beaconThreeCoords = [0.0,0.0];
+  var beaconTwoCoords = [1.0,0.0];
+  var beaconThreeCoords = [0.0,1.0];
 
   double beaconRssiValue;
   double beaconRssiDistance;
@@ -68,7 +70,29 @@ class BluetoothPageState extends State<BluetoothPage> {
   FlutterBlue flutterBlue = FlutterBlue.instance;
   final double EPSILON = 0.000001;
 
+  var r;
+  var x;
+  var y;
+
   Future beaconScan() async {
+
+    flutterBlue.isAvailable.then((res){
+      if(res.toString() != 'true'){
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
+          });
+        return;
+      }
+    }
+    );
+    flutterBlue.isOn.then((res){
+      if(res.toString() != 'true'){
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
+          });
+        return;
+      }
+    });
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
       beaconRssiValue = scanResult.rssi.toDouble();
       beaconRssiDistance = pow(10,(-55 - beaconRssiValue.toDouble()) / (10 * 2));
@@ -153,9 +177,8 @@ class BluetoothPageState extends State<BluetoothPage> {
   });
  }
 
-  ///
+
   /// Tests if ANY of the beacons were not able to pull a Distance. If not, they will rerun the scanning protocol
-  ///
  beaconPositioning(){
     if ((totalBeaconOneList/counterOne) == 0 || (totalBeaconTwoList/counterTwo) == 0 || (totalBeaconThreeList/counterThree) == 0){
       beaconScan();
@@ -233,9 +256,8 @@ class BluetoothPageState extends State<BluetoothPage> {
     return true;
   }
 
-  ///
+
   /// Builds the Apps appearance: Text boxes, buttons, etc.
-  ///
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -301,4 +323,6 @@ class BluetoothPageState extends State<BluetoothPage> {
     )
     ));
     }
+
+
 }

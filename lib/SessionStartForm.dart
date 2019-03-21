@@ -2,7 +2,6 @@ import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'APIManager.dart';
 
 
 void main() => runApp(SessionStartForm());
@@ -49,7 +48,6 @@ class SessionStartPageState extends State<SessionStartPage> {
       isReady = false;
     });
 
-    print("before the res .available");
     flutterBlue.isAvailable.then((res){
       if(res.toString() != 'true'){
         setState(() {
@@ -125,22 +123,24 @@ class SessionStartPageState extends State<SessionStartPage> {
     }
     return Center(
       child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
               child: Image.asset('assets/Benny2.jpg', fit: BoxFit.contain, alignment: Alignment.center),
               height: 200.0,
               alignment: Alignment.center,
+
             ),
             new Container(
-              margin: EdgeInsets.all(15.0),
+              margin: EdgeInsets.all(20.0),
               child: new Text("This application requires bluetooth to be activated.",
                 softWrap: true,
                 style: new TextStyle(fontSize: 25.0, color: AppResources.labelTextColor),
               ),
             ),
             new Container(
-                margin: EdgeInsets.all(5.0),
+               margin: EdgeInsets.all(25.0),
                 child: new RaisedButton(
                   onPressed:beaconScan,
                   child: new Text("Start Session", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
