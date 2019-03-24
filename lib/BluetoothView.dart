@@ -5,8 +5,6 @@ import 'dart:async';
 import 'AppConsts.dart';
 
 
-
-void main() => runApp(BluetoothView());
 var x,y;
 
 class BluetoothView extends StatelessWidget {
@@ -28,7 +26,6 @@ class BluetoothPage extends StatefulWidget {
   @override
   BluetoothPageState createState() => BluetoothPageState();
 }
-
 
 class BluetoothPageState extends State<BluetoothPage> {
   String bluetoothDevices = "";
@@ -72,6 +69,23 @@ class BluetoothPageState extends State<BluetoothPage> {
   var r;
   var x;
   var y;
+
+  flutterBlueTestOn(){
+    flutterBlue.isOn.then((res){
+      if(res.toString() != 'true'){
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
+          });
+        return true;
+      }});}
+  flutterBlueAvailabilityTest(){
+    flutterBlue.isOn.then((res){
+      if(res.toString() != 'true'){
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
+          });
+        return true;
+      }});}
 
   Future beaconScan() async {
 
@@ -162,9 +176,9 @@ class BluetoothPageState extends State<BluetoothPage> {
          + "\nequals: " +(totalBeaconThreeList/counterThree).toString());
      return;
 
-     //
    });
   }
+
   button() async{
     setState((){
       beaconPositioning();
@@ -175,7 +189,6 @@ class BluetoothPageState extends State<BluetoothPage> {
        totalBeaconThreeList/counterThree);
   });
  }
-
 
   /// Tests if ANY of the beacons were not able to pull a Distance. If not, they will rerun the scanning protocol
  beaconPositioning(){
@@ -323,6 +336,9 @@ class BluetoothPageState extends State<BluetoothPage> {
     if (x <= -1.0) return pi;
     return acos(x);
   }
+
+
+
 
   /// Builds the Apps appearance: Text boxes, buttons, etc.
   @override

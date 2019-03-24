@@ -2,9 +2,6 @@ import 'package:behavior_analyzer/main.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 
-
-void main() => runApp(SubmissionForm());
-
 class SubmissionForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {

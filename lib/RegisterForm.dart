@@ -144,7 +144,15 @@ class RegisterState extends State<RegisterForm> {
         isReady = true;
         print(res.body);
       });
-      Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));});
+      if (res.body.contains("success")){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));}
+      if(res.body.contains("106")){
+        AppResources.showErrorDialog(MODULE_NAME, "ERROR, Username has been taken", context);
+      }
+
+
+    }
+    );
   }
 
 

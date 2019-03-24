@@ -2,9 +2,8 @@ import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 import 'package:flutter_blue/flutter_blue.dart';
+import 'package:behavior_analyzer/BluetoothView.dart';
 
-
-void main() => runApp(SessionStartForm());
 
 class SessionStartForm extends StatelessWidget {
   @override
@@ -40,6 +39,34 @@ class SessionStartPageState extends State<SessionStartPage> {
   String beaconThree = "88:3F:4A:E5:FD:C5";
   int scanAttempts = 0;
 
+
+  flutterBlueTestOn(){
+    flutterBlue.isOn.then((res){
+      if(res.toString() != 'true'){
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
+        });
+        return true;
+      }
+    else{
+      return false;}
+    });}
+  flutterBlueAvailabilityTest(){
+    flutterBlue.isOn.then((res){
+      if(res.toString() != 'true'){
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
+        });
+        return true;}
+      else{
+        return false;}
+    });}
+  setStateReady(){
+    setState(() {
+      isReady = true;
+    });
+  }
+
   Future beaconScan() async {
     int beaconOneRssiValue = 0;
     int beaconTwoRssiValue = 0;
@@ -48,24 +75,9 @@ class SessionStartPageState extends State<SessionStartPage> {
       isReady = false;
     });
 
-    flutterBlue.isAvailable.then((res){
-      if(res.toString() != 'true'){
-        setState(() {
-          AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
-          isReady = true;});
-        return;
-      }
+    if (flutterBlueTestOn() == true && flutterBlueAvailabilityTest() == true){
+      AppResources.showErrorDialog(MODULE_NAME, "Something happened", context);
     }
-    );
-    flutterBlue.isOn.then((res){
-      if(res.toString() != 'true'){
-        setState(() {
-          AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
-          isReady=true;});
-        return;
-      }
-    });
-
 
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
       int beaconRssiValue = scanResult.rssi;
@@ -74,79 +86,37 @@ class SessionStartPageState extends State<SessionStartPage> {
       if (scanResult.device.id.id == "88:3F:4A:E5:FD:C5"){beaconThreeRssiValue = beaconRssiValue;}
 
       new Future.delayed(const Duration(seconds: 2), () {
-            bluetoothScan.cancel();
-            if(beaconOneRssiValue == 0){
-              setState(() {
-                isReady = true;
-              });
-          AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon One wasnt reached. Please try again", context);
-          beaconOneRssiValue=1;
-          scanAttempts++;
-          return;}
-          else{
-              if(beaconTwoRssiValue == 0){
+          bluetoothScan.cancel();
+          if (beaconOneRssiValue < 0){
+            if(beaconTwoRssiValue < 0){
+              if (beaconThreeRssiValue < 0){
                 setState(() {
-                  isReady = true;
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
                 });
-                AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Two wasnt reached. Please try again", context);
-                beaconTwoRssiValue=1;
+              }
+              if(beaconThreeRssiValue == 0){
                 scanAttempts++;
-                return;}
-              else{
-                if(beaconThreeRssiValue == 0){
-                  setState(() {
-                    isReady = true;
-                  });
-                  AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Three wasnt reached. Please try again", context);
-                  beaconThreeRssiValue=1;
-                  scanAttempts++;
-                  return;
-                    }
-                  }
-                }
-            if (scanAttempts == 5){
-              setState(() {
-                isReady = true;
-              });
-              AppResources.showErrorDialog(MODULE_NAME, "ERROR, A beacon wasn't reached after multiple attempts. Please notify an administrator. You may close the app.", context);
-              return;}
-
-            if (beaconOneRssiValue < -10 && beaconTwoRssiValue <- 10 && beaconThreeRssiValue < -10) {
-              setState(() {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
-              });
+                beaconThreeRssiValue++;
+                AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Three wasnt reached. Please try again", context);
+                setStateReady();}
             }
-/*
-        if(beaconTwoRssiValue == 0){
-          setState(() {
-            isReady = true;
-          });
-          AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Two wasnt reached. Please try again", context);
-          beaconTwoRssiValue=1;
-          scanAttempts++;
-          return;}
+            if(beaconTwoRssiValue == 0){
+              scanAttempts++;
+              beaconTwoRssiValue++;
+              AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Two wasnt reached. Please try again", context);
+              setStateReady();}
+          }
+          if(beaconOneRssiValue == 0){
+            scanAttempts++;
+            beaconOneRssiValue++;
+            AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon One wasnt reached. Please try again", context);
+            setStateReady();
+          }
+          if (scanAttempts == 5){
+            setStateReady();
+            AppResources.showErrorDialog(MODULE_NAME, "ERROR, A beacon wasn't reached after multiple attempts. Please notify an administrator. You may close the app.", context);
+          }
 
-        if(beaconThreeRssiValue == 0){
-          setState(() {
-            isReady = true;
-          });
-          AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Three wasnt reached. Please try again", context);
-          beaconThreeRssiValue=1;
-          scanAttempts++;
-          return;}
-
-        if (scanAttempts == 5){
-          setState(() {
-            isReady = true;
-          });
-          AppResources.showErrorDialog(MODULE_NAME, "ERROR, A beacon wasn't reached after multiple attempts. Please notify an administrator. You may close the app.", context);
-          return;}
-
-        if (beaconOneRssiValue < -10 && beaconTwoRssiValue <- 10 && beaconThreeRssiValue < -10) {
-          setState(() {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
-          });
-        }*/
       });
       });
   }

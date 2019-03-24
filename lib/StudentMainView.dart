@@ -9,9 +9,6 @@ import 'dart:math';
 import 'dart:async';
 import 'AppConsts.dart';
 
-
-void main() => runApp(StudentMainView());
-
 class StudentMainView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
