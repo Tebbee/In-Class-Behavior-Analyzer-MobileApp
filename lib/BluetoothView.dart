@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'package:behavior_analyzer/APIManager.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:async';
@@ -8,6 +7,7 @@ import 'AppConsts.dart';
 
 
 void main() => runApp(BluetoothView());
+var x,y;
 
 class BluetoothView extends StatelessWidget {
   @override
@@ -20,7 +20,6 @@ class BluetoothView extends StatelessWidget {
     );
   }
 }
-
 
 class BluetoothPage extends StatefulWidget {
   BluetoothPage({Key key, this.title}) : super(key: key);
@@ -44,8 +43,8 @@ class BluetoothPageState extends State<BluetoothPage> {
   String beaconThree = "88:3F:4A:E5:FD:C5";
 
   var beaconOneCoords = [0.0,0.0];
-  var beaconTwoCoords = [1.0,0.0];
-  var beaconThreeCoords = [0.0,1.0];
+  var beaconTwoCoords = [0.0,2.0];
+  var beaconThreeCoords = [2.0,0.0];
 
   double beaconRssiValue;
   double beaconRssiDistance;
@@ -115,7 +114,7 @@ class BluetoothPageState extends State<BluetoothPage> {
           beaconNumberThreeValueList.add(beaconRssiDistance);
           counterThree++;}
       }
-      return new Future.delayed(const Duration(seconds: 5), () {
+      return new Future.delayed(const Duration(seconds: 30), () {
         bluetoothScan.cancel();
       });
     });
@@ -192,8 +191,8 @@ class BluetoothPageState extends State<BluetoothPage> {
     double y2 = secondBeacon[1];
     double x3 = thirdBeacon[0];
     double y3 = thirdBeacon[1];
-    calculateThreeCircleIntersection(x1, y1, beaconOneDistance, x2, y2, beaconTwoDistance, x3, y3, beaconThreeDistance);
-
+    //calculateThreeCircleIntersection(x1, y1, beaconOneDistance, x2, y2, beaconTwoDistance, x3, y3, beaconThreeDistance);
+    circleCircleIntersectionPoints(x1,y1,beaconOneDistance,x2,y2,beaconTwoDistance);
  }
 
  calculateThreeCircleIntersection(
@@ -255,7 +254,75 @@ class BluetoothPageState extends State<BluetoothPage> {
     }
     return true;
   }
+  
+  
+  circleCircleIntersectionPoints(x1,y1,r1,x2,y2,r2) {
 
+    var  d, dx, dy;
+
+    if (r1 < r2) {
+      r1  = r1;  r2 = r2;
+      x1 = x1; y1 = y1;
+      x2 = x2; y2 = y2;
+    } else {
+      r1  = r2; r2  = r1;
+      x2 = x1; y2 = y1;
+      x1 = x2; y1 = y2;
+    }
+
+    dx = (x1 - x2).abs();
+    dy = (y1 - y2).abs();
+
+    d = sqrt( dx*dx + dy*dy );
+    print("THERE");
+    
+    if (d < EPSILON && (r2-r1).abs() < EPSILON){
+      print("HERE");
+      return [];}
+
+    // No intersection (circles centered at the
+    // same place with different size)
+    else if (d < EPSILON){print("Or here");
+    return [];}
+
+    var x = (dx / d) * r2 + x2;
+    var y = (dy / d) * r2 + y2;
+    var P = Point(x, y);
+
+    // Single intersection (kissing circles)
+    if (((r2+r1)-d).abs() < EPSILON || ((r2-(r1+d)).abs() < EPSILON)) {
+      print("kissing");
+      return [P];}
+    // No intersection. Either the small circle contained within
+    // big circle or circles are simply disjoint.
+    if ( (d+r1) < r2 || (r2+r1 < d) ) {
+      print("No intersection");
+      return [];}
+
+
+    var C = Point(x2, y2);
+    var angle = acossafe((r1*r1-d*d-r2*r2)/(-2.0*d*r2));
+    var pt1 = rotatePoint(C, P, angle);
+    var pt2 = rotatePoint(C, P, -1*angle);
+    return [pt1, pt2];
+  }
+
+   rotatePoint(fp, pt, a) {
+    var x = pt.x - fp.x;
+    var y = pt.y - fp.y;
+    var xRot = x * cos(a) + y * sin(a);
+    var yRot = y * cos(a) - x * sin(a);
+    return Point(fp.x+xRot,fp.y+yRot);
+  }
+   Point(x, y) {
+    this.x = x;
+    this.y = y;
+  }
+   acossafe(x) {
+    if (x >= 1.0) return 0;
+    if (x <= -1.0) return pi;
+    return acos(x);
+  }
 
   /// Builds the Apps appearance: Text boxes, buttons, etc.
   @override
@@ -323,6 +390,5 @@ class BluetoothPageState extends State<BluetoothPage> {
     )
     ));
     }
-
 
 }

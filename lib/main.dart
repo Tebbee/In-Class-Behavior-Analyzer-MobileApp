@@ -26,7 +26,6 @@ class MyApp extends StatelessWidget {
 class LoginPage extends StatefulWidget {
   @override
   _LoginPageState createState() => _LoginPageState();
-
 }
 
 class _LoginPageState extends State<LoginPage> {
@@ -105,7 +104,6 @@ class _LoginPageState extends State<LoginPage> {
     setState(() {
       loginTextColor = AppResources.buttonTextColor;
       loginBackColor = AppResources.buttonBackColor;
-
       registerTextColor = AppResources.buttonBackColor;
       registerBackColor = AppResources.buttonTextColor;
 

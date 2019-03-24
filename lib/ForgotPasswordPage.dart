@@ -1,4 +1,3 @@
-import 'package:behavior_analyzer/APIManager.dart';
 import 'package:flutter/material.dart';
 import 'ForgotPasswordForm.dart';
 import 'PasswordResetForm.dart';
@@ -20,7 +19,7 @@ class ForgotPasswordState extends State<ForgotPasswordPage> {
     // TODO: implement initState
     super.initState();
     ForgotPasswordForm fpf = new ForgotPasswordForm(onComplete: this.onRequestResetCodeComplete,);
-    PasswordResetForm prf = new PasswordResetForm(onComplete: this.onPasswordResetCompelete,);
+    PasswordResetForm prf = new PasswordResetForm(onComplete: this.onPasswordResetComplete,);
     states = [fpf, prf];
   }
 
@@ -54,7 +53,7 @@ class ForgotPasswordState extends State<ForgotPasswordPage> {
     });
   }
 
-  void onPasswordResetCompelete() {
+  void onPasswordResetComplete() {
     Navigator.pop(context);
   }
 

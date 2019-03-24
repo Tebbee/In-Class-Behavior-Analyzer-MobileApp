@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'AppConsts.dart';
-import 'PasswordResetForm.dart';
 import 'APIManager.dart';
 
 class ForgotPasswordForm extends StatefulWidget {
@@ -76,7 +73,6 @@ class ForgotPasswordState extends State<ForgotPasswordForm> {
     if (usernameController.text.isEmpty) {
       AppResources.showErrorDialog(MODULE_NAME, "No username!", context);
     }
-
     setState(() {
       isReady = false;
     });

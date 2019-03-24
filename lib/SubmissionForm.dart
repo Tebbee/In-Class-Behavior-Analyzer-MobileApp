@@ -12,12 +12,11 @@ class SubmissionForm extends StatelessWidget {
       home: Scaffold(
         resizeToAvoidBottomPadding: false,
         body: SafeArea(
-          child: SubmissionPage(title: ''),
+          child: SubmissionPage(title: 'Success!'),
         ),
       ),
     );
   }
-
 }
 
 class SubmissionPage extends StatefulWidget {
@@ -29,7 +28,6 @@ class SubmissionPage extends StatefulWidget {
 }
 
 class SubmissionPageState extends State<SubmissionPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +37,6 @@ class SubmissionPageState extends State<SubmissionPage> {
       ),
       body: Center(
         child: Column(
-
             children: <Widget>[
         new Container(
               margin: EdgeInsets.all(25.0),
@@ -55,11 +52,9 @@ class SubmissionPageState extends State<SubmissionPage> {
                     child: new Text("Login Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: AppResources.buttonBackColor,)
               ),
-
             ]
         ),
       ),
-
     );
 
   }

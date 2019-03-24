@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart';
 import 'APIModels.dart';
 
 class APIManager {
@@ -7,7 +6,7 @@ class APIManager {
   static String SESSION_ID = "";
   static String SESSION_COOKIE = "";
   //static final String BASE_URL = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/";
-  static final String BASE_URL = "http://192.168.0.70:8000/api/";
+  static final String BASE_URL = "http://10.2.224.19:8000/api/";
 
   static bool isUserLoggedIn() {
     return SESSION_ID.isNotEmpty;

@@ -1,4 +1,5 @@
 import 'package:behavior_analyzer/SessionStartForm.dart';
+import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'ForgotPasswordPage.dart';
 import 'AppConsts.dart';
@@ -17,7 +18,7 @@ class LoginState extends State<LoginForm> {
 
   bool isReady = true;
 
-  ///
+
   /// Building the page on the App. (The text boxes, pictures, buttons)
   @override
   Widget build(BuildContext context) {
@@ -62,7 +63,6 @@ class LoginState extends State<LoginForm> {
 
         new FlatButton(
           textColor: AppResources.labelTextColor,
-          //color: Colors.white,
           child: new Text('Forgot Password?'),
           onPressed: forgotPasswordClick,
         ),

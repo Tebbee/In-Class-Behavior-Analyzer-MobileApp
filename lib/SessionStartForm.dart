@@ -74,30 +74,66 @@ class SessionStartPageState extends State<SessionStartPage> {
       if (scanResult.device.id.id == "88:3F:4A:E5:FD:C5"){beaconThreeRssiValue = beaconRssiValue;}
 
       new Future.delayed(const Duration(seconds: 2), () {
-        bluetoothScan.cancel();
-        if(beaconOneRssiValue == 0){
-          setState(() {
-            isReady = true;
-          });
+            bluetoothScan.cancel();
+            if(beaconOneRssiValue == 0){
+              setState(() {
+                isReady = true;
+              });
           AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon One wasnt reached. Please try again", context);
           beaconOneRssiValue=1;
-          scanAttempts++;}
+          scanAttempts++;
+          return;}
+          else{
+              if(beaconTwoRssiValue == 0){
+                setState(() {
+                  isReady = true;
+                });
+                AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Two wasnt reached. Please try again", context);
+                beaconTwoRssiValue=1;
+                scanAttempts++;
+                return;}
+              else{
+                if(beaconThreeRssiValue == 0){
+                  setState(() {
+                    isReady = true;
+                  });
+                  AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Three wasnt reached. Please try again", context);
+                  beaconThreeRssiValue=1;
+                  scanAttempts++;
+                  return;
+                    }
+                  }
+                }
+            if (scanAttempts == 5){
+              setState(() {
+                isReady = true;
+              });
+              AppResources.showErrorDialog(MODULE_NAME, "ERROR, A beacon wasn't reached after multiple attempts. Please notify an administrator. You may close the app.", context);
+              return;}
 
+            if (beaconOneRssiValue < -10 && beaconTwoRssiValue <- 10 && beaconThreeRssiValue < -10) {
+              setState(() {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
+              });
+            }
+/*
         if(beaconTwoRssiValue == 0){
           setState(() {
             isReady = true;
           });
           AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Two wasnt reached. Please try again", context);
-          beaconOneRssiValue=1;
-          scanAttempts++;}
+          beaconTwoRssiValue=1;
+          scanAttempts++;
+          return;}
 
         if(beaconThreeRssiValue == 0){
           setState(() {
             isReady = true;
           });
           AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Three wasnt reached. Please try again", context);
-          beaconOneRssiValue=1;
-          scanAttempts++;}
+          beaconThreeRssiValue=1;
+          scanAttempts++;
+          return;}
 
         if (scanAttempts == 5){
           setState(() {
@@ -110,7 +146,7 @@ class SessionStartPageState extends State<SessionStartPage> {
           setState(() {
             Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
           });
-        }
+        }*/
       });
       });
   }
