@@ -53,9 +53,13 @@ class StudentPageState extends State<StudentPage> {
             RaisedButton(onPressed: (){
               Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyExample()));},
             child:Text("Survey Questions"),),
-            RaisedButton(onPressed: (){
-              Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));},
-            child:Text("Demographic Information"),),
+            new Container(
+                margin: EdgeInsets.all(5.0),
+                child: new RaisedButton(
+                  onPressed: demographicButton,
+                  child: new Text("Demographic Information", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
+                  color: AppResources.buttonBackColor,)
+            ),
             new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
@@ -81,7 +85,10 @@ class StudentPageState extends State<StudentPage> {
     Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
     APIManager.SESSION_ID = "";
     }
+  void demographicButton(){
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));
 
+  }
 
   void bluetooth() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}

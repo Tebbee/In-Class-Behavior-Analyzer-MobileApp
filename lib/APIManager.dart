@@ -1,5 +1,4 @@
 import 'package:http/http.dart' as http;
-import 'APIModels.dart';
 
 class APIManager {
   static final String LOG_NAME = "API_Manager";
@@ -74,11 +73,9 @@ class APIManager {
 
   static Future<http.Response> demographicCreate(int age, int gender, int gradeYear, int ethnicity, int race, String major) async {
     print(LOG_NAME + ': Making demographic create request...');
-    print(SESSION_ID);
-
     return await http.post(
       BASE_URL + 'demographic/create?session_id='+SESSION_ID,
-      body: {'age': age.toString(), 'gender': gender.toString(), 'grade_year': gradeYear.toString(), 'ethnicity': ethnicity.toString(), 'race': race.toString(), 'major': major.toString()},
+      body: {'age': age.toString(), 'gender': gender.toString(), 'grade_year': gradeYear.toString(), 'ethnicity': ethnicity.toString(), 'race': race.toString(), 'major': major},
     );
   }
 
@@ -121,7 +118,7 @@ class APIManager {
     print(LOG_NAME + ': Making demographic select request...');
 
     return await http.post(
-      BASE_URL + 'demographic/select',
+      BASE_URL + 'demographic/select?session_id='+SESSION_ID,
     );
   }
 

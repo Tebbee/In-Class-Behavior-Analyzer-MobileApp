@@ -1,7 +1,6 @@
 import 'package:behavior_analyzer/DemographicSubmissionForm.dart';
 import 'package:flutter/material.dart';
 import 'APIManager.dart';
-import 'APIModels.dart';
 import 'AppConsts.dart';
 
 class DemographicForm extends StatefulWidget {
@@ -21,11 +20,6 @@ class DemographicFormState extends State<DemographicForm> {
   var currentRaceSelected = "American Indian or Alaska Native";
   var currentEthnicitySelected = "Hispanic or Latino";
 
-  GenderLookup selectedGender;
-  GradeYearLookup selectedGradeYear;
-  RaceLookup selectedRace;
-  EthnicityLookup selectedEthnicity;
-
   bool isReady = false;
 
   TextEditingController ageController = new TextEditingController();
@@ -35,10 +29,19 @@ class DemographicFormState extends State<DemographicForm> {
   @override
   void initState() {
     super.initState();
-    APIManager.demographicForm().then((response) {
+    APIManager.demographicSelect().then((response){
+      if(response.body.split(":")[2]!= "error"){
+        ageController.text=(response.body.split(":")[5].split(",")[0]);
+        currentGenderSelected = genders[int.parse(response.body.split(":")[6].split(",")[0])];
+        currentGradeYearSelected = gradeYears[int.parse(response.body.split(":")[6].split(",")[0])];
+        currentRaceSelected = races[int.parse(response.body.split(":")[6].split(",")[0])];
+        currentEthnicitySelected = ethnicities[int.parse(response.body.split(":")[6].split(",")[0])];
+        majorController.text=(response.body.split(":")[10].replaceAll("}", "").replaceAll('"', ""));
+      }
       setState(() {
         isReady = true;
       });
+
     });
   }
 
@@ -66,7 +69,6 @@ class DemographicFormState extends State<DemographicForm> {
                         style: TextStyle(
                             color: AppResources.labelTextColor, fontSize: 30.0),
                       ),
-
                       TextField(
                         decoration: new InputDecoration(
                             labelText: 'Age:',
@@ -199,26 +201,29 @@ class DemographicFormState extends State<DemographicForm> {
     setState(() {
       isReady = false;
     });
-    
-    APIManager.demographicCreate(int.parse(ageController.text),
+    APIManager.demographicUpdate(int.parse(ageController.text),
         convertToNumber(genders, currentGenderSelected),
         convertToNumber(gradeYears, currentGradeYearSelected),
         convertToNumber(races, currentRaceSelected),
         convertToNumber(ethnicities, currentEthnicitySelected),
-        majorController.text).then((response) {
-      setState(() {
-        isReady = true;
-      });
-      if(response.body.contains("204")){
-        APIManager.demographicUpdate(int.parse(ageController.text),
-          convertToNumber(genders, currentGenderSelected),
-          convertToNumber(gradeYears, currentGradeYearSelected),
-          convertToNumber(races, currentRaceSelected),
-          convertToNumber(ethnicities, currentEthnicitySelected),
-          majorController.text);
-        Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicSubmissionForm()));
+        majorController.text).then((response){
+          setState(() {
+            isReady = true;
+          });
+        print(response.body);
+        if(response.body.contains("success")){
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicSubmissionForm()));
+        }
+        if(response.body.contains("206")){
+          APIManager.demographicCreate(int.parse(ageController.text),
+              convertToNumber(genders, currentGenderSelected),
+              convertToNumber(gradeYears, currentGradeYearSelected),
+              convertToNumber(races, currentRaceSelected),
+              convertToNumber(ethnicities, currentEthnicitySelected),
+              majorController.text);
+          Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicSubmissionForm()));
 
-      }
+        }
     });
   }
 
@@ -233,4 +238,7 @@ class DemographicFormState extends State<DemographicForm> {
     return number;
   }
 
+  getDemographics(){
+    print(APIManager.demographicSelect());
+  }
 }
