@@ -1,5 +1,6 @@
 import 'package:behavior_analyzer/APIManager.dart';
 import 'package:behavior_analyzer/DemographicForm.dart';
+import 'package:behavior_analyzer/FeedbackForm.dart';
 import 'package:behavior_analyzer/StudentSurveyExample.dart';
 import 'package:behavior_analyzer/main.dart';
 import 'package:behavior_analyzer/BluetoothView.dart';
@@ -17,7 +18,7 @@ class StudentMainView extends StatelessWidget {
         resizeToAvoidBottomPadding: false,
         backgroundColor: AppResources.buttonBackColor,
         body: SafeArea(
-            child: StudentPage(title: 'Student Main Page'),
+            child: StudentPage(title: 'Main Menu'),
         ),
       ),
     );
@@ -74,6 +75,14 @@ class StudentPageState extends State<StudentPage> {
                   child: new Text("Bluetooth", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: Colors.blue,)
             ),
+            new Container(
+                margin: EdgeInsets.all(5.0),
+                child: new RaisedButton(
+                  onPressed: feedbackButton,
+                  child: new Text("Feedback", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                  color: AppResources.buttonBackColor,
+                  )
+            ),
             ]
           ),
           ),
@@ -82,14 +91,16 @@ class StudentPageState extends State<StudentPage> {
 
   void logoutButton(){
     APIManager.logout();
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
+    Navigator.pop(context,new MaterialPageRoute(builder: (context) => MyApp()));
     APIManager.SESSION_ID = "";
     }
   void demographicButton(){
     Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));
+  }
+  void feedbackButton(){
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => FeedbackForm()));
 
   }
-
   void bluetooth() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}
   }

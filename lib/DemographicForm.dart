@@ -29,20 +29,7 @@ class DemographicFormState extends State<DemographicForm> {
   @override
   void initState() {
     super.initState();
-    APIManager.demographicSelect().then((response){
-      if(response.body.split(":")[2]!= "error"){
-        ageController.text=(response.body.split(":")[5].split(",")[0]);
-        currentGenderSelected = genders[int.parse(response.body.split(":")[6].split(",")[0])];
-        currentGradeYearSelected = gradeYears[int.parse(response.body.split(":")[6].split(",")[0])];
-        currentRaceSelected = races[int.parse(response.body.split(":")[6].split(",")[0])];
-        currentEthnicitySelected = ethnicities[int.parse(response.body.split(":")[6].split(",")[0])];
-        majorController.text=(response.body.split(":")[10].replaceAll("}", "").replaceAll('"', ""));
-      }
-      setState(() {
-        isReady = true;
-      });
-
-    });
+    getDemographics();
   }
 
   @override
@@ -210,7 +197,6 @@ class DemographicFormState extends State<DemographicForm> {
           setState(() {
             isReady = true;
           });
-        print(response.body);
         if(response.body.contains("success")){
           Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicSubmissionForm()));
         }
@@ -222,7 +208,6 @@ class DemographicFormState extends State<DemographicForm> {
               convertToNumber(ethnicities, currentEthnicitySelected),
               majorController.text);
           Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicSubmissionForm()));
-
         }
     });
   }
@@ -239,6 +224,19 @@ class DemographicFormState extends State<DemographicForm> {
   }
 
   getDemographics(){
-    print(APIManager.demographicSelect());
+    APIManager.demographicSelect().then((response){
+      if(response.body.split(":")[2]!= "error"){
+        ageController.text=(response.body.split(":")[5].split(",")[0]);
+        currentGenderSelected = genders[int.parse(response.body.split(":")[6].split(",")[0])];
+        currentGradeYearSelected = gradeYears[int.parse(response.body.split(":")[6].split(",")[0])];
+        currentRaceSelected = races[int.parse(response.body.split(":")[6].split(",")[0])];
+        currentEthnicitySelected = ethnicities[int.parse(response.body.split(":")[6].split(",")[0])];
+        majorController.text=(response.body.split(":")[10].replaceAll("}", "").replaceAll('"', ""));
+      }
+      setState(() {
+        isReady = true;
+      });
+
+    });
   }
 }
