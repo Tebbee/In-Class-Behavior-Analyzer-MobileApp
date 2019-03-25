@@ -60,14 +60,14 @@ class StudentPageState extends State<StudentPage> {
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
                   onPressed:logoutButton,
-                  child: new Text("Logout", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                  color: Colors.red,)
+                  child: new Text("Logout", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
+                  color: AppResources.buttonBackColor,)
             ),
             new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
                   onPressed: bluetooth,
-                  child: new Text("Bluetooth On", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                  child: new Text("Bluetooth", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: Colors.blue,)
             ),
             ]

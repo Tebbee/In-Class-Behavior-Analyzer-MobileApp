@@ -112,7 +112,8 @@ class LoginState extends State<LoginForm> {
           });
           return;}
         if(APIManager.SESSION_ID != null){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SessionStartForm()));
+          //Navigator.push(context, MaterialPageRoute(builder: (context) => SessionStartForm()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
           setState(() {
             isReady = true;
           });

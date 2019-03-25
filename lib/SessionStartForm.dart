@@ -75,10 +75,6 @@ class SessionStartPageState extends State<SessionStartPage> {
       isReady = false;
     });
 
-    if (flutterBlueTestOn() == true && flutterBlueAvailabilityTest() == true){
-      AppResources.showErrorDialog(MODULE_NAME, "Something happened", context);
-    }
-
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
       int beaconRssiValue = scanResult.rssi;
       if (scanResult.device.id.id == "88:3F:4A:E5:F6:E2") {beaconOneRssiValue = beaconRssiValue;}

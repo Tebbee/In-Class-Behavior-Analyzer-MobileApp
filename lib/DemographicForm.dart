@@ -1,6 +1,5 @@
+import 'package:behavior_analyzer/DemographicSubmissionForm.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'APIManager.dart';
 import 'APIModels.dart';
 import 'AppConsts.dart';
@@ -13,10 +12,14 @@ class DemographicForm extends StatefulWidget {
 class DemographicFormState extends State<DemographicForm> {
   static const String MODULE_NAME = 'demographic_form';
 
-  List<GenderLookup> genders = new List<GenderLookup>();
-  List<GradeYearLookup> gradeYears = new List<GradeYearLookup>();
-  List<RaceLookup> races = new List<RaceLookup>();
-  List<EthnicityLookup> ethnicities = new List<EthnicityLookup>();
+  var genders = ["Male","Female", "Other", "Prefer not to say"];
+  var gradeYears = ["Freshman","Sophomore","Junior","Senior","Super Senior","Graduate","Other","Prefer not to say"];
+  var races = ["American Indian or Alaska Native","Asian","Black or African American","Native Hawaiian or Other Pacific Islander","White","Other","Prefer not to say"];
+  var ethnicities = ["Hispanic or Latino","Not Hispanic or Latino","Other","Prefer not to say"];
+  var currentGenderSelected = 'Male';
+  var currentGradeYearSelected = "Freshman";
+  var currentRaceSelected = "American Indian or Alaska Native";
+  var currentEthnicitySelected = "Hispanic or Latino";
 
   GenderLookup selectedGender;
   GradeYearLookup selectedGradeYear;
@@ -28,11 +31,11 @@ class DemographicFormState extends State<DemographicForm> {
   TextEditingController ageController = new TextEditingController();
   TextEditingController majorController = new TextEditingController();
 
+
   @override
   void initState() {
     super.initState();
     APIManager.demographicForm().then((response) {
-      //populateFormChoices(response);
       setState(() {
         isReady = true;
       });
@@ -76,66 +79,78 @@ class DemographicFormState extends State<DemographicForm> {
                       SizedBox(height: 15.0,),
 
                       Text('Gender:', style: new TextStyle(color: AppResources.labelTextColor),),
-            /*        DropdownButton<GenderLookup>(
-                        isExpanded: true,
-                        items: genders.map((GenderLookup gender) {
-                          return new DropdownMenuItem(child: new Text(gender.name), value: gender);
+                      DropdownButton<String>(
+                        value : currentGenderSelected,
+                        items: genders.map((String dropDownStringItem){
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem),
+                          );
                         }).toList(),
-                        value: selectedGender,
-                        onChanged: (val){
-                          setState(() {
-                            selectedGender = val;
+                        onChanged: (String newValueSelected){
+                          setState((){
+                            currentGenderSelected = newValueSelected;
                           });
                         },
-                      ),*/
+                        iconSize: 50,
+                      ),
 
                       SizedBox(height: 15.0,),
 
                       Text('Grade Year:', style: new TextStyle(color: AppResources.labelTextColor),),
-                  /*    DropdownButton<GradeYearLookup>(
-                        isExpanded: true,
-                        items: gradeYears.map((GradeYearLookup g) {
-                          return new DropdownMenuItem(child: new Text(g.name), value: g);
+                      DropdownButton<String>(
+                        value : currentGradeYearSelected,
+                        items: gradeYears.map((String dropDownStringItem){
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem),
+                          );
                         }).toList(),
-                        value: selectedGradeYear,
-                        onChanged: (val){
-                          setState(() {
-                            selectedGradeYear = val;
+                        onChanged: (String newValueSelected){
+                          setState((){
+                            currentGradeYearSelected = newValueSelected;
                           });
                         },
-                      ),*/
-
+                        iconSize: 50,
+                      ),
                       SizedBox(height: 15.0,),
 
                       Text('Race:', style: new TextStyle(color: AppResources.labelTextColor),),
-                  /*    DropdownButton<RaceLookup>(
-                        isExpanded: true,
-                        items: races.map((RaceLookup g) {
-                          return new DropdownMenuItem(child: new Text(g.name), value: g);
+                      DropdownButton<String>(
+                        value : currentRaceSelected,
+                        items: races.map((String dropDownStringItem){
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem),
+                          );
                         }).toList(),
-                        value: selectedRace,
-                        onChanged: (val){
-                          setState(() {
-                            selectedRace = val;
+                        isExpanded: true,
+                        onChanged: (String newValueSelected){
+                          setState((){
+                            currentRaceSelected = newValueSelected;
                           });
                         },
-                      ),*/
+                        iconSize: 50,
+                      ),
 
                       SizedBox(height: 15.0,),
 
                       Text('Ethnicity:', style: new TextStyle(color: AppResources.labelTextColor),),
-                    /*  DropdownButton<EthnicityLookup>(
-                        isExpanded: true,
-                        items: ethnicities.map((EthnicityLookup g) {
-                          return new DropdownMenuItem(child: new Text(g.name), value: g);
+                      DropdownButton<String>(
+                        value : currentEthnicitySelected,
+                        items: ethnicities.map((String dropDownStringItem){
+                          return DropdownMenuItem<String>(
+                            value: dropDownStringItem,
+                            child: Text(dropDownStringItem),
+                          );
                         }).toList(),
-                        value: selectedEthnicity,
-                        onChanged: (val){
-                          setState(() {
-                            selectedEthnicity = val;
+                        onChanged: (String newValueSelected){
+                          setState((){
+                            currentEthnicitySelected = newValueSelected;
                           });
                         },
-                      ),*/
+                        iconSize: 50,
+                      ),
 
                       SizedBox(height:15.0,),
 
@@ -165,30 +180,6 @@ class DemographicFormState extends State<DemographicForm> {
     );
   }
 
-  void populateFormChoices(http.Response response) {
-    Map<String, dynamic> formValues = json.decode(response.body);
-
-    for (Map<String, dynamic> gender in formValues['genders']) {
-      genders.add(new GenderLookup(gender['id'], gender['name']));
-    }
-    selectedGender = genders.first;
-
-    for (Map<String, dynamic> gradeYear in formValues['grade_years']) {
-      gradeYears.add(new GradeYearLookup(gradeYear['id'], gradeYear['name']));
-    }
-    selectedGradeYear = gradeYears.first;
-
-    for (Map<String, dynamic> race in formValues['races']) {
-      races.add(new RaceLookup(race['id'], race['name']));
-    }
-    selectedRace = races.first;
-
-    for (Map<String, dynamic> ethnicity in formValues['ethnicities']) {
-      ethnicities.add(new EthnicityLookup(ethnicity['id'], ethnicity['name']));
-    }
-    selectedEthnicity = ethnicities.first;
-  }
-
   void submitData() {
     if (ageController.text.isEmpty) {
       AppResources.showErrorDialog(MODULE_NAME, 'No age inputted!', context);
@@ -201,25 +192,45 @@ class DemographicFormState extends State<DemographicForm> {
     }
 
     if (!APIManager.isUserLoggedIn()) {
-      //AppResources.showErrorDialog(MODULE_NAME, 'You are not logged in!', context);
-      //return;
+      AppResources.showErrorDialog(MODULE_NAME, 'You are not logged in!', context);
+      return;
     }
 
     setState(() {
       isReady = false;
     });
-
-    APIManager.demographicCreate(int.parse(ageController.text), selectedGender, selectedGradeYear, selectedEthnicity, selectedRace, majorController.text).then((response) {
+    
+    APIManager.demographicCreate(int.parse(ageController.text),
+        convertToNumber(genders, currentGenderSelected),
+        convertToNumber(gradeYears, currentGradeYearSelected),
+        convertToNumber(races, currentRaceSelected),
+        convertToNumber(ethnicities, currentEthnicitySelected),
+        majorController.text).then((response) {
       setState(() {
         isReady = true;
       });
-      print(response.body);
-      if (Navigator.canPop(context)) {
-        Navigator.pop(context);
+      if(response.body.contains("204")){
+        APIManager.demographicUpdate(int.parse(ageController.text),
+          convertToNumber(genders, currentGenderSelected),
+          convertToNumber(gradeYears, currentGradeYearSelected),
+          convertToNumber(races, currentRaceSelected),
+          convertToNumber(ethnicities, currentEthnicitySelected),
+          majorController.text);
+        Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicSubmissionForm()));
+
       }
     });
+  }
 
-
+  convertToNumber(list, selectedWord){
+    int number = 1;
+    for(var word in list){
+      if (word != selectedWord){
+        number++;
+      }
+      return number;
+    }
+    return number;
   }
 
 }

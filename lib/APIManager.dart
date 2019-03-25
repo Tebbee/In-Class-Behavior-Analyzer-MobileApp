@@ -33,7 +33,6 @@ class APIManager {
   static Future<http.Response> logout() async {
     print(LOG_NAME + ': Making logout request...');
 
-
     return await http.post(
       BASE_URL + "auth/logout?session_id="+SESSION_ID,
     );
@@ -73,16 +72,17 @@ class APIManager {
     );
   }
 
-  static Future<http.Response> demographicCreate(int age, GenderLookup gender, GradeYearLookup gradeYear, EthnicityLookup ethnicity, RaceLookup race, String major) async {
+  static Future<http.Response> demographicCreate(int age, int gender, int gradeYear, int ethnicity, int race, String major) async {
     print(LOG_NAME + ': Making demographic create request...');
+    print(SESSION_ID);
 
     return await http.post(
-      BASE_URL + 'demographic/create',
-      body: {'age': age.toString(), 'gender': gender.id.toString(), 'grade_year': gradeYear.id.toString(), 'ethnicity': ethnicity.id.toString(), 'race': race.id.toString(), 'major': major.toString(), 'session_id': SESSION_ID},
+      BASE_URL + 'demographic/create?session_id='+SESSION_ID,
+      body: {'age': age.toString(), 'gender': gender.toString(), 'grade_year': gradeYear.toString(), 'ethnicity': ethnicity.toString(), 'race': race.toString(), 'major': major.toString()},
     );
   }
 
-  static Future<http.Response> demographicUpdate(int age, GenderLookup gender, GradeYearLookup gradeYear, EthnicityLookup ethnicity, RaceLookup race, String major) async {
+  static Future<http.Response> demographicUpdate(int age, int gender, int gradeYear, int ethnicity, int race, String major) async {
     print(LOG_NAME + ': Making demographic update request...');
 
     Map<String, dynamic> bodyValues = {};
@@ -92,19 +92,19 @@ class APIManager {
     }
 
     if (gender != null) {
-      bodyValues['gender'] = gender.id.toString();
+      bodyValues['gender'] = gender.toString();
     }
 
     if (gradeYear != null) {
-      bodyValues['grade_year'] = gradeYear.id.toString();
+      bodyValues['grade_year'] = gradeYear.toString();
     }
 
     if (ethnicity != null) {
-      bodyValues['ethnicity'] = ethnicity.id.toString();
+      bodyValues['ethnicity'] = ethnicity.toString();
     }
 
     if (race != null) {
-      bodyValues['race'] = race.id.toString();
+      bodyValues['race'] = race.toString();
     }
 
     if (major != null) {
@@ -112,7 +112,7 @@ class APIManager {
     }
 
     return await http.post(
-      BASE_URL + 'demographic/update',
+      BASE_URL + 'demographic/update?session_id='+SESSION_ID,
       body: bodyValues,
     );
   }
@@ -129,7 +129,7 @@ class APIManager {
     print(LOG_NAME + ': Making demographic form request...');
 
     return await http.post(
-      BASE_URL + 'demographic/form',
+      BASE_URL + 'demographic/form/create?'+SESSION_ID,
     );
   }
 
