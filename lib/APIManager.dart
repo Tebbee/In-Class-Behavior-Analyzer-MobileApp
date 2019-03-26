@@ -3,22 +3,19 @@ import 'package:http/http.dart' as http;
 class APIManager {
   static final String LOG_NAME = "API_Manager";
   static String SESSION_ID = "";
-  static String USER_ID = "";
+  static String CLASS_ID = "";
   static String SESSION_COOKIE = "";
   //static final String BASE_URL = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/";
-  static final String BASE_URL = "http://192.168.0.70:8000/api/";
+  //static final String BASE_URL = "http://192.168.0.70:8000/api/";
+  static final String BASE_URL = "http://10.2.224.19:8000/api/";
   static bool openSurvey = false;
   static bool isUserLoggedIn() {
     return SESSION_ID.isNotEmpty;
   }
 
   static void parseLoginResponse(http.Response res) {
-    //String cookieString = res.headers['set-cookie'];
     SESSION_ID=(res.body.split(" ")[4].replaceAll('"', '').replaceAll("}", ""));
-    print(res.body);
     print(SESSION_ID);
-   // SESSION_ID = res.headers['set-cookie'].split("sessionid=")[1].split(";")[0];
-   // SESSION_COOKIE = cookieString.substring(cookieString.indexOf("sessionid"), cookieString.length);
   }
 
   static Future<http.Response> login(String username, String password) async {

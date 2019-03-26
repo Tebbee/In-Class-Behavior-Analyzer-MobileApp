@@ -92,24 +92,9 @@ class BluetoothPageState extends State<BluetoothPage> {
       }});}
 
   Future beaconScan() async {
+    if(flutterBlueAvailabilityTest() && flutterBlueTestOn()){
 
-    flutterBlue.isAvailable.then((res){
-      if(res.toString() != 'true'){
-        setState(() {
-          AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
-          });
-        return;
-      }
-    }
-    );
-    flutterBlue.isOn.then((res){
-      if(res.toString() != 'true'){
-        setState(() {
-          AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
-          });
-        return;
-      }
-    });
+
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
       beaconRssiValue = scanResult.rssi.toDouble();
       beaconRssiDistance = pow(10,(-55 - beaconRssiValue.toDouble()) / (10 * 2));
@@ -135,7 +120,7 @@ class BluetoothPageState extends State<BluetoothPage> {
       return new Future.delayed(const Duration(seconds: 30), () {
         bluetoothScan.cancel();
       });
-    });
+    });}
   }
 
   reset(){

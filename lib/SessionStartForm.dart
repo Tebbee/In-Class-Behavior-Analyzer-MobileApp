@@ -39,32 +39,33 @@ class SessionStartPageState extends State<SessionStartPage> {
   String beaconTwo = "88:3F:4A:E5:FA:7C";
   String beaconThree = "88:3F:4A:E5:FD:C5";
   int scanAttempts = 0;
-  List<String> classItems = [];
+  var classItems = ["None"];
   var currentClassSelected;
 
 
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
-      if(res.toString() != 'true'){
-        setState(() {
-          AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
-        });
-        return true;
+      print(res.toString());
+      if(res.toString() == 'true'){
+        dropDownListTest();
       }
-    else{
-      return false;}
+    else
+      setState(() {
+      AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
+    });
+
     });}
   flutterBlueAvailabilityTest(){
-    flutterBlue.isOn.then((res){
-      if(res.toString() != 'true'){
+    flutterBlue.isAvailable.then((res){
+      if(res.toString() == 'true'){
+        flutterBlueTestOn();
+        }
+      else
         setState(() {
           AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
         });
-        return true;}
-      else{
-        return false;}
+      return false;
     });}
-
   setStateReady(){
     setState(() {
       isReady = true;
@@ -124,9 +125,8 @@ class SessionStartPageState extends State<SessionStartPage> {
   @override
   initState() {
     isReady = false;
-    classItems.clear();
+    refresh();
     super.initState();
-    test();
   }
 
   @override
@@ -138,7 +138,6 @@ class SessionStartPageState extends State<SessionStartPage> {
     }
     return Center(
       child: Column(
-
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Container(
@@ -156,7 +155,7 @@ class SessionStartPageState extends State<SessionStartPage> {
             ),
             Text('Select Class:', style: new TextStyle(color: AppResources.labelTextColor),),
             DropdownButton<String>(
-              value : currentClassSelected,
+              //value : null,
               items: classItems.map((String dropDownStringItem){
                 return DropdownMenuItem<String>(
                   value: dropDownStringItem,
@@ -168,28 +167,33 @@ class SessionStartPageState extends State<SessionStartPage> {
                   currentClassSelected = newValueSelected;
                 });
               },
+              value : currentClassSelected,
               iconSize: 50,
+            ),
+            new Container(
+                margin: EdgeInsets.all(5.0),
+                child: new RaisedButton(
+                  onPressed:refresh,
+                  child: new Text("Refresh", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                  color: AppResources.buttonBackColor,)
             ),
             new Container(
                margin: EdgeInsets.all(25.0),
                 child: new RaisedButton(
-                  onPressed:beaconScan,
+                  onPressed:flutterBlueAvailabilityTest,
                   child: new Text("Start Session", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: AppResources.buttonBackColor,)
             ),
-            new Container(
-                margin: EdgeInsets.all(25.0),
-                child: new RaisedButton(
-                  onPressed:test,
-                  child: new Text("Test", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                  color: AppResources.buttonBackColor,)
-            ),
+
           ]
       ),
     );
   }
-  test(){
+  refresh(){
+    isReady=false;
+    classItems.clear();
     APIManager.classRequest().then((response){
+      print(response.body);
       if (response.body.split("{").length>2) {
         int x = 0;
         for(var section in response.body.split("{")){
@@ -198,12 +202,17 @@ class SessionStartPageState extends State<SessionStartPage> {
             print(x);}
           x++;
         }
+        print(classItems);
       }
       if (response.body.split("{").length<=2){
         AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou are not in any classes.\nContact administration", context);
       }
+      setStateReady();
       });
-    setStateReady();
+
+
     }
+
+  void dropDownListTest() {}
 
 }
