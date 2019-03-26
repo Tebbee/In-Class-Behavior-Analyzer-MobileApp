@@ -82,12 +82,6 @@ class APIManager {
 
   static Future<http.Response> demographicUpdate(int age, int gender, int gradeYear, int ethnicity, int race, String major) async {
     print(LOG_NAME + ': Making demographic update request...');
-    print(age);
-    print(gender);
-    print(gradeYear);
-    print(ethnicity);
-    print(race);
-    print(major);
 
 
     Map<String, dynamic> bodyValues = {};

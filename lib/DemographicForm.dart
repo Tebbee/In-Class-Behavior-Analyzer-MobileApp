@@ -15,10 +15,10 @@ class DemographicFormState extends State<DemographicForm> {
   var gradeYears = ["Freshman","Sophomore","Junior","Senior","Super Senior","Graduate","Other","Prefer not to say"];
   var races = ["American Indian or Alaska Native","Asian","Black or African American","Native Hawaiian or Other Pacific Islander","White","Other","Prefer not to say"];
   var ethnicities = ["Hispanic or Latino","Not Hispanic or Latino","Other","Prefer not to say"];
-  var currentGenderSelected = 'Other';
-  var currentGradeYearSelected = "Other";
-  var currentRaceSelected = "Other";
-  var currentEthnicitySelected = "Other";
+  var currentGenderSelected;
+  var currentGradeYearSelected;
+  var currentRaceSelected;
+  var currentEthnicitySelected;
 
   bool isReady = false;
 
@@ -195,15 +195,13 @@ class DemographicFormState extends State<DemographicForm> {
         convertToNumber(races, currentRaceSelected),
         convertToNumber(ethnicities, currentEthnicitySelected),
         majorController.text).then((response){
-          print(response.body);
-          print(APIManager.SESSION_ID);
           setState(() {
             isReady = true;
           });
         if(response.body.contains("success")){
           Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicSubmissionForm()));
         }
-        if(response.body.contains("206")){
+        if(response.body.contains("206")||response.body.contains("205")){
           APIManager.demographicCreate(int.parse(ageController.text),
               convertToNumber(genders, currentGenderSelected),
               convertToNumber(gradeYears, currentGradeYearSelected),
@@ -237,13 +235,26 @@ class DemographicFormState extends State<DemographicForm> {
       }
 
       else{
+        print("ELSEING");
+        print(response.body.split(":")[5][0]);
+        print(response.body.split(":")[6][0]);
+        print(response.body.split(":")[7][0]);
+        print(response.body.split(":")[8][0]);
+        print(response.body.split(":")[9][0]);
+        print(response.body.split(":")[10].replaceAll("}", "").replaceAll('"', ""));
         ageController.text=(response.body.split(":")[5].split(",")[0]);
         currentGenderSelected = genders[int.parse(response.body.split(":")[6].split(",")[0])-1];
-        currentGradeYearSelected = gradeYears[int.parse(response.body.split(":")[6].split(",")[0])-1];
-        currentRaceSelected = races[int.parse(response.body.split(":")[6].split(",")[0])-1];
-        currentEthnicitySelected = ethnicities[int.parse(response.body.split(":")[6].split(",")[0])-1];
-        majorController.text=(response.body.split(":")[10].replaceAll("}", "").replaceAll('"', "").substring(1));
+        currentGradeYearSelected = gradeYears[int.parse(response.body.split(":")[7].split(",")[0])-1];
+        currentRaceSelected = races[int.parse(response.body.split(":")[9].split(",")[0])-1];
+        currentEthnicitySelected = ethnicities[int.parse(response.body.split(":")[8].split(",")[0])-1];
+        majorController.text=(response.body.split(":")[10].replaceAll("}", "").replaceAll('"',"").substring(1));
       }
+      print(currentRaceSelected);
+      print(currentGradeYearSelected);
+      print(currentGenderSelected);
+      print(currentEthnicitySelected);
+
+      print(response.body);
       setState(() {
         isReady = true;
       });
