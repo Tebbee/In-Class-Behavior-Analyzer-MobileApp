@@ -1,3 +1,4 @@
+import 'package:behavior_analyzer/APIManager.dart';
 import 'package:flutter/material.dart';
 import 'LoginForm.dart';
 import 'RegisterForm.dart';
@@ -46,6 +47,7 @@ class _LoginPageState extends State<LoginPage> {
   initState() {
     super.initState();
     currentForm = loginForm;
+    APIManager.logout();
   }
 
   @override

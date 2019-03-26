@@ -15,10 +15,10 @@ class DemographicFormState extends State<DemographicForm> {
   var gradeYears = ["Freshman","Sophomore","Junior","Senior","Super Senior","Graduate","Other","Prefer not to say"];
   var races = ["American Indian or Alaska Native","Asian","Black or African American","Native Hawaiian or Other Pacific Islander","White","Other","Prefer not to say"];
   var ethnicities = ["Hispanic or Latino","Not Hispanic or Latino","Other","Prefer not to say"];
-  var currentGenderSelected = 'Male';
-  var currentGradeYearSelected = "Freshman";
-  var currentRaceSelected = "American Indian or Alaska Native";
-  var currentEthnicitySelected = "Hispanic or Latino";
+  var currentGenderSelected = 'Other';
+  var currentGradeYearSelected = "Other";
+  var currentRaceSelected = "Other";
+  var currentEthnicitySelected = "Other";
 
   bool isReady = false;
 
@@ -188,12 +188,15 @@ class DemographicFormState extends State<DemographicForm> {
     setState(() {
       isReady = false;
     });
+
     APIManager.demographicUpdate(int.parse(ageController.text),
         convertToNumber(genders, currentGenderSelected),
         convertToNumber(gradeYears, currentGradeYearSelected),
         convertToNumber(races, currentRaceSelected),
         convertToNumber(ethnicities, currentEthnicitySelected),
         majorController.text).then((response){
+          print(response.body);
+          print(APIManager.SESSION_ID);
           setState(() {
             isReady = true;
           });
@@ -215,23 +218,31 @@ class DemographicFormState extends State<DemographicForm> {
   convertToNumber(list, selectedWord){
     int number = 1;
     for(var word in list){
-      if (word != selectedWord){
-        number++;
+      if(word == selectedWord){
+        return number;
       }
-      return number;
+      number++;
     }
-    return number;
   }
 
   getDemographics(){
     APIManager.demographicSelect().then((response){
-      if(response.body.split(":")[2]!= "error"){
+      if(response.body.contains("error")){
+        ageController.text=("");
+        currentGenderSelected = genders[0];
+        currentGradeYearSelected = gradeYears[0];
+        currentRaceSelected = races[0];
+        currentEthnicitySelected = ethnicities[0];
+        majorController.text=("");
+      }
+
+      else{
         ageController.text=(response.body.split(":")[5].split(",")[0]);
-        currentGenderSelected = genders[int.parse(response.body.split(":")[6].split(",")[0])];
-        currentGradeYearSelected = gradeYears[int.parse(response.body.split(":")[6].split(",")[0])];
-        currentRaceSelected = races[int.parse(response.body.split(":")[6].split(",")[0])];
-        currentEthnicitySelected = ethnicities[int.parse(response.body.split(":")[6].split(",")[0])];
-        majorController.text=(response.body.split(":")[10].replaceAll("}", "").replaceAll('"', ""));
+        currentGenderSelected = genders[int.parse(response.body.split(":")[6].split(",")[0])-1];
+        currentGradeYearSelected = gradeYears[int.parse(response.body.split(":")[6].split(",")[0])-1];
+        currentRaceSelected = races[int.parse(response.body.split(":")[6].split(",")[0])-1];
+        currentEthnicitySelected = ethnicities[int.parse(response.body.split(":")[6].split(",")[0])-1];
+        majorController.text=(response.body.split(":")[10].replaceAll("}", "").replaceAll('"', "").substring(1));
       }
       setState(() {
         isReady = true;

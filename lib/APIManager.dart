@@ -3,10 +3,11 @@ import 'package:http/http.dart' as http;
 class APIManager {
   static final String LOG_NAME = "API_Manager";
   static String SESSION_ID = "";
+  static String USER_ID = "";
   static String SESSION_COOKIE = "";
   //static final String BASE_URL = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/";
   static final String BASE_URL = "http://192.168.0.70:8000/api/";
-
+  static bool openSurvey = false;
   static bool isUserLoggedIn() {
     return SESSION_ID.isNotEmpty;
   }
@@ -81,6 +82,13 @@ class APIManager {
 
   static Future<http.Response> demographicUpdate(int age, int gender, int gradeYear, int ethnicity, int race, String major) async {
     print(LOG_NAME + ': Making demographic update request...');
+    print(age);
+    print(gender);
+    print(gradeYear);
+    print(ethnicity);
+    print(race);
+    print(major);
+
 
     Map<String, dynamic> bodyValues = {};
 
@@ -117,7 +125,7 @@ class APIManager {
   static Future<http.Response> demographicSelect() async {
     print(LOG_NAME + ': Making demographic select request...');
 
-    return await http.post(
+    return await http.get(
       BASE_URL + 'demographic/select?session_id='+SESSION_ID,
     );
   }
@@ -136,8 +144,16 @@ class APIManager {
         BASE_URL + 'position/create?session_id='+SESSION_ID.toString()+"&x="+x.toString()+'&y='+y.toString()
     );
   }
-
   static Future<http.Response> feedbackSubmission() async{
 
   }
+
+  static Future<http.Response> surveySubmission() async{
+    print(LOG_NAME + ': Making survey submission...');
+  }
+
+
+
+
 }
+

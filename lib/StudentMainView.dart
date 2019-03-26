@@ -1,7 +1,7 @@
 import 'package:behavior_analyzer/APIManager.dart';
 import 'package:behavior_analyzer/DemographicForm.dart';
 import 'package:behavior_analyzer/FeedbackForm.dart';
-import 'package:behavior_analyzer/StudentSurveyExample.dart';
+import 'package:behavior_analyzer/StudentSurveyForm.dart';
 import 'package:behavior_analyzer/main.dart';
 import 'package:behavior_analyzer/BluetoothView.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +36,13 @@ class StudentPage extends StatefulWidget {
 
 class StudentPageState extends State<StudentPage> {
 
+
+  @override
+  initState() {
+    super.initState();
+    print(APIManager.SESSION_ID);
+  }
+
   bool isReady = true;
 
   @override
@@ -50,10 +57,13 @@ class StudentPageState extends State<StudentPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
 
-
-            RaisedButton(onPressed: (){
-              Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyExample()));},
-            child:Text("Survey Questions"),),
+            new Container(
+                margin: EdgeInsets.all(5.0),
+                child: new RaisedButton(
+                  onPressed: surveyButton,
+                  child: new Text("Survey", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
+                  color: AppResources.buttonBackColor,)
+            ),
             new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
@@ -91,11 +101,14 @@ class StudentPageState extends State<StudentPage> {
 
   void logoutButton(){
     APIManager.logout();
-    Navigator.pop(context,new MaterialPageRoute(builder: (context) => MyApp()));
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
     APIManager.SESSION_ID = "";
     }
   void demographicButton(){
     Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));
+  }
+  void surveyButton(){
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyForm()));
   }
   void feedbackButton(){
     Navigator.push(context,new MaterialPageRoute(builder: (context) => FeedbackForm()));

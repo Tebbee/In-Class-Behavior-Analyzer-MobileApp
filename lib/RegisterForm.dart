@@ -149,9 +149,8 @@ class RegisterState extends State<RegisterForm> {
       if(res.body.contains("106")){
         AppResources.showErrorDialog(MODULE_NAME, "ERROR, Username has been taken", context);
       }
-
-
-    }
+      if(res.body.contains("111")){
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));}      }
     );
   }
 

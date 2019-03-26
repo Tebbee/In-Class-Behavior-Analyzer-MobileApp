@@ -18,6 +18,11 @@ class LoginState extends State<LoginForm> {
 
   bool isReady = true;
 
+  @override
+  initState() {
+    super.initState();
+    APIManager.logout();
+  }
 
   /// Building the page on the App. (The text boxes, pictures, buttons)
   @override
@@ -88,6 +93,7 @@ class LoginState extends State<LoginForm> {
 
       if (APIManager.isUserLoggedIn()) {
         AppResources.showErrorDialog(MODULE_NAME, 'User already logged in!', context);
+        APIManager.logout();
         //return;
       }
 
@@ -100,6 +106,7 @@ class LoginState extends State<LoginForm> {
         APIManager.parseLoginResponse(res);
         if (APIManager.SESSION_ID == "104,") {
           AppResources.showErrorDialog(MODULE_NAME, "ERROR, no user detected", context);
+          APIManager.logout();
           setState(() {
             isReady = true;
           });
@@ -107,6 +114,7 @@ class LoginState extends State<LoginForm> {
         }
         if (APIManager.SESSION_ID == "105,") {
           AppResources.showErrorDialog(MODULE_NAME, "ERROR, wrong password", context);
+          APIManager.logout();
           setState(() {
             isReady = true;
           });

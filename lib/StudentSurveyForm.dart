@@ -1,17 +1,18 @@
 import 'package:behavior_analyzer/StudentMainView.dart';
+import 'package:behavior_analyzer/AppConsts.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(StudentSurveyExample());
+void main() => runApp(StudentSurveyForm());
 
-class StudentSurveyExample extends StatelessWidget {
+class StudentSurveyForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Behavior Analyzer',
       theme: ThemeData(
-        primarySwatch: Colors.red,
+        primarySwatch: AppResources.buttonBackColor,
       ),
-      home: StudentSurveyPage(title: 'Student Survey Page'),
+      home: StudentSurveyPage(title: 'Survey'),
     );
   }
 }
