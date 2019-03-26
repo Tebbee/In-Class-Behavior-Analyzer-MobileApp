@@ -145,6 +145,10 @@ class APIManager {
   static Future<http.Response> surveySubmission() async{
     print(LOG_NAME + ': Making survey submission...');
   }
+  static Future<http.Response> classRequest() async{
+    print(LOG_NAME + ': Making class search...');
+    return await http.get(BASE_URL + "class/select/all?session_id="+SESSION_ID);
+  }
 
 
 

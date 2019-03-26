@@ -1,5 +1,6 @@
 import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:behavior_analyzer/AppConsts.dart';
+import 'package:behavior_analyzer/APIManager.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(StudentSurveyForm());
@@ -9,8 +10,7 @@ class StudentSurveyForm extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Behavior Analyzer',
-      theme: ThemeData(
-        primarySwatch: AppResources.buttonBackColor,
+      theme: ThemeData(backgroundColor: AppResources.buttonBackColor
       ),
       home: StudentSurveyPage(title: 'Survey'),
     );
@@ -32,36 +32,26 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+        backgroundColor: AppResources.buttonBackColor,
       ),
       body: Center(
         child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text("Inserted Question Here"),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                width: 350,
-                child: Form(child: TextField()),
-              ),
-              Text("Inserted Question Here"),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                width: 350,
-                child: Form(child: TextField()),
-              ),
-              Container(
-                margin: EdgeInsets.all(10.0),
-                width: 350, child: Form(child: Text("More need to be implemented")),
-              ),
+
 
               RaisedButton(onPressed: (){
-                Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
-                print("Submitted");},
-                child:Text("Submit"),
+                APIManager.surveySubmission();
+                Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
+                child: new Text("Submit", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
+                color: AppResources.buttonBackColor,
               ),
               RaisedButton(onPressed: (){
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
-                child:Text("Exit to main page"),),
+                  child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
+                  color: AppResources.buttonBackColor,),
+
 
             ]
         ),

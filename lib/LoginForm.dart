@@ -20,8 +20,8 @@ class LoginState extends State<LoginForm> {
 
   @override
   initState() {
-    super.initState();
     APIManager.logout();
+    super.initState();
   }
 
   /// Building the page on the App. (The text boxes, pictures, buttons)
@@ -102,10 +102,9 @@ class LoginState extends State<LoginForm> {
       });
       APIManager.login(username, password).then((res) {
         print(res.body);
-        print(APIManager.SESSION_ID);
         APIManager.parseLoginResponse(res);
         if (APIManager.SESSION_ID == "104,") {
-          AppResources.showErrorDialog(MODULE_NAME, "ERROR, no user detected", context);
+          AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nWrong username. Perhaps a misspelling or capitalized letter?", context);
           APIManager.logout();
           setState(() {
             isReady = true;

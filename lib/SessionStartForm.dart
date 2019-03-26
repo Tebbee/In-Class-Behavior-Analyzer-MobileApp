@@ -1,3 +1,4 @@
+import 'package:behavior_analyzer/APIManager.dart';
 import 'package:behavior_analyzer/StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
@@ -38,6 +39,8 @@ class SessionStartPageState extends State<SessionStartPage> {
   String beaconTwo = "88:3F:4A:E5:FA:7C";
   String beaconThree = "88:3F:4A:E5:FD:C5";
   int scanAttempts = 0;
+  List<String> classItems = [];
+  var currentClassSelected;
 
 
   flutterBlueTestOn(){
@@ -61,6 +64,7 @@ class SessionStartPageState extends State<SessionStartPage> {
       else{
         return false;}
     });}
+
   setStateReady(){
     setState(() {
       isReady = true;
@@ -77,9 +81,9 @@ class SessionStartPageState extends State<SessionStartPage> {
 
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
       int beaconRssiValue = scanResult.rssi;
-      if (scanResult.device.id.id == "88:3F:4A:E5:F6:E2") {beaconOneRssiValue = beaconRssiValue;}
-      if (scanResult.device.id.id == "88:3F:4A:E5:FA:7C"){beaconTwoRssiValue = beaconRssiValue;}
-      if (scanResult.device.id.id == "88:3F:4A:E5:FD:C5"){beaconThreeRssiValue = beaconRssiValue;}
+      if (scanResult.device.id.id == BluetoothView.beaconOne) {beaconOneRssiValue = beaconRssiValue;}
+      if (scanResult.device.id.id == BluetoothView.beaconTwo){beaconTwoRssiValue = beaconRssiValue;}
+      if (scanResult.device.id.id == BluetoothView.beaconThree){beaconThreeRssiValue = beaconRssiValue;}
 
       new Future.delayed(const Duration(seconds: 2), () {
           bluetoothScan.cancel();
@@ -116,6 +120,15 @@ class SessionStartPageState extends State<SessionStartPage> {
       });
       });
   }
+
+  @override
+  initState() {
+    isReady = false;
+    classItems.clear();
+    super.initState();
+    test();
+  }
+
   @override
   Widget build(BuildContext context) {
     if (!isReady) {
@@ -141,6 +154,22 @@ class SessionStartPageState extends State<SessionStartPage> {
                 style: new TextStyle(fontSize: 25.0, color: AppResources.labelTextColor),
               ),
             ),
+            Text('Select Class:', style: new TextStyle(color: AppResources.labelTextColor),),
+            DropdownButton<String>(
+              value : currentClassSelected,
+              items: classItems.map((String dropDownStringItem){
+                return DropdownMenuItem<String>(
+                  value: dropDownStringItem,
+                  child: Text(dropDownStringItem),
+                );
+              }).toList(),
+              onChanged: (String newValueSelected){
+                setState((){
+                  currentClassSelected = newValueSelected;
+                });
+              },
+              iconSize: 50,
+            ),
             new Container(
                margin: EdgeInsets.all(25.0),
                 child: new RaisedButton(
@@ -148,10 +177,33 @@ class SessionStartPageState extends State<SessionStartPage> {
                   child: new Text("Start Session", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: AppResources.buttonBackColor,)
             ),
-
+            new Container(
+                margin: EdgeInsets.all(25.0),
+                child: new RaisedButton(
+                  onPressed:test,
+                  child: new Text("Test", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
+                  color: AppResources.buttonBackColor,)
+            ),
           ]
       ),
     );
-
   }
+  test(){
+    APIManager.classRequest().then((response){
+      if (response.body.split("{").length>2) {
+        int x = 0;
+        for(var section in response.body.split("{")){
+          if(x >=2){
+            classItems.add(section.split(",")[1].split(":")[1].replaceAll('"', "").substring(1));
+            print(x);}
+          x++;
+        }
+      }
+      if (response.body.split("{").length<=2){
+        AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou are not in any classes.\nContact administration", context);
+      }
+      });
+    setStateReady();
+    }
+
 }

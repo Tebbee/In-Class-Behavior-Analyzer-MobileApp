@@ -8,6 +8,10 @@ import 'AppConsts.dart';
 var x,y;
 
 class BluetoothView extends StatelessWidget {
+  static Object get beaconOne => "88:3F:4A:E5:F6:E2";
+  static Object get beaconTwo => "88:3F:4A:E5:FA:7C";
+  static Object get beaconThree => "88:3F:4A:E5:FD:C5";
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
