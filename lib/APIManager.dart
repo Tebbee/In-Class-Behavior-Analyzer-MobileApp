@@ -6,8 +6,8 @@ class APIManager {
   static String CLASS_ID = "";
   static String SESSION_COOKIE = "";
   //static final String BASE_URL = "http://icba-env.nrvxnah2uj.us-east-1.elasticbeanstalk.com/api/";
-  //static final String BASE_URL = "http://192.168.0.70:8000/api/";
-  static final String BASE_URL = "http://10.2.224.19:8000/api/";
+  static final String BASE_URL = "http://192.168.0.70:8000/api/";
+  //static final String BASE_URL = "http://10.2.224.19:8000/api/";
   static bool openSurvey = false;
   static bool isUserLoggedIn() {
     return SESSION_ID.isNotEmpty;
@@ -79,8 +79,6 @@ class APIManager {
 
   static Future<http.Response> demographicUpdate(int age, int gender, int gradeYear, int ethnicity, int race, String major) async {
     print(LOG_NAME + ': Making demographic update request...');
-
-
     Map<String, dynamic> bodyValues = {};
 
     if (age != null) {
@@ -135,13 +133,22 @@ class APIManager {
         BASE_URL + 'position/create?session_id='+SESSION_ID.toString()+"&x="+x.toString()+'&y='+y.toString()
     );
   }
-  static Future<http.Response> feedbackSubmission() async{
 
+  static Future<http.Response> feedbackSubmission(String textBox) async{
+    print(LOG_NAME + ': Making feedback submission...');
+    Map<String, dynamic> bodyValues = {'feedback': textBox};
+    return await http.post(BASE_URL + "feedback/submit",body: bodyValues);
   }
 
   static Future<http.Response> surveySubmission() async{
     print(LOG_NAME + ': Making survey submission...');
   }
+
+  static Future<http.Response> surveyRequest() async{
+    print(LOG_NAME + ': Making survey request...');
+
+  }
+
   static Future<http.Response> classRequest() async{
     print(LOG_NAME + ': Making class search...');
     return await http.get(BASE_URL + "class/select/all?session_id="+SESSION_ID);

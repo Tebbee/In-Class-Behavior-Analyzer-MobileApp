@@ -1,4 +1,6 @@
 import 'package:behavior_analyzer/StudentMainView.dart';
+import 'package:behavior_analyzer/APIManager.dart';
+import 'package:behavior_analyzer/FeedbackSubmissionForm.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 
@@ -83,6 +85,13 @@ class FeedbackPageState extends State<FeedbackPage> {
   }
 
   void submit() {
+    APIManager.feedbackSubmission(inputController.text).then((response){
+      print(response.body);
+      if(response.body == "success"){
+        Navigator.push(context,new MaterialPageRoute(builder: (context) => FeedbackSubmissionForm()));
+
+      }
+    });
 
   }
 }

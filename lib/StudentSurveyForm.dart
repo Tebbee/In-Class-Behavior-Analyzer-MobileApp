@@ -39,8 +39,6 @@ class StudentSurveyState extends State<StudentSurveyPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text("Inserted Question Here"),
-
-
               RaisedButton(onPressed: (){
                 APIManager.surveySubmission();
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},

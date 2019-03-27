@@ -144,18 +144,17 @@ class RegisterState extends State<RegisterForm> {
         isReady = true;
         print(res.body);
       });
-      if (res.body.contains("success")){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));}
-      if(res.body.contains("106")){
-        AppResources.showErrorDialog(MODULE_NAME, "ERROR, Username has been taken", context);
+      if (res.body.contains("success")) {
+        Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));
       }
-      if(res.body.contains("111")){
-        Navigator.push(context, MaterialPageRoute(builder: (context) => SubmissionForm()));}      }
-    );
+      if (res.body.contains("106")) {
+        AppResources.showErrorDialog(
+            MODULE_NAME, "ERROR, Username has been taken", context);
+      }
+      if (res.body.contains("111")) {
+        AppResources.showErrorDialog(
+            MODULE_NAME, "ERROR, Not strong enough password", context);}
+    });
   }
-
-
-
-
 
 }

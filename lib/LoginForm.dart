@@ -20,7 +20,6 @@ class LoginState extends State<LoginForm> {
 
   @override
   initState() {
-    APIManager.logout();
     super.initState();
   }
 

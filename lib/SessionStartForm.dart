@@ -40,12 +40,12 @@ class SessionStartPageState extends State<SessionStartPage> {
   String beaconThree = "88:3F:4A:E5:FD:C5";
   int scanAttempts = 0;
   var classItems = ["None"];
+  var classIDs = ["None"];
   var currentClassSelected;
 
 
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
-      print(res.toString());
       if(res.toString() == 'true'){
         dropDownListTest();
       }
@@ -170,7 +170,7 @@ class SessionStartPageState extends State<SessionStartPage> {
               value : currentClassSelected,
               iconSize: 50,
             ),
-            new Container(
+          new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
                   onPressed:refresh,
@@ -190,29 +190,37 @@ class SessionStartPageState extends State<SessionStartPage> {
     );
   }
   refresh(){
-    isReady=false;
     classItems.clear();
+    classIDs.clear();
     APIManager.classRequest().then((response){
-      print(response.body);
       if (response.body.split("{").length>2) {
-        int x = 0;
+        int counter = 0;
         for(var section in response.body.split("{")){
-          if(x >=2){
+          if(counter >=2){
+            classIDs.add(section.split(",")[0].split(":")[1].replaceAll('"', "").substring(1));
             classItems.add(section.split(",")[1].split(":")[1].replaceAll('"', "").substring(1));
-            print(x);}
-          x++;
+            }
+          counter++;
         }
-        print(classItems);
       }
       if (response.body.split("{").length<=2){
         AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou are not in any classes.\nContact administration", context);
       }
       setStateReady();
       });
-
-
     }
 
-  void dropDownListTest() {}
+  dropDownListTest() {
+    if(currentClassSelected == null){
+      return(AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou have not selected a class!", context));
+    }
+    int counter = 0;
+    for (var item in classItems){
+      if (item == currentClassSelected){
+        APIManager.CLASS_ID=classIDs[counter];
+        beaconScan();
+      }
+      counter++;
+    }}
 
 }
