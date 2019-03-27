@@ -146,7 +146,8 @@ class APIManager {
 
   static Future<http.Response> surveyRequest() async{
     print(LOG_NAME + ': Making survey request...');
-
+    return await http.post(BASE_URL+ "survey/select?session_id="+SESSION_ID,
+        body: {'class' : CLASS_ID});
   }
 
   static Future<http.Response> classRequest() async{

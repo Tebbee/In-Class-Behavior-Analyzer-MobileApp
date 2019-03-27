@@ -40,7 +40,6 @@ class StudentPageState extends State<StudentPage> {
   @override
   initState() {
     super.initState();
-    print(APIManager.SESSION_ID);
   }
 
   bool isReady = true;
