@@ -59,7 +59,9 @@ class LoginState extends State<LoginForm> {
         new RaisedButton(
           color: AppResources.labelTextColor,
           textColor: Colors.white,
-          onPressed: loginToServer,
+          onPressed: //loginToServer,
+          (){Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));},
+
           child: new Text('Submit'),
         ),
 
@@ -118,8 +120,8 @@ class LoginState extends State<LoginForm> {
           });
           return;}
         if(APIManager.SESSION_ID != null){
-          Navigator.push(context, MaterialPageRoute(builder: (context) => SessionStartForm()));
-          //Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
+          //Navigator.push(context, MaterialPageRoute(builder: (context) => SessionStartForm()));
+          Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
           setState(() {
             isReady = true;
           });

@@ -94,9 +94,9 @@ class SessionStartPageState extends State<SessionStartPage> {
 
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
       int beaconRssiValue = scanResult.rssi;
-      if (scanResult.device.id.id == BluetoothView.beaconOne) {beaconOneRssiValue = beaconRssiValue;}
-      if (scanResult.device.id.id == BluetoothView.beaconTwo){beaconTwoRssiValue = beaconRssiValue;}
-      if (scanResult.device.id.id == BluetoothView.beaconThree){beaconThreeRssiValue = beaconRssiValue;}
+      if (scanResult.device.id.id == BluetoothPageState.beaconOne) {beaconOneRssiValue = beaconRssiValue;}
+      if (scanResult.device.id.id == BluetoothPageState.beaconTwo){beaconTwoRssiValue = beaconRssiValue;}
+      if (scanResult.device.id.id == BluetoothPageState.beaconThree){beaconThreeRssiValue = beaconRssiValue;}
 
       new Future.delayed(const Duration(seconds: 2), () {
           bluetoothScan.cancel();

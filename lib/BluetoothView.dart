@@ -8,9 +8,6 @@ import 'AppConsts.dart';
 var x,y;
 
 class BluetoothView extends StatelessWidget {
-  static Object get beaconOne => "88:3F:4A:E5:F6:E2";
-  static Object get beaconTwo => "88:3F:4A:E5:FA:7C";
-  static Object get beaconThree => "88:3F:4A:E5:FD:C5";
 
   @override
   Widget build(BuildContext context) {
@@ -39,36 +36,40 @@ class BluetoothPageState extends State<BluetoothPage> {
   String MODULE_NAME = "Bluetooth Error";
   var ids = new List<String>();
 
-  String beaconOne = "88:3F:4A:E5:F6:E2";
-  String beaconTwo = "88:3F:4A:E5:FA:7C";
-  String beaconThree = "88:3F:4A:E5:FD:C5";
+  static Object get beaconOne => "88:3F:4A:E5:F6:E2";
+  static Object get beaconTwo => "88:3F:4A:E5:FA:7C";
+  static Object get beaconThree => "88:3F:4A:E5:FD:C5";
+
 
   static var beaconOneCoords = [0.0,0.0];
   static var beaconTwoCoords = [0.0,2.0];
   static var beaconThreeCoords = [2.0,0.0];
 
-  double beaconRssiValue;
-  double beaconRssiDistance;
+  static double beaconRssiValue;
+  static double beaconRssiDistance;
 
-  List beaconNumberOneValueList = new List<double>();
-  List beaconNumberTwoValueList = new List<double>();
-  List beaconNumberThreeValueList = new List<double>();
+  static List beaconNumberOneValueList = new List<double>();
+  static List beaconNumberTwoValueList = new List<double>();
+  static List beaconNumberThreeValueList = new List<double>();
 
-  List beaconNumberOneAveragesList = new List<double>();
-  List beaconNumberTwoAveragesList = new List<double>();
-  List beaconNumberThreeAveragesList = new List<double>();
+  static List beaconNumberOneAveragesList = new List<double>();
+  static List beaconNumberTwoAveragesList = new List<double>();
+  static List beaconNumberThreeAveragesList = new List<double>();
 
-  var bluetoothScan;
-  double totalBeaconOneList = 0.0;
-  double totalBeaconTwoList = 0.0;
-  double totalBeaconThreeList = 0.0;
+  static var bluetoothScan;
+  static double totalBeaconOneList = 0.0;
+  static double totalBeaconTwoList = 0.0;
+  static double totalBeaconThreeList = 0.0;
 
-  int counterOne = 0;
-  int counterTwo = 0;
-  int counterThree = 0;
+  static double beaconOneAverageDistance;
+  static double beaconTwoAverageDistance;
+  static double beaconThreeAverageDistance;
 
-  FlutterBlue flutterBlue = FlutterBlue.instance;
-  final double EPSILON = 0.000001;
+  static int counterOne = 0;
+  static int counterTwo = 0;
+  static int counterThree = 0;
+  static FlutterBlue flutterBlue = FlutterBlue.instance;
+  static final double EPSILON = 0.000001;
 
   var r;
   var x;
@@ -186,7 +187,7 @@ class BluetoothPageState extends State<BluetoothPage> {
     }
  }
 
- beaconDistance(firstBeacon, secondBeacon, thirdBeacon, beaconOneDistance, beaconTwoDistance, beaconThreeDistance){
+  beaconDistance(firstBeacon, secondBeacon, thirdBeacon, beaconOneDistance, beaconTwoDistance, beaconThreeDistance){
     double x1 = firstBeacon[0];
     double x2 = secondBeacon[0];
     double y1 = firstBeacon[1];
@@ -197,10 +198,10 @@ class BluetoothPageState extends State<BluetoothPage> {
     circleCircleIntersectionPoints(x1,y1,beaconOneDistance,x2,y2,beaconTwoDistance);
  }
 
- calculateThreeCircleIntersection(
+ static calculateThreeCircleIntersection(
       double x0, double y0, double r0,
       double x1, double y1, double r1,
-      double x2, double y2, double r2) {
+      ) {
     double a, dx, dy, d, h, rx, ry;
     double point2_x, point2_y;
 
@@ -236,25 +237,7 @@ class BluetoothPageState extends State<BluetoothPage> {
 
     print("INTERSECTION Circle1 AND Circle2: (" + intersectionPoint1_x.toString() + "," + intersectionPoint1_y.toString() + ") AND (" + intersectionPoint2_x.toString() + "," + intersectionPoint2_y.toString() + ")");
 
-    dx = intersectionPoint1_x - x2;
-    dy = intersectionPoint1_y - y2;
-    double d1 = sqrt((dy*dy) + (dx*dx));
 
-    dx = intersectionPoint2_x - x2;
-    dy = intersectionPoint2_y - y2;
-    double d2 = sqrt((dy*dy) + (dx*dx));
-
-
-    if(max(d1, r2)-min(d1,r2) < EPSILON) {
-      print("INTERSECTION Circle1 AND Circle2 AND Circle3: (" + intersectionPoint1_x.toString() + "," + intersectionPoint1_y.toString() + ")");
-    }
-    else if(max(d2 , r2)-min(d2,r2) < EPSILON) {
-      print("INTERSECTION Circle1 AND Circle2 AND Circle3: (" + intersectionPoint2_x.toString() + "," + intersectionPoint2_y.toString() + ")"); //here was an error
-    }
-    else {
-      print("INTERSECTION Circle1 AND Circle2 AND Circle3: NONE");
-    }
-    return true;
   }
   
   
@@ -395,5 +378,25 @@ class BluetoothPageState extends State<BluetoothPage> {
     )
     ));
     }
+
+  static void clearAll() {
+    beaconRssiValue = 0;
+    beaconRssiDistance = 0;
+    beaconNumberOneValueList.clear();
+    beaconNumberTwoValueList.clear();
+    beaconNumberThreeValueList.clear();
+    beaconNumberOneAveragesList.clear();
+    beaconNumberTwoAveragesList.clear();
+    beaconNumberThreeAveragesList.clear();
+    totalBeaconOneList = 0.0;
+    totalBeaconTwoList = 0.0;
+    totalBeaconThreeList = 0.0;
+    beaconOneAverageDistance = 0;
+    beaconTwoAverageDistance = 0;
+    beaconThreeAverageDistance = 0;
+    counterOne = 0;
+    counterTwo = 0;
+    counterThree = 0;
+  }
 
 }
