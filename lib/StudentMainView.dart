@@ -35,13 +35,43 @@ class StudentPage extends StatefulWidget {
 }
 
 class StudentPageState extends State<StudentPage> {
+  FlutterBlue flutterBlue = FlutterBlue.instance;
+  static const String MODULE_NAME = 'Session Start Form';
 
 
   @override
   initState() {
     super.initState();
+    flutterBlueAvailabilityTest();
   }
+  void bluetoothScan(){
+    print("I FULLY MADE IT");
+  }
+  void flutterBlueTestOn(){
+    flutterBlue.isOn.then((res){
+      if(res.toString() == 'true'){
+        print("TEST WAS A SUCCESS");
+        bluetoothScan();
+      }
+      else
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
+        });
 
+    });}
+  flutterBlueAvailabilityTest(){
+    flutterBlue.isAvailable.then((res){
+      if(res.toString() == 'true'){
+        print("AVAILABILITY IS A SUCCESS");
+        flutterBlueTestOn();
+      }
+      else
+        setState(() {
+          AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
+        });
+      return false;
+    });
+  }
   bool isReady = true;
 
   @override
@@ -101,7 +131,6 @@ class StudentPageState extends State<StudentPage> {
   void logoutButton(){
     APIManager.logout();
     Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
-    APIManager.SESSION_ID = "";
     }
   void demographicButton(){
     Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));
@@ -116,3 +145,4 @@ class StudentPageState extends State<StudentPage> {
   void bluetooth() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}
   }
+

@@ -66,6 +66,18 @@ class SessionStartPageState extends State<SessionStartPage> {
         });
       return false;
     });}
+  dropDownListTest() {
+    if(currentClassSelected == null){
+      return(AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou have not selected a class!", context));
+    }
+    int counter = 0;
+    for (var item in classItems){
+      if (item == currentClassSelected){
+        APIManager.CLASS_ID=classIDs[counter];
+        beaconScan();
+      }
+      counter++;
+    }}
   setStateReady(){
     setState(() {
       isReady = true;
@@ -170,13 +182,13 @@ class SessionStartPageState extends State<SessionStartPage> {
               value : currentClassSelected,
               iconSize: 50,
             ),
-          new Container(
+        /*  new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
                   onPressed:refresh,
                   child: new Text("Refresh", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: AppResources.buttonBackColor,)
-            ),
+            ),*/
             new Container(
                margin: EdgeInsets.all(25.0),
                 child: new RaisedButton(
@@ -210,17 +222,5 @@ class SessionStartPageState extends State<SessionStartPage> {
       });
     }
 
-  dropDownListTest() {
-    if(currentClassSelected == null){
-      return(AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou have not selected a class!", context));
-    }
-    int counter = 0;
-    for (var item in classItems){
-      if (item == currentClassSelected){
-        APIManager.CLASS_ID=classIDs[counter];
-        beaconScan();
-      }
-      counter++;
-    }}
 
 }

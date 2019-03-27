@@ -43,9 +43,9 @@ class BluetoothPageState extends State<BluetoothPage> {
   String beaconTwo = "88:3F:4A:E5:FA:7C";
   String beaconThree = "88:3F:4A:E5:FD:C5";
 
-  var beaconOneCoords = [0.0,0.0];
-  var beaconTwoCoords = [0.0,2.0];
-  var beaconThreeCoords = [2.0,0.0];
+  static var beaconOneCoords = [0.0,0.0];
+  static var beaconTwoCoords = [0.0,2.0];
+  static var beaconThreeCoords = [2.0,0.0];
 
   double beaconRssiValue;
   double beaconRssiDistance;

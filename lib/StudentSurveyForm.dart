@@ -93,7 +93,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
                 padding: EdgeInsets.all(20.0),
                 child:
               RaisedButton(onPressed: (){
-                APIManager.surveySubmission();
+                questionRetrieval();
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child: new Text("Submit", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                 color: AppResources.buttonBackColor,
@@ -101,8 +101,8 @@ class StudentSurveyState extends State<StudentSurveyPage> {
               Container(
                 padding: EdgeInsets.all(20.0),
                 child:
-              RaisedButton(
-                onPressed: questionRetrieval,
+              RaisedButton(onPressed:(){
+                Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                 color: AppResources.buttonBackColor,
                 ))
