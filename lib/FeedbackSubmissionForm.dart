@@ -1,4 +1,4 @@
-import 'package:behavior_analyzer/StudentMainView.dart';
+import 'StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 
@@ -24,7 +24,14 @@ class FeedbackSubmissionPage extends StatefulWidget {
   FeedbackSubmissionPageState createState() => FeedbackSubmissionPageState();
 }
 
+///Description: The contents within this class is simply a confirmation that the submission of the feedback
+///was properly sent through. There are no calls to the APIManager or functions that require anything
+///outside information.
+///
+///Primary Author: Cody Tebbe
 class FeedbackSubmissionPageState extends State<FeedbackSubmissionPage> {
+  ///This build function builds the view of the application. The two containers contain text and
+  ///a button which sends them back to the Main Page.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -54,6 +61,9 @@ class FeedbackSubmissionPageState extends State<FeedbackSubmissionPage> {
       ),
     );
   }
+
+  ///This function is connected to the Main Menu button from the build function.
+  ///Its only purpose is to send the user back to the StudentMainView
   void mainMenuButton() {
     Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
   }

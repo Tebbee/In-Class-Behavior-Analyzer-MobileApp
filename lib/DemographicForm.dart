@@ -1,4 +1,4 @@
-import 'package:behavior_analyzer/DemographicSubmissionForm.dart';
+import 'DemographicSubmissionForm.dart';
 import 'package:flutter/material.dart';
 import 'APIManager.dart';
 import 'AppConsts.dart';
@@ -8,6 +8,16 @@ class DemographicForm extends StatefulWidget {
   DemographicFormState createState() => DemographicFormState();
 }
 
+///Description: This class handles everything within the Demographic field besides the server calls.
+///Within this section consists of the creation of the application view, the immediate appearance, and the
+///values that are able to be utilized
+///
+///Primary Author: Cody Tebbe
+///Secondary Author: Ben Lawson
+///
+///Primary Uses:
+///   - Creation of Demographics
+///   - Updating of Demographics
 class DemographicFormState extends State<DemographicForm> {
   static const String MODULE_NAME = 'demographic_form';
 
@@ -25,13 +35,18 @@ class DemographicFormState extends State<DemographicForm> {
   TextEditingController ageController = new TextEditingController();
   TextEditingController majorController = new TextEditingController();
 
-
+  ///Description: Activates upon initialization of the page, in this instance, it requests any demographics
+  ///that the user has pushed to the server. If there is demographics present, then it places the values in
+  ///their appropriate positions.
   @override
   void initState() {
     super.initState();
     getDemographics();
   }
 
+  ///Description: Building the Demographic form page of the apps users, this includes filling the values of
+  ///the dropdown lists. More questions and buttons can be implemented using the Flutter guidelines online regarding
+  ///their widgets.
   @override
   Widget build(BuildContext context) {
     if (!isReady) {
@@ -169,6 +184,15 @@ class DemographicFormState extends State<DemographicForm> {
     );
   }
 
+  ///Description: This function checks the demographic fields to ensure that all the fields are filled.
+  ///It will then use the APIManager.demographicUpdate from the APIManager to update/create the required action
+  ///for the demographics.
+  ///
+  ///Primary Objects: Compares the selected value in the checkboxes to a number, these numbers correspond to
+  ///those in the server.
+  ///
+  ///A 206 errors simply states that there was no demographics before, so it will use the APIManager.demographicCreate
+  ///to create them.
   void submitData() {
     if (ageController.text.isEmpty) {
       AppResources.showErrorDialog(MODULE_NAME, 'No age inputted!', context);
@@ -214,6 +238,7 @@ class DemographicFormState extends State<DemographicForm> {
     });
   }
 
+  ///Description: This function simply converts the selected value in the demographics to a number which is sent to the server
   convertToNumber(list, selectedWord){
     int number = 1;
     for(var word in list){
@@ -224,6 +249,8 @@ class DemographicFormState extends State<DemographicForm> {
     }
   }
 
+  ///Description: This function is utilized upon opening and checks for demographics within the server
+  ///If no demographics are available, then default values are placed instead.
   getDemographics(){
     APIManager.demographicSelect().then((response){
       if(response.body.contains("error")){

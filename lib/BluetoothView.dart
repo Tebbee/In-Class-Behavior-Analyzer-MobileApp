@@ -6,7 +6,18 @@ import 'AppConsts.dart';
 
 
 var x,y;
-
+///Description: This file consists of all the testing used throughout the program available in a
+///commented out subsection within the StudentMainView. This page only requires variables to be kept
+///within, all functions were required to be present outside of this file and exist within the StudentMainView
+///
+///Primary uses:
+///   - Storing values of the bluetooth values from the StudentMainPage
+///   - Testing for more efficient use of the bluetooth beacons in a visible file
+///
+///Primary Author: Cody Tebbe
+///
+///Locations: StudentMainView
+///
 class BluetoothView extends StatelessWidget {
 
   @override
@@ -42,8 +53,8 @@ class BluetoothPageState extends State<BluetoothPage> {
 
 
   static var beaconOneCoords = [0.0,0.0];
-  static var beaconTwoCoords = [0.0,2.0];
-  static var beaconThreeCoords = [2.0,0.0];
+  static var beaconTwoCoords = [0.0,0.0];
+  static var beaconThreeCoords = [0.0,0.0];
 
   static double beaconRssiValue;
   static double beaconRssiDistance;
@@ -65,6 +76,10 @@ class BluetoothPageState extends State<BluetoothPage> {
   static double beaconTwoAverageDistance;
   static double beaconThreeAverageDistance;
 
+  static var beaconOneTwoCoords;
+  static var beaconOneThreeCoords;
+  static var beaconTwoThreeCoords;
+
   static int counterOne = 0;
   static int counterTwo = 0;
   static int counterThree = 0;
@@ -75,6 +90,8 @@ class BluetoothPageState extends State<BluetoothPage> {
   var x;
   var y;
 
+  ///Description: Scans to test if Bluetooth is turned on
+  ///For test purposes in this file
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
       if(res.toString() != 'true'){
@@ -83,6 +100,9 @@ class BluetoothPageState extends State<BluetoothPage> {
           });
         return true;
       }});}
+
+  ///Description: Scans to test if Bluetooth is able to be turned on
+  ///For test purposes in this file
   flutterBlueAvailabilityTest(){
     flutterBlue.isOn.then((res){
       if(res.toString() != 'true'){
@@ -92,10 +112,12 @@ class BluetoothPageState extends State<BluetoothPage> {
         return true;
       }});}
 
+  ///Description: Tests for scannability for the bluetooth beacons, re-initiates the scan and records the returned
+  ///distances that are recorded. A separate counter for each of these values is also recorded
+  ///These values are then used for later use and this function is STRICTLY FOR TEST USE.
+  ///
   Future beaconScan() async {
     if(flutterBlueAvailabilityTest() && flutterBlueTestOn()){
-
-
     bluetoothScan = flutterBlue.scan().listen((scanResult) {
       beaconRssiValue = scanResult.rssi.toDouble();
       beaconRssiDistance = pow(10,(-55 - beaconRssiValue.toDouble()) / (10 * 2));
@@ -124,6 +146,7 @@ class BluetoothPageState extends State<BluetoothPage> {
     });}
   }
 
+  ///Description: Resets all the values within this page for TEST PURPOSES ONLY
   reset(){
    setState(() {
      ids.clear();
@@ -143,6 +166,8 @@ class BluetoothPageState extends State<BluetoothPage> {
    });
  }
 
+  ///Creates the total of all the values recorded from scanning the bluetooth devices and adds them together
+  ///This is then used to find an average value
   void beaconAveraging(){
    setState(() {
      for(var value in beaconNumberOneValueList){
@@ -169,6 +194,8 @@ class BluetoothPageState extends State<BluetoothPage> {
    });
   }
 
+  ///Description: Turns on the bluetooth capabilities, sets their distances, and then initiates the calculations required
+  ///to find the x and y values of where the person is located.
   button() async{
     setState((){
       beaconPositioning();
@@ -180,24 +207,32 @@ class BluetoothPageState extends State<BluetoothPage> {
   });
  }
 
-  /// Tests if ANY of the beacons were not able to pull a Distance. If not, they will rerun the scanning protocol
+  ///Description: Tests if ANY of the beacons were not able to pull a Distance.
+  ///If they did not, they will rerun the scanning protocol
  beaconPositioning(){
     if ((totalBeaconOneList/counterOne) == 0 || (totalBeaconTwoList/counterTwo) == 0 || (totalBeaconThreeList/counterThree) == 0){
       beaconScan();
     }
  }
 
+  ///Description: Tests how beacons intersect one another via the circleCircleIntersectionPoints function.
+  ///This function exists for test purposes within the application
   beaconDistance(firstBeacon, secondBeacon, thirdBeacon, beaconOneDistance, beaconTwoDistance, beaconThreeDistance){
     double x1 = firstBeacon[0];
     double x2 = secondBeacon[0];
     double y1 = firstBeacon[1];
     double y2 = secondBeacon[1];
-    double x3 = thirdBeacon[0];
-    double y3 = thirdBeacon[1];
+    //double x3 = thirdBeacon[0];
+    //double y3 = thirdBeacon[1];
     //calculateThreeCircleIntersection(x1, y1, beaconOneDistance, x2, y2, beaconTwoDistance, x3, y3, beaconThreeDistance);
     circleCircleIntersectionPoints(x1,y1,beaconOneDistance,x2,y2,beaconTwoDistance);
  }
 
+  ///Description: Tests the intersection point of two circles, whether they be infinitely, not at all, at one point, or many
+  ///This exists only for testing purposes within the application. and has removed the third circle
+  ///for said testing purposes.
+  ///
+  ///Parameters: x0, y0, radius0 (r0), x1, y1
  static calculateThreeCircleIntersection(
       double x0, double y0, double r0,
       double x1, double y1, double r1,
@@ -235,12 +270,14 @@ class BluetoothPageState extends State<BluetoothPage> {
     double intersectionPoint1_y = point2_y + ry;
     double intersectionPoint2_y = point2_y - ry;
 
-    print("INTERSECTION Circle1 AND Circle2: (" + intersectionPoint1_x.toString() + "," + intersectionPoint1_y.toString() + ") AND (" + intersectionPoint2_x.toString() + "," + intersectionPoint2_y.toString() + ")");
-
-
+    return("INTERSECTION: " +intersectionPoint1_x.toString() + "," + intersectionPoint1_y.toString() + ") AND (" + intersectionPoint2_x.toString() + "," + intersectionPoint2_y.toString() + ")");
   }
   
-  
+
+  ///Description: Tests two circles and returns how they intersect one another, whether their points are connected
+  ///via 2 points, one point, infinite points, or no points at all.
+  ///
+  ///Parameters: x1,y1,radius1 (r1),x2,y2,radius2 (r2)
   circleCircleIntersectionPoints(x1,y1,r1,x2,y2,r2) {
 
     var  d, dx, dy;
@@ -292,18 +329,26 @@ class BluetoothPageState extends State<BluetoothPage> {
     return [pt1, pt2];
   }
 
-   rotatePoint(fp, pt, a) {
+  ///Description: Function utilized within the calculateThreeCircleIntersection and circleCircleIntersectionPoints
+  ///(DO NOT ADJUST, THIS IS A MATH EQUATION)
+  rotatePoint(fp, pt, a) {
     var x = pt.x - fp.x;
     var y = pt.y - fp.y;
     var xRot = x * cos(a) + y * sin(a);
     var yRot = y * cos(a) - x * sin(a);
     return Point(fp.x+xRot,fp.y+yRot);
   }
-   Point(x, y) {
+
+  ///Description: Function utilized within the calculateThreeCircleIntersection and circleCircleIntersectionPoints
+  ///(DO NOT ADJUST, THIS IS A MATH EQUATION)
+  Point(x, y) {
     this.x = x;
     this.y = y;
   }
-   acossafe(x) {
+
+  ///Description: Function utilized within the calculateThreeCircleIntersection and circleCircleIntersectionPoints
+  ///(DO NOT ADJUST, THIS IS A MATH EQUATION)
+  acossafe(x) {
     if (x >= 1.0) return 0;
     if (x <= -1.0) return pi;
     return acos(x);
@@ -312,7 +357,7 @@ class BluetoothPageState extends State<BluetoothPage> {
 
 
 
-  /// Builds the Apps appearance: Text boxes, buttons, etc.
+  ///Description: Builds the Apps appearance: Text boxes, buttons, etc. Check Flutter for assistance on editing
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -379,6 +424,9 @@ class BluetoothPageState extends State<BluetoothPage> {
     ));
     }
 
+  ///Description: Clears all fields of all values
+  ///
+  ///Location: StudentMainView
   static void clearAll() {
     beaconRssiValue = 0;
     beaconRssiDistance = 0;

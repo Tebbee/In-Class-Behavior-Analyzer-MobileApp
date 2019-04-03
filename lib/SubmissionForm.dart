@@ -1,4 +1,4 @@
-import 'package:behavior_analyzer/main.dart';
+import 'main.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 
@@ -24,7 +24,15 @@ class SubmissionPage extends StatefulWidget {
   SubmissionPageState createState() => SubmissionPageState();
 }
 
+///Description: Shows the user that their registration was a success. It does not contain any sensitive information.
+///
+///Primary Author: Cody Tebbe
+///
+///
 class SubmissionPageState extends State<SubmissionPage> {
+
+  ///Builds the view for the user, and in the event needs to be edited, would be beneficial if guided by
+  ///the Flutter website.
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +53,7 @@ class SubmissionPageState extends State<SubmissionPage> {
               new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
-                    onPressed:logoutButton,
+                    onPressed:mainMenuButton,
                     child: new Text("Login Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: AppResources.buttonBackColor,)
               ),
@@ -56,7 +64,8 @@ class SubmissionPageState extends State<SubmissionPage> {
 
   }
 
-  void logoutButton(){
+  ///Sends the user back to the main menu
+  void mainMenuButton(){
     Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
   }
 

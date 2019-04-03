@@ -1,4 +1,4 @@
-import 'package:behavior_analyzer/SubmissionForm.dart';
+import 'SubmissionForm.dart';
 import 'package:flutter/material.dart';
 import 'APIManager.dart';
 import 'AppConsts.dart';
@@ -8,6 +8,18 @@ class RegisterForm extends StatefulWidget {
   RegisterState createState() => RegisterState();
 }
 
+///Description: Shows the user the register form in which they can input their information
+///A button clearly shows that this is what they are supposed to use to submit their information
+///A pop-up menu will appear if an error is reported, and errors are documented within the register function
+///
+///Primary Author: Ben Lawson
+///Secondary Author: Cody Tebbe
+///
+///Primary purpose:
+///   - creation of a new user
+///   - checking to see is the username is taken
+///   - checking to see if the password is quality
+///
 class RegisterState extends State<RegisterForm> {
   static final String MODULE_NAME = 'register_form';
 
@@ -20,6 +32,8 @@ class RegisterState extends State<RegisterForm> {
 
   bool isReady = true;
 
+  ///Creates the build for the application and everything the user sees
+  ///Any updates to this section should be guided by the Flutter Website.
   @override
   Widget build(BuildContext context) {
     if (!isReady) {
@@ -107,6 +121,10 @@ class RegisterState extends State<RegisterForm> {
     ));
   }
 
+  ///registerToServer checks to make sure all fields are filled, the password contains a quality password,
+  ///and sends the information to the server via the APIManager. Upon success will
+  ///send the user to the Submission form to confirm their submission. Error codes are also
+  ///checked with pop-ups in case one occurs.
   void registerToServer() {
     String username = usernameController.text;
     String password = passwordController.text;

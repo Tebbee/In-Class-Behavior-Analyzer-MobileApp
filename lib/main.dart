@@ -1,4 +1,4 @@
-import 'package:behavior_analyzer/APIManager.dart';
+import 'APIManager.dart';
 import 'package:flutter/material.dart';
 import 'LoginForm.dart';
 import 'RegisterForm.dart';
@@ -29,6 +29,14 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+///Description: The initial page for the entire application and the first page of the login/register group
+///The LoginForm is the default section of the application
+///
+///Primary Author: Ben Lawson
+///Secondary Author: Cody Tebbe
+///
+///Primary Purpose:
+///   - Switches the field between login and register
 class _LoginPageState extends State<LoginPage> {
   RaisedButton loginButton;
   RaisedButton registerButton;
@@ -43,13 +51,19 @@ class _LoginPageState extends State<LoginPage> {
   RegisterForm registerForm = RegisterForm();
   Widget currentForm;
 
+  ///Upon beginning the application, it tests if anyone is logged in and then attempts to
+  ///log them out to prevent any SESSION_ID issues
   @override
   initState() {
     super.initState();
     currentForm = loginForm;
-    APIManager.logout();
+    if(APIManager.SESSION_ID!="")
+      APIManager.logout();
   }
 
+  ///Creates the initial application with two buttons, "Login and Register"
+  ///Login is the initial application form within the application. Any changes and adjustments
+  ///can be assisted with Flutter's website
   @override
   Widget build(BuildContext context) {
     loginButton = new RaisedButton(
@@ -68,40 +82,40 @@ class _LoginPageState extends State<LoginPage> {
 
     return Scaffold(
         body: SafeArea(
-            child:
-                SingleChildScrollView(
-                    child:
-                    Column(
-                      mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Container(
-                            child: Image.asset('assets/Benny2.jpg', fit: BoxFit.contain, alignment: Alignment.center),
-                            height: 200.0,
-                            alignment: Alignment.center,
-                          ),
-
-                          SizedBox(height:25.0),
-                          Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: loginButton,
-                              ),
-                              Expanded(
-                                child: registerButton,
-                              ),
-                            ],
-                          ),
-                          Container(
-                            padding: EdgeInsets.all(10.0),
-                            child: currentForm,
-                          )
-                        ]
+          child:
+          SingleChildScrollView(
+              child:
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Container(
+                      child: Image.asset('assets/Benny2.jpg', fit: BoxFit.contain, alignment: Alignment.center),
+                      height: 200.0,
+                      alignment: Alignment.center,
+                    ),
+                    SizedBox(height:25.0),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          child: loginButton,
+                        ),
+                        Expanded(
+                          child: registerButton,
+                        ),
+                      ],
+                    ),
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      child: currentForm,
                     )
-                ),
-      )
+                  ]
+              )
+          ),
+        )
     );
   }
 
+  ///Description: Changes the form to the login form
   void login() {
     setState(() {
       loginTextColor = AppResources.buttonTextColor;
@@ -113,13 +127,14 @@ class _LoginPageState extends State<LoginPage> {
     });
   }
 
+  ///Description: Changes the form to the register form
   void register() {
     setState(() {
-        loginTextColor = AppResources.buttonBackColor;
-        loginBackColor = AppResources.buttonTextColor;
-        registerTextColor = AppResources.buttonTextColor;
-        registerBackColor = AppResources.buttonBackColor;
-        currentForm = registerForm;
+      loginTextColor = AppResources.buttonBackColor;
+      loginBackColor = AppResources.buttonTextColor;
+      registerTextColor = AppResources.buttonTextColor;
+      registerBackColor = AppResources.buttonBackColor;
+      currentForm = registerForm;
     });
   }
 

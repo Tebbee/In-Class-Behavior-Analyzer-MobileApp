@@ -1,4 +1,4 @@
-import 'package:behavior_analyzer/StudentMainView.dart';
+import 'StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 
@@ -24,7 +24,16 @@ class DemographicSubmissionPage extends StatefulWidget {
   DemographicSubmissionPageState createState() => DemographicSubmissionPageState();
 }
 
+
+///Description: The page is simply an acknowledgement of updating or creating a users demographics.
+///No functions are utilized within this page besides a push to the StudentMainView.
+///
+///Primary Author: Cody Tebbe
+///
 class DemographicSubmissionPageState extends State<DemographicSubmissionPage> {
+
+  ///Description: The build function that is within each primary class throughout the application are the visible
+  ///appearance of the application. Any updates can be followed up with on the Flutter guides online
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +54,7 @@ class DemographicSubmissionPageState extends State<DemographicSubmissionPage> {
               new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
-                    onPressed:logoutButton,
+                    onPressed:mainMenuButton,
                     child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: AppResources.buttonBackColor,)
               ),
@@ -55,7 +64,8 @@ class DemographicSubmissionPageState extends State<DemographicSubmissionPage> {
     );
   }
 
-  void logoutButton(){
+  ///Description: Sends the user back the the StudentMainView
+  void mainMenuButton(){
     Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
   }
 

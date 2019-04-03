@@ -1,3 +1,9 @@
+
+///Description: The purpose of this class was to automatically update the demographics form with
+///selections changed by the backend
+///*This was not fully implemented and unused as of 4/1/19
+///
+///Location: DemographicForm
 class ModelLookup {
   int _id;
   String _name;

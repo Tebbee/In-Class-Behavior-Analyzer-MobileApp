@@ -1,9 +1,9 @@
-import 'package:behavior_analyzer/APIManager.dart';
-import 'package:behavior_analyzer/StudentMainView.dart';
+import 'APIManager.dart';
+import 'StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 import 'package:flutter_blue/flutter_blue.dart';
-import 'package:behavior_analyzer/BluetoothView.dart';
+import 'BluetoothView.dart';
 
 
 class SessionStartForm extends StatelessWidget {
@@ -14,12 +14,10 @@ class SessionStartForm extends StatelessWidget {
         resizeToAvoidBottomPadding: false,
         body: SafeArea(
           child: SessionStartPage(title: ''),
-
         ),
       ),
     );
   }
-
 }
 
 class SessionStartPage extends StatefulWidget {
@@ -30,6 +28,15 @@ class SessionStartPage extends StatefulWidget {
   SessionStartPageState createState() => SessionStartPageState();
 }
 
+///Description: Scans for the Bluetooth beacons around the rooms and prepares the survey for future use
+///
+///Primary Author: Cody Tebbe
+///
+///Primary Purpose:
+///   - Activates automatically
+///   - Checks to ensure that the beacons are available
+///   - Checks that the user is in a class and will be able to pull a survey
+///
 class SessionStartPageState extends State<SessionStartPage> {
   static const String MODULE_NAME = 'Session Start Form';
   bool isReady = true;
@@ -43,7 +50,7 @@ class SessionStartPageState extends State<SessionStartPage> {
   var classIDs = ["None"];
   var currentClassSelected;
 
-
+  ///Tests if the users bluetooth is on
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
       if(res.toString() == 'true'){
@@ -53,8 +60,9 @@ class SessionStartPageState extends State<SessionStartPage> {
       setState(() {
       AppResources.showErrorDialog(MODULE_NAME, "The Bluetooth is not activated. Please turn on your bluetooth", context);
     });
-
     });}
+
+  ///Tests if the users device could support bluetooth
   flutterBlueAvailabilityTest(){
     flutterBlue.isAvailable.then((res){
       if(res.toString() == 'true'){
@@ -66,6 +74,8 @@ class SessionStartPageState extends State<SessionStartPage> {
         });
       return false;
     });}
+
+  ///Tests if the user selected a class to pull their survey from.
   dropDownListTest() {
     if(currentClassSelected == null){
       return(AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou have not selected a class!", context));
@@ -78,12 +88,15 @@ class SessionStartPageState extends State<SessionStartPage> {
       }
       counter++;
     }}
+
+  ///Sets the SetStateReady variable to true, to prevent copying the same code for multiple lines.
   setStateReady(){
     setState(() {
       isReady = true;
     });
   }
 
+  ///Scans for the devices and ensures that all the beacons will be able to be reached and distances recorded
   Future beaconScan() async {
     int beaconOneRssiValue = 0;
     int beaconTwoRssiValue = 0;
@@ -129,7 +142,6 @@ class SessionStartPageState extends State<SessionStartPage> {
             setStateReady();
             AppResources.showErrorDialog(MODULE_NAME, "ERROR, A beacon wasn't reached after multiple attempts. Please notify an administrator. You may close the app.", context);
           }
-
       });
       });
   }
@@ -141,6 +153,7 @@ class SessionStartPageState extends State<SessionStartPage> {
     super.initState();
   }
 
+  ///Builds the view of the app for the user, any updates should be guided by Flutter's website.
   @override
   Widget build(BuildContext context) {
     if (!isReady) {
@@ -192,7 +205,7 @@ class SessionStartPageState extends State<SessionStartPage> {
             new Container(
                margin: EdgeInsets.all(25.0),
                 child: new RaisedButton(
-                  onPressed:flutterBlueAvailabilityTest,
+                  onPressed: flutterBlueAvailabilityTest,
                   child: new Text("Start Session", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: AppResources.buttonBackColor,)
             ),
@@ -201,6 +214,9 @@ class SessionStartPageState extends State<SessionStartPage> {
       ),
     );
   }
+
+  ///Activates upon opening, and clears the classItems and classIDs from the application and checks to see if the user
+  ///is enlisted in any classes. If not, they are notified.
   refresh(){
     classItems.clear();
     classIDs.clear();

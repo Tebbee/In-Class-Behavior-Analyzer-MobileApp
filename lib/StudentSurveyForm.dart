@@ -1,6 +1,6 @@
-import 'package:behavior_analyzer/StudentMainView.dart';
-import 'package:behavior_analyzer/AppConsts.dart';
-import 'package:behavior_analyzer/APIManager.dart';
+import 'StudentMainView.dart';
+import 'AppConsts.dart';
+import 'APIManager.dart';
 import 'package:flutter/material.dart';
 
 class StudentSurveyForm extends StatelessWidget {
@@ -14,7 +14,7 @@ class StudentSurveyForm extends StatelessWidget {
     );
   }
 }
-//
+
 class StudentSurveyPage extends StatefulWidget {
   StudentSurveyPage({Key key, this.title}) : super(key: key);
 
@@ -28,7 +28,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
   var shortAnswerPrompts = [];
   var longAnswerPrompts = [];
   var rangePrompts = [];
-  var sliderValue;
+  var sliderValue = 3.0;
   TextEditingController shortAnswerController = new TextEditingController();
   TextEditingController longAnswerController = new TextEditingController();
 
@@ -51,7 +51,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
 
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-        Container(
+       /* Container(
         padding: EdgeInsets.all(20.0),
             child:Text(
                "How was your experience today?"
@@ -61,14 +61,16 @@ class StudentSurveyState extends State<StudentSurveyPage> {
               new Slider(
                 label: "0 = bad, 5 = great",
                 activeColor: AppResources.buttonBackColor,
-                value: 1,
+                value: sliderValue,
                 min: 0,
                 max: 5,
                 divisions: 5,
                 onChanged: (newRating) {
                   setState(() => sliderValue = newRating);
                     },
-              ),),
+              ),
+        ),
+          questionPlacement(),
           Container(
             padding: EdgeInsets.all(20.0),
             child:
@@ -105,8 +107,8 @@ class StudentSurveyState extends State<StudentSurveyPage> {
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                 color: AppResources.buttonBackColor,
-                ))
-
+                ))*/
+              questionPlacement()
             ]
         ),
       ),),
@@ -121,21 +123,17 @@ class StudentSurveyState extends State<StudentSurveyPage> {
         int counter = 0;
         for(var section in response.body.split("{")){
           if(counter >=3){
-            print(section.split(",")[2].replaceAll('"', "").substring(1));
       if(section.split(",")[2].replaceAll('"', "").substring(1).contains("SA")){
-        print("I CONTAIN A SHORT ANSWER");
         setState(() {
           shortAnswerPrompts.add(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
         });
       }
       if(section.split(",")[2].replaceAll('"', "").substring(1).contains("LA")){
-        print("I CONTAIN AN ESSAY");
         setState(() {
           longAnswerPrompts.add(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
         });
       }
       if(section.split(",")[2].replaceAll('"', "").substring(1).contains("RA")){
-        print("I CONTAIN A RANGE");
           rangePrompts.add(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
       }
       }
@@ -151,33 +149,29 @@ class StudentSurveyState extends State<StudentSurveyPage> {
   }
 
   questionPlacement(){
-    for(var value in shortAnswerPrompts){
-      print(value+"\n");
-
-    }
-    for(var value in longAnswerPrompts){
-      print(value+"\n");
-    }
+   // for(var value in shortAnswerPrompts){}
+   // for(var value in longAnswerPrompts){}
     for(var value in rangePrompts){
-      print(value+"\n");
-      new Text(value,style: TextStyle(color: AppResources.labelTextColor),);
-      new Slider(
-        activeColor: AppResources.buttonBackColor,
-        min: 0,
-        max: 5,
-        divisions: 5,
+      setState(() {
 
-        onChanged: (newRating) {
-          setState(() => sliderValue = newRating);
-        },
-        value: sliderValue,
-      );
-
+      });
+    createRanges(3);
     }
+  }
 
+  createRanges(int d){
+    var textEditingControllers = <TextEditingController>[];
 
+    var textFields = <TextField>[];
+    var list = new List<int>.generate(d, (i) =>i + 1 );
+    print(list);
 
-
+    list.forEach((i) {
+      var textEditingController = new TextEditingController(text: "test $i");
+      textEditingControllers.add(textEditingController);
+      return textFields.add(new TextField(controller: textEditingController));
+    });
+    return textFields;
   }
 }
 

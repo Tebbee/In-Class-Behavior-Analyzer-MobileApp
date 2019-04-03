@@ -10,6 +10,13 @@ class PasswordResetForm extends StatefulWidget {
   PasswordResetState createState() => PasswordResetState(onComplete);
 }
 
+///Description: The password reset form takes information from the user and plugs it into the
+///reset option in the APIManager.
+///
+///Primary Author: Ben Lawson
+///Secondary Author: Cody Tebbe
+///
+///Primary purpose: Resetting the password for the user
 class PasswordResetState extends State<PasswordResetForm> {
   VoidCallback onComplete;
 
@@ -23,6 +30,8 @@ class PasswordResetState extends State<PasswordResetForm> {
 
   bool isReady = true;
 
+  ///The creation of the view for the application. Text boxes, buttons, text, etc.
+  ///Any updates can be guided to go through the Flutter website.
   @override
   Widget build(BuildContext context) {
     if (!isReady) {
@@ -83,10 +92,13 @@ class PasswordResetState extends State<PasswordResetForm> {
     );
   }
 
+  ///Upon utilization the password reset function is closed and the LoginForm returns to the user.
   void closeButtonPress() {
     Navigator.pop(context);
   }
 
+  ///This function tests if there is the proper fields filled, tests if they are correct
+  ///via the APIManager.resetPassword function.
   void submitPasswordReset() {
     if (resetCodeController.text.isEmpty) {
       AppResources.showErrorDialog(MODULE_NAME, "No reset code!", context);
