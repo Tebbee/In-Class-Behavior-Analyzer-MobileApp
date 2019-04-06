@@ -35,7 +35,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
   @override
   initState() {
     super.initState();
-    //questionRetrieval();
+    questionRetrieval();
   }
 
   @override
@@ -125,9 +125,10 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     );
 
   }
-/*
+
   questionRetrieval(){
     APIManager.surveyRequest().then((response){
+      print(response.body);
       if (response.body.contains("success")){
       if (response.body.split("{").length>2) {
         int counter = 0;
@@ -168,7 +169,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
 
     }
   }
-*/
+
   createRanges(int d){
     RaisedButton(onPressed:(){
       Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},

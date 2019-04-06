@@ -31,8 +31,7 @@ class APIManager {
   ///Description: Tests if the user has a SESSION_ID, sending a true/false value to where it is called.
   ///Location of its use: LoginForm, RegistrationForm, SessionStartForm, ForgotPasswordForm,
   static bool isUserLoggedIn() {
-    return SESSION_ID.isNotEmpty;
-  }
+    return SESSION_ID.isNotEmpty;}
 
   ///Description: ParseLoginResponse function sets the Session_ID located within the APIManager
   ///that is checked be the isUserLoggedIn function.
@@ -97,7 +96,6 @@ class APIManager {
   ///Location: ForgotPasswordForm
   static Future<http.Response> requestResetPassword(String username) async {
     print(LOG_NAME + ': Making request reset password request...');
-
     return await http.post(
       BASE_URL + 'request_password_reset/' + username,
     );
@@ -233,7 +231,14 @@ class APIManager {
     return await http.get(BASE_URL + "class/select/all?session_id="+SESSION_ID);
   }
 
-
+  ///Description: Requests survey information from the server and populates the StudentSurveyForm from
+  ///the results
+  ///
+  ///Location: StudentSurveyForm
+  static Future<http.Response> allOpenSurveyRequest() async{
+    print(LOG_NAME + ': Making open survey request...');
+    return await http.post(BASE_URL+ "survey/open_surveys?session_id="+SESSION_ID);
+  }
 
 
 }

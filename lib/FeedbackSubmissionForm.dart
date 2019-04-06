@@ -45,7 +45,7 @@ class FeedbackSubmissionPageState extends State<FeedbackSubmissionPage> {
               new Container(
                   margin: EdgeInsets.all(25.0),
                   child: new Text(
-                    "Thank you for your input! it really means a lot!",
+                    "Thank you for your input! It really means a lot!",
                     style: new TextStyle(color: AppResources.labelTextColor,fontStyle: FontStyle.italic, fontSize: 30.0),
                     textAlign: TextAlign.center,
                   )),

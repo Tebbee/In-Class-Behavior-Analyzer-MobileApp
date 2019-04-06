@@ -152,6 +152,12 @@ class StudentPageState extends State<StudentPage> {
   ///Flutter website
   @override
   Widget build(BuildContext context) {
+    
+    if (!isReady) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -183,13 +189,13 @@ class StudentPageState extends State<StudentPage> {
                   child: new Text("Logout", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
                   color: AppResources.buttonBackColor,)
             ),
-         /*   new Container(
+            new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
                   onPressed: bluetooth,
                   child: new Text("Bluetooth", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                   color: Colors.blue,)
-            ),*/
+            ),
             new Container(
                 margin: EdgeInsets.all(5.0),
                 child: new RaisedButton(
@@ -206,27 +212,32 @@ class StudentPageState extends State<StudentPage> {
 
   ///Logs the user out of the app, and sends them to the beginning login/register screen
   void logoutButton(){
+    setStateFalse();
     APIManager.logout();
     Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
     }
 
   ///Sends the user to the Demographics page to be utilized further
   void demographicButton(){
+    setStateFalse();
     Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));
   }
 
   ///Sends the user to the Survey form to be utilized further
   void surveyButton(){
+    setStateFalse();
     Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyForm()));
   }
 
+  void setStateFalse() {setState(() {isReady = false;});}
+
   ///Sends the user to the Feedback form to be utilized further
   void feedbackButton(){
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => FeedbackForm()));
-  }
+    setStateFalse();
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => FeedbackForm()));}
 
   ///Sends the user to the Bluetooth page to be used for testing for developers
   void bluetooth() {
-    Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}
-  }
+    setStateFalse();
+    Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}}
 

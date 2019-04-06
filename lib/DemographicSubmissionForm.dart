@@ -36,6 +36,7 @@ class DemographicSubmissionPageState extends State<DemographicSubmissionPage> {
   ///appearance of the application. Any updates can be followed up with on the Flutter guides online
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),

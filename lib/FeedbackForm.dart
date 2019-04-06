@@ -85,7 +85,7 @@ class FeedbackPageState extends State<FeedbackPage> {
                   margin: EdgeInsets.fromLTRB(5.0, 25.0, 5.0, 5.0),
                   child: new Text(
                     "If there are any issues, please implement them here!",
-                    style: new TextStyle(color: AppResources.labelTextColor,fontStyle: FontStyle.italic, fontSize: 10.0),
+                    style: new TextStyle(color: AppResources.labelTextColor,fontStyle: FontStyle.italic, fontSize: 12.0),
                     textAlign: TextAlign.center,
                   )),
             ]
