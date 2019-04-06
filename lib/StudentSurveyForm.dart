@@ -25,9 +25,9 @@ class StudentSurveyPage extends StatefulWidget {
 
 class StudentSurveyState extends State<StudentSurveyPage> {
   static final String MODULE_NAME = 'Survey_Form';
-  var shortAnswerPrompts = [];
-  var longAnswerPrompts = [];
-  var rangePrompts = [];
+  var shortAnswerPrompts = ["Fuck You"];
+  var longAnswerPrompts = ["Goodbye"];
+  var rangePrompts = ["Hello"];
   var sliderValue = 3.0;
   TextEditingController shortAnswerController = new TextEditingController();
   TextEditingController longAnswerController = new TextEditingController();
@@ -35,7 +35,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
   @override
   initState() {
     super.initState();
-    questionRetrieval();
+    //questionRetrieval();
   }
 
   @override
@@ -99,7 +99,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child: new Text("Submit", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                 color: AppResources.buttonBackColor,
-              )),
+              )),*/
               Container(
                 padding: EdgeInsets.all(20.0),
                 child:
@@ -107,15 +107,25 @@ class StudentSurveyState extends State<StudentSurveyPage> {
                 Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                 child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                 color: AppResources.buttonBackColor,
-                ))*/
-              questionPlacement()
+                )),
+              new Flexible(child:
+              new ListView.builder(itemCount: rangePrompts.length,
+                  itemBuilder: (BuildContext ctxt, int index){
+                return
+                    new Slider(value: 1,
+                        min: 0,
+                        max: 2,
+                        onChanged: null,
+
+                );
+                  }))
             ]
         ),
       ),),
     );
 
   }
-
+/*
   questionRetrieval(){
     APIManager.surveyRequest().then((response){
       if (response.body.contains("success")){
@@ -153,25 +163,18 @@ class StudentSurveyState extends State<StudentSurveyPage> {
    // for(var value in longAnswerPrompts){}
     for(var value in rangePrompts){
       setState(() {
-
+        createRanges(1);
       });
-    createRanges(3);
+
     }
   }
-
+*/
   createRanges(int d){
-    var textEditingControllers = <TextEditingController>[];
-
-    var textFields = <TextField>[];
-    var list = new List<int>.generate(d, (i) =>i + 1 );
-    print(list);
-
-    list.forEach((i) {
-      var textEditingController = new TextEditingController(text: "test $i");
-      textEditingControllers.add(textEditingController);
-      return textFields.add(new TextField(controller: textEditingController));
-    });
-    return textFields;
+    RaisedButton(onPressed:(){
+      Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
+      child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
+      color: AppResources.buttonBackColor,
+    );
   }
 }
 

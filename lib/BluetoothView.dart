@@ -17,7 +17,7 @@ var x,y;
 ///Primary Author: Cody Tebbe
 ///
 ///Locations: StudentMainView
-///
+
 class BluetoothView extends StatelessWidget {
 
   @override
