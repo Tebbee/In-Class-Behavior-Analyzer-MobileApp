@@ -1,7 +1,7 @@
 import 'APIManager.dart';
 import 'DemographicForm.dart';
 import 'FeedbackForm.dart';
-import 'StudentSurveyForm.dart';
+import 'StudentSurveySelection.dart';
 import 'main.dart';
 import 'BluetoothView.dart';
 import 'package:flutter/material.dart';
@@ -226,7 +226,7 @@ class StudentPageState extends State<StudentPage> {
   ///Sends the user to the Survey form to be utilized further
   void surveyButton(){
     setStateFalse();
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyForm()));
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveySelection()));
   }
 
   void setStateFalse() {setState(() {isReady = false;});}
