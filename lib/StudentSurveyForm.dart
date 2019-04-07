@@ -25,9 +25,9 @@ class StudentSurveyPage extends StatefulWidget {
 
 class StudentSurveyState extends State<StudentSurveyPage> {
   static final String MODULE_NAME = 'Survey_Form';
-  var shortAnswerPrompts = ["Fuck You"];
-  var longAnswerPrompts = ["Goodbye"];
-  var rangePrompts = ["Hello"];
+  var shortAnswerPrompts = [];
+  var longAnswerPrompts = [];
+  var rangePrompts = [];
   var sliderValue = 3.0;
   TextEditingController shortAnswerController = new TextEditingController();
   TextEditingController longAnswerController = new TextEditingController();

@@ -218,8 +218,8 @@ class APIManager {
   ///Location: StudentSurveyForm
   static Future<http.Response> surveyRequest() async{
     print(LOG_NAME + ': Making survey request...');
-    return await http.post(BASE_URL+ "survey/select?session_id="+SESSION_ID,
-        body: {'class' : CLASS_ID});
+    return await http.post(BASE_URL+ "survey/get?session_id="+SESSION_ID,
+        body: {'survey_id' : CLASS_ID});
   }
 
   ///Description: Scans the server for all classes a user is signed up for,

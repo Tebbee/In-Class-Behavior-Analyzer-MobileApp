@@ -27,8 +27,11 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
   static final String MODULE_NAME = 'Survey_Selection_Form';
   int x = 2;
   var apiResponse;
+  var idArray = [];
+  var surveyArray = [];
+  var dateGeneratedArray = [];
 
-  List <Widget> v = [];
+  List <Widget> buttonCreator = [];
   @override
   initState() {
     super.initState();
@@ -48,8 +51,16 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
 
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                new Container(
+                  padding: EdgeInsets.all(10),
+                  child: Text("Here are all of your open Surveys:",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: AppResources.labelTextColor,
+                  ),)
+                ),
                 new Column(
-                  children:v),
+                  children:buttonCreator),
                 new Container(
                     padding: EdgeInsets.all(20.0),
                     child: RaisedButton(onPressed:(){
@@ -58,7 +69,6 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
                       color: AppResources.buttonBackColor,
                     )
                 ),
-
               ]
           ),
         ),),
@@ -73,25 +83,31 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
       while(x < length) {
         if (response.body.split("{").length > 2) {
           setState(() {
-            buildButton(response.body.split("{")[x].split(":")[3].substring(2, 12),studentClassSurvey);
+            idArray.add(response.body.split("{")[x].split(":")[1].split(",")[0].replaceAll(" ", ""));
+            surveyArray.add(response.body.split("{")[x].split(":")[2].split(",")[0].replaceAll(" ", ""));
+            dateGeneratedArray.add(response.body.split("{")[x].split(":")[3].substring(2, 12));
+            buildButton(response.body.split("{")[x].split(":")[3].substring(2, 12) + "   -   " + response.body.split("{")[x].split(":")[2].split(",")[0].replaceAll(" ", ""),int.parse(response.body.split("{")[x].split(":")[1].split(",")[0].replaceAll(" ", "")));
             });
+
           x++;
         }
       }
     });
   }
 
-  buildButton(name,function){
-    v.add(new Container(
-        padding: EdgeInsets.all(20.0),
+  buildButton(className, classID){
+    buttonCreator.add(new Container(
+        padding: EdgeInsets.all(10.0),
         child: RaisedButton(
-        onPressed: function,
-        child: new Text(name, style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
+        onPressed: () =>studentClassSurvey(classID),
+        child: new Text(className, style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
         color: AppResources.buttonBackColor,
         )
     ));
   }
-  studentClassSurvey(){
-    print(apiResponse.body);
+  
+  studentClassSurvey(int id){
+    APIManager.CLASS_ID = id.toString();
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
   }
 }

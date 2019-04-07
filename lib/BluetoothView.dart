@@ -214,7 +214,6 @@ class BluetoothPageState extends State<BluetoothPage> {
       beaconScan();
     }
  }
-
   ///Description: Tests how beacons intersect one another via the circleCircleIntersectionPoints function.
   ///This function exists for test purposes within the application
   beaconDistance(firstBeacon, secondBeacon, thirdBeacon, beaconOneDistance, beaconTwoDistance, beaconThreeDistance){
@@ -227,7 +226,6 @@ class BluetoothPageState extends State<BluetoothPage> {
     //calculateThreeCircleIntersection(x1, y1, beaconOneDistance, x2, y2, beaconTwoDistance, x3, y3, beaconThreeDistance);
     circleCircleIntersectionPoints(x1,y1,beaconOneDistance,x2,y2,beaconTwoDistance);
  }
-
   ///Description: Tests the intersection point of two circles, whether they be infinitely, not at all, at one point, or many
   ///This exists only for testing purposes within the application. and has removed the third circle
   ///for said testing purposes.
@@ -272,8 +270,6 @@ class BluetoothPageState extends State<BluetoothPage> {
 
     return("INTERSECTION: " +intersectionPoint1_x.toString() + "," + intersectionPoint1_y.toString() + ") AND (" + intersectionPoint2_x.toString() + "," + intersectionPoint2_y.toString() + ")");
   }
-  
-
   ///Description: Tests two circles and returns how they intersect one another, whether their points are connected
   ///via 2 points, one point, infinite points, or no points at all.
   ///
@@ -328,7 +324,6 @@ class BluetoothPageState extends State<BluetoothPage> {
     var pt2 = rotatePoint(C, P, -1*angle);
     return [pt1, pt2];
   }
-
   ///Description: Function utilized within the calculateThreeCircleIntersection and circleCircleIntersectionPoints
   ///(DO NOT ADJUST, THIS IS A MATH EQUATION)
   rotatePoint(fp, pt, a) {
@@ -338,14 +333,12 @@ class BluetoothPageState extends State<BluetoothPage> {
     var yRot = y * cos(a) - x * sin(a);
     return Point(fp.x+xRot,fp.y+yRot);
   }
-
   ///Description: Function utilized within the calculateThreeCircleIntersection and circleCircleIntersectionPoints
   ///(DO NOT ADJUST, THIS IS A MATH EQUATION)
   Point(x, y) {
     this.x = x;
     this.y = y;
   }
-
   ///Description: Function utilized within the calculateThreeCircleIntersection and circleCircleIntersectionPoints
   ///(DO NOT ADJUST, THIS IS A MATH EQUATION)
   acossafe(x) {
@@ -413,7 +406,7 @@ class BluetoothPageState extends State<BluetoothPage> {
                 new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
-                    onPressed: button,
+                    onPressed: timerTest,
                     child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: Colors.red,
                   ),
@@ -446,5 +439,14 @@ class BluetoothPageState extends State<BluetoothPage> {
     counterTwo = 0;
     counterThree = 0;
   }
+
+
+  timerTest(){
+    new Timer(Duration(seconds: 2),  testtwo());
+  }
+  testtwo(){
+    print("HELLO");
+  }
+
 
 }

@@ -210,6 +210,8 @@ class StudentPageState extends State<StudentPage> {
         );
   }
 
+  void setStateFalse() {setState(() {isReady = false;});}
+
   ///Logs the user out of the app, and sends them to the beginning login/register screen
   void logoutButton(){
     setStateFalse();
@@ -228,8 +230,6 @@ class StudentPageState extends State<StudentPage> {
     setStateFalse();
     Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveySelection()));
   }
-
-  void setStateFalse() {setState(() {isReady = false;});}
 
   ///Sends the user to the Feedback form to be utilized further
   void feedbackButton(){
