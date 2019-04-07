@@ -52,7 +52,7 @@ class StudentPageState extends State<StudentPage> {
   @override
   initState() {
     super.initState();
-    flutterBlueAvailabilityTest();
+    //flutterBlueAvailabilityTest();
   }
 
   ///Scans for all the beacons, uses a math equation to find the distance from the beacon, and records the results.

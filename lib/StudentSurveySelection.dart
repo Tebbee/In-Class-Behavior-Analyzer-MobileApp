@@ -25,11 +25,14 @@ class StudentSurveySelectionPage extends StatefulWidget {
 
 class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
   static final String MODULE_NAME = 'Survey_Selection_Form';
+  int x = 2;
+  var apiResponse;
 
-
+  List <Widget> v = [];
   @override
   initState() {
     super.initState();
+    questionRetrieval();
   }
 
   @override
@@ -45,21 +48,17 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
 
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new Container(
-                    margin: EdgeInsets.all(5.0),
-                    child: new RaisedButton(
-                      onPressed: questionRetrieval,
-                      child: new Text("Bluetooth", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                      color: Colors.blue,)
-                ),
+                new Column(
+                  children:v),
                 new Container(
                     padding: EdgeInsets.all(20.0),
-                    child:
-                    RaisedButton(onPressed:(){
+                    child: RaisedButton(onPressed:(){
                       Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
                       child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                       color: AppResources.buttonBackColor,
-                    )),
+                    )
+                ),
+
               ]
           ),
         ),),
@@ -68,17 +67,31 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
 
   questionRetrieval(){
     APIManager.allOpenSurveyRequest().then((response) {
+      int length = response.body.split("{").length;
+      apiResponse = response;
       print(response.body);
+      while(x < length) {
+        if (response.body.split("{").length > 2) {
+          setState(() {
+            buildButton(response.body.split("{")[x].split(":")[3].substring(2, 12),studentClassSurvey);
+            });
+          x++;
+        }
+      }
     });
   }
-/*
-  createButton(buttonName){
-    new Container(
-        margin: EdgeInsets.all(5.0),
-        child: new RaisedButton(
-          onPressed: questionRetrieval,
-          child: new Text(buttonName, style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
-          color: Colors.blue,)
-    );
-  }*/
+
+  buildButton(name,function){
+    v.add(new Container(
+        padding: EdgeInsets.all(20.0),
+        child: RaisedButton(
+        onPressed: function,
+        child: new Text(name, style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
+        color: AppResources.buttonBackColor,
+        )
+    ));
+  }
+  studentClassSurvey(){
+    print(apiResponse.body);
+  }
 }
