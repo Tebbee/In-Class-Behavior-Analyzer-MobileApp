@@ -52,59 +52,50 @@ class StudentPageState extends State<StudentPage> {
   @override
   initState() {
     super.initState();
-    //flutterBlueAvailabilityTest();
+    flutterBlueAvailabilityTest();
   }
 
   ///Scans for all the beacons, uses a math equation to find the distance from the beacon, and records the results.
   Future beaconScan() async {
-        BluetoothPageState.bluetoothScan = flutterBlue.scan().listen((scanResult) {
-        BluetoothPageState.beaconRssiValue = scanResult.rssi.toDouble();
-        BluetoothPageState.beaconRssiDistance = pow(10,(-55 - BluetoothPageState.beaconRssiValue.toDouble()) / (10 * 2));
-        if (scanResult.device.id.id == BluetoothPageState.beaconOne) {
-          print("Beacon One is: " + BluetoothPageState.beaconRssiDistance.toString() + " meters away\n");
-          if (BluetoothPageState.beaconRssiDistance < 30){
-            BluetoothPageState.beaconNumberOneValueList.add(BluetoothPageState.beaconRssiDistance);
-            BluetoothPageState.counterOne++;}
+    BluetoothPageState.bluetoothScan = flutterBlue.scan().listen((scanResult) {
+      print("HERE");
+      BluetoothPageState.beaconRssiValue = scanResult.rssi.toDouble();
+      BluetoothPageState.beaconRssiDistance = pow(10,(-55 - BluetoothPageState.beaconRssiValue.toDouble()) / (10 * 2));
+      if (scanResult.device.id.id == BluetoothPageState.beaconOne) {
+        print("Beacon One is: " + BluetoothPageState.beaconRssiDistance.toString() + " meters away\n");
+        if (BluetoothPageState.beaconRssiDistance < 30){
+          BluetoothPageState.beaconNumberOneValueList.add(BluetoothPageState.beaconRssiDistance);
+          BluetoothPageState.counterOne++;}
+      }
+      if (scanResult.device.id.id == BluetoothPageState.beaconTwo) {
+        print("Beacon Two is: " + BluetoothPageState.beaconRssiDistance.toString() + " meters away\n");
+        if (BluetoothPageState.beaconRssiDistance < 30){
+          BluetoothPageState.beaconNumberTwoValueList.add(BluetoothPageState.beaconRssiDistance);
+          BluetoothPageState.counterTwo++;
         }
-        if (scanResult.device.id.id == BluetoothPageState.beaconTwo) {
-         print("Beacon Two is: " + BluetoothPageState.beaconRssiDistance.toString() + " meters away\n");
-          if (BluetoothPageState.beaconRssiDistance < 30){
-            BluetoothPageState.beaconNumberTwoValueList.add(BluetoothPageState.beaconRssiDistance);
-            BluetoothPageState.counterTwo++;
-          }
-        }
-        if (scanResult.device.id.id == BluetoothPageState.beaconThree) {
-          print("Beacon Three is: " + BluetoothPageState.beaconRssiDistance.toString() + " meters away\n");
-          if (BluetoothPageState.beaconRssiDistance < 30){
-            BluetoothPageState.beaconNumberThreeValueList.add(BluetoothPageState.beaconRssiDistance);
-            BluetoothPageState.counterThree++;}
-        }
+      }
+      if (scanResult.device.id.id == BluetoothPageState.beaconThree) {
+        print("Beacon Three is: " + BluetoothPageState.beaconRssiDistance.toString() + " meters away\n");
+        if (BluetoothPageState.beaconRssiDistance < 30){
+          BluetoothPageState.beaconNumberThreeValueList.add(BluetoothPageState.beaconRssiDistance);
+          BluetoothPageState.counterThree++;}
+      }
 
-          Future.delayed(const Duration(seconds: 5), () {
-          BluetoothPageState.bluetoothScan.cancel();
-          BluetoothPageState.beaconNumberOneValueList.sort();
-          BluetoothPageState.beaconNumberTwoValueList.sort();
-          BluetoothPageState.beaconNumberThreeValueList.sort();
+      Future.delayed(const Duration(seconds: 5), () {
+        BluetoothPageState.bluetoothScan.cancel();
+        BluetoothPageState.beaconNumberOneValueList.sort();
+        BluetoothPageState.beaconNumberTwoValueList.sort();
+        BluetoothPageState.beaconNumberThreeValueList.sort();
 
-          Future.delayed(const Duration (seconds: 10),(){
-            calculateLocation();
-            print("IM HERE NOW");
-           // BluetoothPageState.clearAll();
-           // flutterBlueAvailabilityTest();
-          });
+        Future.delayed(const Duration (seconds: 10),(){
+          calculateLocation();
+          // BluetoothPageState.clearAll();
+           flutterBlueAvailabilityTest();
         });
-      });}
+      });
+    });}
 
-  scan(){
-    Timer.periodic(Duration(seconds: 10), callback(Timer(Duration(seconds: 10), functoin())));
-  }
 
-  callback(timer){
-    print("hello");
-  }
-  functoin(){
-
-  }
   ///Calculates the intersecting points of the bluetooth beacon circles, and records the results.
   calculateLocation(){
     print("One and Two");
@@ -119,7 +110,6 @@ class StudentPageState extends State<StudentPage> {
     print(BluetoothPageState.calculateThreeCircleIntersection(
       BluetoothPageState.beaconThreeCoords[0], BluetoothPageState.beaconThreeCoords[1], BluetoothPageState.beaconNumberThreeValueList[0],
       BluetoothPageState.beaconTwoCoords[0], BluetoothPageState.beaconTwoCoords[1], BluetoothPageState.beaconNumberTwoValueList[0]));
-
     }
 
   ///Tests if the user's bluetooth is on and will tell the user if it is not, connects into beaconScan
@@ -239,5 +229,6 @@ class StudentPageState extends State<StudentPage> {
   ///Sends the user to the Bluetooth page to be used for testing for developers
   void bluetooth() {
     setStateFalse();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}}
+    Navigator.push(context, MaterialPageRoute(builder: (context) => BluetoothView()));}
+}
 

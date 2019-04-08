@@ -406,7 +406,7 @@ class BluetoothPageState extends State<BluetoothPage> {
                 new Container(
                   margin: EdgeInsets.all(5.0),
                   child: new RaisedButton(
-                    onPressed: timerTest,
+
                     child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: Colors.red,
                   ),
@@ -438,11 +438,6 @@ class BluetoothPageState extends State<BluetoothPage> {
     counterOne = 0;
     counterTwo = 0;
     counterThree = 0;
-  }
-
-
-  timerTest(){
-    new Timer(Duration(seconds: 2),  testtwo());
   }
   testtwo(){
     print("HELLO");

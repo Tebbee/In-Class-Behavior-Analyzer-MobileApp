@@ -207,9 +207,11 @@ class APIManager {
   ///Description: Submits the survey information submitted by the user
   ///
   ///Location: StudentSurveyForm
-  static Future<http.Response> surveySubmission() async{
+  static Future<http.Response> surveySubmission(List responses, int surveyNumber) async{
     print(LOG_NAME + ': Making survey submission...');
-    return await http.post(BASE_URL);
+    return await http.post(BASE_URL+"survey/respond?session_id="+SESSION_ID,
+    body: {
+    });
   }
 
   ///Description: Requests survey information from the server and populates the StudentSurveyForm from

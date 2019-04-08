@@ -1,3 +1,4 @@
+import 'package:icbaversion2/StudentSurveyForm.dart';
 import 'StudentMainView.dart';
 import 'AppConsts.dart';
 import 'APIManager.dart';
@@ -30,8 +31,9 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
   var idArray = [];
   var surveyArray = [];
   var dateGeneratedArray = [];
-
   List <Widget> buttonCreator = [];
+  bool isReady = true;
+
   @override
   initState() {
     super.initState();
@@ -40,6 +42,11 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (!isReady) {
+      return Center(
+        child: CircularProgressIndicator(),
+      );
+    }
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -108,6 +115,10 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
   
   studentClassSurvey(int id){
     APIManager.CLASS_ID = id.toString();
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
+    setState(() {
+      isReady = false;
+    });
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyForm()));
   }
+
 }

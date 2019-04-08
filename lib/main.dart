@@ -4,7 +4,6 @@ import 'LoginForm.dart';
 import 'RegisterForm.dart';
 import 'AppConsts.dart';
 
-
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
