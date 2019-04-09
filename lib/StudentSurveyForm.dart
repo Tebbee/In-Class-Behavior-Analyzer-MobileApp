@@ -4,6 +4,8 @@ import 'StudentMainView.dart';
 import 'AppConsts.dart';
 import 'APIManager.dart';
 import 'package:flutter/material.dart';
+import 'dart:core';
+import 'dart:convert';
 
 class StudentSurveyForm extends StatelessWidget {
   @override
@@ -27,6 +29,7 @@ class StudentSurveyPage extends StatefulWidget {
 
 class StudentSurveyState extends State<StudentSurveyPage> {
   static final String MODULE_NAME = 'Survey_Form';
+  Map<String, dynamic> formValues = Map();
   var shortAnswerPrompts = [];
   var shortAnswerAnswers = [];
   var longAnswerPrompts = [];
@@ -88,14 +91,15 @@ class StudentSurveyState extends State<StudentSurveyPage> {
                   child: RaisedButton(onPressed: submitSurvey,
                     child: new Text("Submit", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                     color: AppResources.buttonBackColor,
-                  )
+                  ),
               ),
 
               Container(
                   padding: EdgeInsets.all(10.0),
                   child:
                   RaisedButton(onPressed:(){
-                    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
+                      Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
+                    },
                     child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                     color: AppResources.buttonBackColor,
                   )
@@ -108,87 +112,101 @@ class StudentSurveyState extends State<StudentSurveyPage> {
 
   questionRetrieval(){
     APIManager.surveyRequest().then((response){
-      print(response.body);
-      if (response.body.contains("success")){
-      if (response.body.split("{").length>2) {
-        int counter = 0;
-        for(var section in response.body.split("{")){
-          if(counter >=3){
-      if(section.split(",")[2].replaceAll('"', "").substring(1).contains("SA")){
-        setState(() {
-          shortAnswerPrompts.add(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
-          buildShortAnswer(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
-        });
-      }
-      if(section.split(",")[2].replaceAll('"', "").substring(1).contains("LA")){
-        setState(() {
-          longAnswerPrompts.add(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
-          buildLongAnswer(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
-        });
-      }
-      if(section.split(",")[2].replaceAll('"', "").substring(1).contains("RA")){
-          rangePrompts.add(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
-          buildRange(section.split(",")[3].replaceAll('"', "").substring(9).replaceAll("}", "").replaceAll("]", "").toString());
+      var jsonObj = json.decode(response.body);
+
+      if (jsonObj['status'] == "success") {
+        formValues['survey'] = jsonObj['data']['survey_instance']['id'].toString();
+        for (var question in jsonObj['data']['questions']) {
+          if (question['question']['type'] == 'SA') {
+            setState(() {buildShortAnswer(question['question']['prompt'], question['id']);});
+          } else if (question['question']['type'] == 'LA') {
+            setState(() {buildLongAnswer(question['question']['prompt'], question['id']);});
+          } else if (question['question']['type'] == 'RA') {
+            setState(() {buildRange(question['question']['prompt'], question['id']);});
           }
         }
-      counter++;
+
+        for (int i = 0; i < jsonObj['data']['positions'].length; i++) {
+          var xValue = jsonObj['data']['positions'][i]['position']['x'];
+          var yValue = jsonObj['data']['positions'][i]['position']['y'];
+          var instanceId = jsonObj['data']['positions'][i]['id'];
+
+          if (i == 0) {
+            setState(() {
+              buildShortAnswer("Why did you sit at " + xValue.toString() + ", " + yValue.toString() + " at the beginning of class?", instanceId);
+            });
+          } else {
+            setState(() {
+              buildShortAnswer("Why did you move to " + xValue.toString() + ", " + yValue.toString() + "?", instanceId);
+            });
           }
         }
       }
-      if(response.body.contains("error")){
-        AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nSomething is wrong with the Post request", context);
-      }
+
     });
+
   }
 
-  buildRange(className){
+  buildRange(className, id){
+    formValues[id.toString()] = 5.0.toString();
 
-    rangeCreator.add(
-        new Container(
-        padding: EdgeInsets.all(10.0),
-        child: new Slider(
-          min: 0.0,
-          max: 10.0,
-          divisions: 10,
-          activeColor: AppResources.buttonBackColor,
-          label: className,
-          onChanged: (double value){
-            setState(() {
-              sliderValue = value;
-              print(sliderValue);
-            });
-          },
-          value: sliderValue,
+    rangeCreator.add(new Container(
+      padding: EdgeInsets.all(20.0),
+      child: new TextField(
+        decoration: new InputDecoration(
+          labelStyle: AppResources.labelStyle,
+          labelText: className,
         ),
-      )
-    );}
-  buildLongAnswer(className){
+        keyboardType: TextInputType.number,
+        onChanged: (newValue) {
+          formValues[id.toString()] = newValue.toString();
+        },
+      ),
+    )
+    );
+  }
+  buildLongAnswer(className, id){
+    formValues[id.toString()] = "";
+
     longAnswerCreator.add(new Container(
         padding: EdgeInsets.all(20.0),
         child: new TextField(
           decoration: new InputDecoration(
             labelStyle: AppResources.labelStyle,
-            hintText: className,
+            labelText: className,
           ),
-          controller: shortAnswerController,
+          onChanged: (newValue) {
+            formValues[id.toString()] = newValue;
+          },
         ),
     )
-    );}
-  buildShortAnswer(className){
+    );
+  }
+  buildShortAnswer(className, id){
+    formValues[id.toString()] = "";
+
     shortAnswerCreator.add(new Container(
         padding: EdgeInsets.all(20.0),
         child: new TextField(
 
             decoration: new InputDecoration(
               labelStyle: AppResources.labelStyle,
-              hintText: className,
+              labelText: className,
             ),
-          controller: longAnswerController,
+          onChanged: (newValue) {
+              formValues[id.toString()] = newValue;
+          },
         ),
     )
     );}
 
   submitSurvey(){
+    APIManager.surveySubmission(formValues).then((response) {
+      var jsonObj = json.decode(response.body);
+      if (jsonObj['status'] == "success") {
+        // Navigate to another page
+      }
+    });
 
   }
 

@@ -25,7 +25,7 @@ class APIManager {
   static final String LOG_NAME = "API_Manager";
   static String SESSION_ID = "";
   static String CLASS_ID = "";
-  static final String BASE_URL = "http://192.168.0.17:8000/api/";
+  static final String BASE_URL = "http://10.2.214.74:8000/api/";
   static bool openSurvey = false;
 
   ///Description: Tests if the user has a SESSION_ID, sending a true/false value to where it is called.
@@ -207,11 +207,10 @@ class APIManager {
   ///Description: Submits the survey information submitted by the user
   ///
   ///Location: StudentSurveyForm
-  static Future<http.Response> surveySubmission(List responses, int surveyNumber) async{
+  static Future<http.Response> surveySubmission(Map responses) async{
     print(LOG_NAME + ': Making survey submission...');
     return await http.post(BASE_URL+"survey/respond?session_id="+SESSION_ID,
-    body: {
-    });
+      body: responses);
   }
 
   ///Description: Requests survey information from the server and populates the StudentSurveyForm from
