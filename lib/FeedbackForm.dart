@@ -52,6 +52,13 @@ class FeedbackPageState extends State<FeedbackPage> {
           child: Column(
             children: <Widget>[
               new Container(
+                  alignment: Alignment.topRight,
+                  child: new IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: closePage
+                  )
+              ),
+              new Container(
                   margin: EdgeInsets.all(10.0),
                   child: new Text(
                     "Your input is important to us. \n\n" +
@@ -64,7 +71,7 @@ class FeedbackPageState extends State<FeedbackPage> {
                 child: TextField(
                   decoration: new InputDecoration(
                       labelStyle: AppResources.labelStyle,
-                      hintText: "Input",
+                      labelText: "Feedback...",
                   ),
                   controller: inputController,
                 ),
@@ -75,19 +82,7 @@ class FeedbackPageState extends State<FeedbackPage> {
                     onPressed:submit,
                     child: new Text("Submit", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
                     color: AppResources.buttonBackColor,)
-              ),new Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: new RaisedButton(
-                    onPressed:mainMenuButton,
-                    child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                    color: AppResources.buttonBackColor,),
-              ),new Container(
-                  margin: EdgeInsets.fromLTRB(5.0, 25.0, 5.0, 5.0),
-                  child: new Text(
-                    "If there are any issues, please implement them here!",
-                    style: new TextStyle(color: AppResources.labelTextColor,fontStyle: FontStyle.italic, fontSize: 12.0),
-                    textAlign: TextAlign.center,
-                  )),
+              ),
             ]
         ),
       ),
@@ -111,5 +106,9 @@ class FeedbackPageState extends State<FeedbackPage> {
       }
     });
 
+  }
+
+  void closePage() {
+    Navigator.push(context, new MaterialPageRoute(builder: (context) => StudentMainView()));
   }
 }

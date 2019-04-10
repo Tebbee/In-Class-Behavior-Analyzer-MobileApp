@@ -25,7 +25,7 @@ class APIManager {
   static final String LOG_NAME = "API_Manager";
   static String SESSION_ID = "";
   static String CLASS_ID = "";
-  static final String BASE_URL = "http://10.2.214.74:8000/api/";
+  static final String BASE_URL = "http://172.16.107.182:8000/api/";
   static bool openSurvey = false;
 
   ///Description: Tests if the user has a SESSION_ID, sending a true/false value to where it is called.
@@ -61,6 +61,7 @@ class APIManager {
   ///Location: StudentMainView Logout button
   static Future<http.Response> logout() async {
     print(LOG_NAME + ': Making logout request...');
+    SESSION_ID = "";
 
     return await http.post(
       BASE_URL + "auth/logout?session_id="+SESSION_ID,

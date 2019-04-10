@@ -69,6 +69,13 @@ class StudentSurveyState extends State<StudentSurveyPage> {
 
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              new Container(
+                  alignment: Alignment.topRight,
+                  child: new IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: closePage
+                  )
+              ),
               new Column(
                   children:shortAnswerCreator,),
               new Column(
@@ -78,31 +85,10 @@ class StudentSurveyState extends State<StudentSurveyPage> {
 
               Container(
                   padding: EdgeInsets.all(10.0),
-                  child:
-                  RaisedButton(onPressed:(){
-                    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveySelection()));},
-                    child: new Text("Back", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
-                    color: AppResources.buttonBackColor,
-                  )
-              ),
-
-              Container(
-                  padding: EdgeInsets.all(10.0),
                   child: RaisedButton(onPressed: submitSurvey,
                     child: new Text("Submit", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
                     color: AppResources.buttonBackColor,
                   ),
-              ),
-
-              Container(
-                  padding: EdgeInsets.all(10.0),
-                  child:
-                  RaisedButton(onPressed:(){
-                      Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
-                    },
-                    child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
-                    color: AppResources.buttonBackColor,
-                  )
               ),
             ]
         ),
@@ -110,12 +96,16 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     );
   }
 
+  closePage() {
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveySelection()));
+  }
+
   questionRetrieval(){
     APIManager.surveyRequest().then((response){
       var jsonObj = json.decode(response.body);
 
       if (jsonObj['status'] == "success") {
-        formValues['survey'] = jsonObj['data']['survey_instance']['id'].toString();
+        formValues['survey_id'] = jsonObj['data']['survey_instance']['id'].toString();
         for (var question in jsonObj['data']['questions']) {
           if (question['question']['type'] == 'SA') {
             setState(() {buildShortAnswer(question['question']['prompt'], question['id']);});
@@ -151,7 +141,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     formValues[id.toString()] = 5.0.toString();
 
     rangeCreator.add(new Container(
-      padding: EdgeInsets.all(20.0),
+      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
       child: new TextField(
         decoration: new InputDecoration(
           labelStyle: AppResources.labelStyle,
@@ -169,12 +159,14 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     formValues[id.toString()] = "";
 
     longAnswerCreator.add(new Container(
-        padding: EdgeInsets.all(20.0),
+      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
         child: new TextField(
           decoration: new InputDecoration(
             labelStyle: AppResources.labelStyle,
             labelText: className,
           ),
+          keyboardType: TextInputType.multiline,
+          maxLines: 3,
           onChanged: (newValue) {
             formValues[id.toString()] = newValue;
           },
@@ -186,7 +178,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     formValues[id.toString()] = "";
 
     shortAnswerCreator.add(new Container(
-        padding: EdgeInsets.all(20.0),
+      margin: EdgeInsets.symmetric(vertical: 5.0, horizontal: 20.0),
         child: new TextField(
 
             decoration: new InputDecoration(
@@ -201,10 +193,14 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     );}
 
   submitSurvey(){
+    print(APIManager.SESSION_ID);
+    print(formValues);
     APIManager.surveySubmission(formValues).then((response) {
       var jsonObj = json.decode(response.body);
       if (jsonObj['status'] == "success") {
         // Navigate to another page
+      } else {
+        print(jsonObj);
       }
     });
 

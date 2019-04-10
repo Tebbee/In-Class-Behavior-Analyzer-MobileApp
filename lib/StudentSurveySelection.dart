@@ -3,6 +3,7 @@ import 'StudentMainView.dart';
 import 'AppConsts.dart';
 import 'APIManager.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 class StudentSurveySelection extends StatelessWidget {
   @override
@@ -47,69 +48,113 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
         child: CircularProgressIndicator(),
       );
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: AppResources.buttonBackColor,
-      ),
-      body: SingleChildScrollView(
-        child: Center(
-          child: Column(
 
-              mainAxisAlignment: MainAxisAlignment.center,
+    if (buttonCreator.length == 0) {
+      return Scaffold (
+        appBar: AppBar(
+          title: Text(widget.title),
+          backgroundColor: AppResources.buttonBackColor,
+        ),
+
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 new Container(
+                  alignment: Alignment.topRight,
+                  child: new IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: closePage
+                  )
+                ),
+                new Container(
                   padding: EdgeInsets.all(10),
-                  child: Text("Here are all of your open Surveys:",
+                  child: Text(
+                    "No open surveys at this time!",
                     style: TextStyle(
                       fontSize: 20,
                       color: AppResources.labelTextColor,
-                  ),)
-                ),
-                new Column(
-                  children:buttonCreator),
+                    ),
+                  )
+                )
+              ],
+            )
+          ),
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+          backgroundColor: AppResources.buttonBackColor,
+        ),
+        body: SingleChildScrollView(
+          child: Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
                 new Container(
-                    padding: EdgeInsets.all(20.0),
-                    child: RaisedButton(onPressed:(){
-                      Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));},
-                      child: new Text("Main Menu", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
-                      color: AppResources.buttonBackColor,
+                    alignment: Alignment.topRight,
+                    child: new IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: closePage
                     )
                 ),
+                new Container(
+                    padding: EdgeInsets.all(10),
+                    child: ListView(
+                      shrinkWrap: true,
+                      children: buttonCreator,
+
+                    ),
+                ),
               ]
-          ),
-        ),),
-    );
+            ),
+        ),
+      ));
+    }
+
   }
 
   questionRetrieval(){
-    APIManager.allOpenSurveyRequest().then((response) {
-      int length = response.body.split("{").length;
-      apiResponse = response;
-      print(response.body);
-      while(x < length) {
-        if (response.body.split("{").length > 2) {
-          setState(() {
-            idArray.add(response.body.split("{")[x].split(":")[1].split(",")[0].replaceAll(" ", ""));
-            surveyArray.add(response.body.split("{")[x].split(":")[2].split(",")[0].replaceAll(" ", ""));
-            dateGeneratedArray.add(response.body.split("{")[x].split(":")[3].substring(2, 12));
-            buildButton(response.body.split("{")[x].split(":")[3].substring(2, 12) + "   -   " + response.body.split("{")[x].split(":")[2].split(",")[0].replaceAll(" ", ""),int.parse(response.body.split("{")[x].split(":")[1].split(",")[0].replaceAll(" ", "")));
-            });
-
-          x++;
-        }
-      }
+    setState(() {
+      isReady = false;
     });
+    APIManager.allOpenSurveyRequest().then((response) {
+      var jsonObj = json.decode(response.body);
+      apiResponse = response;
+      for (var survey in jsonObj['data']) {
+        buildSurveyItem(survey['class']['title'], survey['id'], survey['date_generated']);
+      }
+      setState(() {
+        isReady = true;
+      });
+    });
+  }
+  buildSurveyItem(className, classId, dateGenerated) {
+    buttonCreator.add(
+        new ListTile(
+          title: Text(className),
+          subtitle: Text(dateGenerated),
+          onTap: () => studentClassSurvey(classId),
+        )
+    );
+    buttonCreator.add(new Divider(
+        color: Colors.black,
+      )
+    );
   }
 
   buildButton(className, classID){
-    buttonCreator.add(new Container(
-        padding: EdgeInsets.all(10.0),
-        child: RaisedButton(
-        onPressed: () =>studentClassSurvey(classID),
-        child: new Text(className, style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0),),
-        color: AppResources.buttonBackColor,
-        )
+    buttonCreator.add(
+      new ListTile(
+        title: Text(className),
+        onTap: () => studentClassSurvey(classID),
+      )
+    );
+    buttonCreator.add(new Divider(
+      color: AppResources.buttonBackColor
     ));
   }
   
@@ -119,6 +164,10 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
       isReady = false;
     });
     Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyForm()));
+  }
+
+  void closePage() {
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
   }
 
 }

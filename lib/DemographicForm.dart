@@ -2,6 +2,7 @@ import 'DemographicSubmissionForm.dart';
 import 'package:flutter/material.dart';
 import 'APIManager.dart';
 import 'AppConsts.dart';
+import 'StudentMainView.dart';
 
 class DemographicForm extends StatefulWidget {
   @override
@@ -56,10 +57,22 @@ class DemographicFormState extends State<DemographicForm> {
     }
 
     return Scaffold(
+      appBar: AppBar(
+        title: Text("Student Demographics"),
+        automaticallyImplyLeading: false,
+        backgroundColor: AppResources.buttonBackColor,
+      ),
       body: SingleChildScrollView(
         child: SafeArea(
           child: Column(
             children: <Widget>[
+              new Container(
+                  alignment: Alignment.topRight,
+                  child: new IconButton(
+                      icon: Icon(Icons.close),
+                      onPressed: closePage
+                  )
+              ),
               Container(
                   padding: new EdgeInsets.all(20.0),
                   child: Column(
@@ -279,5 +292,8 @@ class DemographicFormState extends State<DemographicForm> {
       });
 
     });
+  }
+  void closePage() {
+    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
   }
 }

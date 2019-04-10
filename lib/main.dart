@@ -3,24 +3,32 @@ import 'package:flutter/material.dart';
 import 'LoginForm.dart';
 import 'RegisterForm.dart';
 import 'AppConsts.dart';
+import 'StudentMainView.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        resizeToAvoidBottomPadding: false,
-        body: SafeArea(
-            child: LoginPage()
+    if (APIManager.SESSION_ID.isEmpty) {
+      return MaterialApp(
+          home: Scaffold(
+            resizeToAvoidBottomPadding: false,
+            body: SafeArea(
+                child: LoginPage()
+            ),
+          ),
+      );
+    } else {
+      return MaterialApp(
+        home: Scaffold(
+          resizeToAvoidBottomPadding: false,
+          body: SafeArea(
+              child: StudentMainView()
+          ),
         ),
-      ),
-      routes: <String, WidgetBuilder> {
-        '/login': (BuildContext context) => new LoginPage(),
-        '/register': (BuildContext context) => new RegisterForm()
-      },
-    );
+      );
+    }
   }
 }
 
@@ -89,9 +97,17 @@ class _LoginPageState extends State<LoginPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     Container(
-                      child: Image.asset('assets/Benny2.jpg', fit: BoxFit.contain, alignment: Alignment.center),
+                      child: Image.asset("assets/benny-main.png", fit: BoxFit.contain, alignment: Alignment.center,),
+                      //child: Image.asset('assets/benny-main.png', fit: BoxFit.contain, alignment: Alignment.center),
                       height: 200.0,
                       alignment: Alignment.center,
+                    ),
+                    Text("In Class Behavior Analyzer",
+                      style: TextStyle(
+                      fontSize: 20,
+                      color: AppResources.labelTextColor,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     SizedBox(height:25.0),
                     Row(
