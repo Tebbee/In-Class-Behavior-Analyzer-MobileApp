@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
   ///Description: API manager is the primary connection between the Server and the mobile application.
   ///Any and all calls to and from the server are located within this file.
@@ -38,7 +39,8 @@ class APIManager {
   ///
   ///Location of its use: LoginForm
   static void parseLoginResponse(http.Response res) {
-    SESSION_ID=(res.body.split(" ")[4].replaceAll('"', '').replaceAll("}", ""));
+    var jsonObj = json.decode(res.body);
+    SESSION_ID = jsonObj['data']['session_id'].toString();
     print(SESSION_ID);
   }
 

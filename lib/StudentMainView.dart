@@ -9,6 +9,7 @@ import 'package:flutter_blue/flutter_blue.dart';
 import 'dart:math';
 import 'dart:async';
 import 'AppConsts.dart';
+import 'SurveyMainPage.dart';
 
 class StudentMainView extends StatelessWidget {
   @override
@@ -148,56 +149,54 @@ class StudentPageState extends State<StudentPage> {
         child: CircularProgressIndicator(),
       );
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: AppResources.buttonBackColor,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
 
-            new Container(
-                margin: EdgeInsets.all(5.0),
-                child: new RaisedButton(
-                  onPressed: surveyButton,
-                  child: new Text("Survey", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
-                  color: AppResources.buttonBackColor,)
+    return new DefaultTabController(
+        length: 3,
+        child: Scaffold(
+          appBar: AppBar(
+            title: Text("ICBA"),
+            backgroundColor: AppResources.buttonBackColor,
+            bottom: TabBar(
+              tabs: [
+                Tab(icon: Icon(Icons.announcement)),
+                Tab(icon: Icon(Icons.accessibility_new)),
+                Tab(icon: Icon(Icons.email)),
+              ],
             ),
-            new Container(
-                margin: EdgeInsets.all(5.0),
-                child: new RaisedButton(
-                  onPressed: demographicButton,
-                  child: new Text("Demographic Information", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
-                  color: AppResources.buttonBackColor,)
-            ),
-            new Container(
-                margin: EdgeInsets.all(5.0),
-                child: new RaisedButton(
-                  onPressed:logoutButton,
-                  child: new Text("Logout", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
-                  color: AppResources.buttonBackColor,)
-            ),
-            new Container(
-                margin: EdgeInsets.all(5.0),
-                child: new RaisedButton(
-                  onPressed: bluetooth,
-                  child: new Text("Bluetooth", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                  color: Colors.blue,)
-            ),
-            new Container(
-                margin: EdgeInsets.all(5.0),
-                child: new RaisedButton(
-                  onPressed: feedbackButton,
-                  child: new Text("Feedback", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 20.0)),
-                  color: AppResources.buttonBackColor,
-                  )
-            ),
-            ]
           ),
+
+          drawer: new Drawer(
+            child: new ListView(
+              children: <Widget>[
+                new ListTile(
+                  title: Text("Start New Session"),
+                ),
+                new Divider(
+                  color: Colors.black,
+                ),
+                new ListTile(
+                  title: Text("Logout"),
+                  onTap: () {
+                    APIManager.logout();
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
+                  },
+                ),
+                new Divider(
+                  color: Colors.black,
+                )
+              ],
+            )
           ),
-        );
+
+          body: TabBarView(
+              children: [
+                SurveyMainWidget(),
+                DemographicForm(),
+                FeedbackForm()
+              ]
+          )
+        )
+    );
   }
 
   void setStateFalse() {setState(() {isReady = false;});}
@@ -206,25 +205,19 @@ class StudentPageState extends State<StudentPage> {
   void logoutButton(){
     setStateFalse();
     APIManager.logout();
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => MyApp()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => MyApp()));
     }
 
   ///Sends the user to the Demographics page to be utilized further
   void demographicButton(){
     setStateFalse();
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => DemographicForm()));
-  }
-
-  ///Sends the user to the Survey form to be utilized further
-  void surveyButton(){
-    setStateFalse();
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveySelection()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => DemographicForm()));
   }
 
   ///Sends the user to the Feedback form to be utilized further
   void feedbackButton(){
     setStateFalse();
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => FeedbackForm()));}
+    Navigator.push(context, MaterialPageRoute(builder: (context) => FeedbackForm()));}
 
   ///Sends the user to the Bluetooth page to be used for testing for developers
   void bluetooth() {

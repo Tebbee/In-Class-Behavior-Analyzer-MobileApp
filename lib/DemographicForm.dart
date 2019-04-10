@@ -56,27 +56,14 @@ class DemographicFormState extends State<DemographicForm> {
       );
     }
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text("Student Demographics"),
-        automaticallyImplyLeading: false,
-        backgroundColor: AppResources.buttonBackColor,
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: SafeArea(
           child: Column(
             children: <Widget>[
-              new Container(
-                  alignment: Alignment.topRight,
-                  child: new IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: closePage
-                  )
-              ),
               Container(
                   padding: new EdgeInsets.all(20.0),
                   child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       Text(
                         "Student Demographics",
@@ -97,6 +84,7 @@ class DemographicFormState extends State<DemographicForm> {
 
                       Text('Gender:', style: new TextStyle(color: AppResources.labelTextColor),),
                       DropdownButton<String>(
+                        isExpanded: true,
                         value : currentGenderSelected,
                         items: genders.map((String dropDownStringItem){
                           return DropdownMenuItem<String>(
@@ -116,6 +104,7 @@ class DemographicFormState extends State<DemographicForm> {
 
                       Text('Grade Year:', style: new TextStyle(color: AppResources.labelTextColor),),
                       DropdownButton<String>(
+                        isExpanded: true,
                         value : currentGradeYearSelected,
                         items: gradeYears.map((String dropDownStringItem){
                           return DropdownMenuItem<String>(
@@ -134,6 +123,7 @@ class DemographicFormState extends State<DemographicForm> {
 
                       Text('Race:', style: new TextStyle(color: AppResources.labelTextColor),),
                       DropdownButton<String>(
+                        isExpanded: true,
                         value : currentRaceSelected,
                         items: races.map((String dropDownStringItem){
                           return DropdownMenuItem<String>(
@@ -141,7 +131,6 @@ class DemographicFormState extends State<DemographicForm> {
                             child: Text(dropDownStringItem),
                           );
                         }).toList(),
-                        isExpanded: true,
                         onChanged: (String newValueSelected){
                           setState((){
                             currentRaceSelected = newValueSelected;
@@ -154,6 +143,7 @@ class DemographicFormState extends State<DemographicForm> {
 
                       Text('Ethnicity:', style: new TextStyle(color: AppResources.labelTextColor),),
                       DropdownButton<String>(
+                        isExpanded: true,
                         value : currentEthnicitySelected,
                         items: ethnicities.map((String dropDownStringItem){
                           return DropdownMenuItem<String>(
@@ -193,7 +183,6 @@ class DemographicFormState extends State<DemographicForm> {
             ],
           )
         )
-      )
     );
   }
 

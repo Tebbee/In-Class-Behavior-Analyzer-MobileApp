@@ -1,28 +1,15 @@
-import 'package:icbaversion2/StudentSurveySelection.dart';
-
-import 'StudentMainView.dart';
 import 'AppConsts.dart';
 import 'APIManager.dart';
 import 'package:flutter/material.dart';
 import 'dart:core';
 import 'dart:convert';
 
-class StudentSurveyForm extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Behavior Analyzer',
-      theme: ThemeData(backgroundColor: AppResources.buttonBackColor
-      ),
-      home: StudentSurveyPage(title: 'Survey'),
-    );
-  }
-}
-
 class StudentSurveyPage extends StatefulWidget {
-  StudentSurveyPage({Key key, this.title}) : super(key: key);
+  StudentSurveyPage({Key key, this.title, this.returnCallback}) : super(key: key);
 
+  final Function returnCallback;
   final String title;
+
   @override
   StudentSurveyState createState() => StudentSurveyState();
 }
@@ -58,22 +45,17 @@ class StudentSurveyState extends State<StudentSurveyPage> {
         child: CircularProgressIndicator(),
       );
     }
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: AppResources.buttonBackColor,
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Center(
         child: Column(
 
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               new Container(
-                  alignment: Alignment.topRight,
+                  alignment: Alignment.topLeft,
                   child: new IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: closePage
+                      icon: Icon(Icons.arrow_back),
+                      onPressed: () => widget.returnCallback()
                   )
               ),
               new Column(
@@ -92,12 +74,12 @@ class StudentSurveyState extends State<StudentSurveyPage> {
               ),
             ]
         ),
-      ),),
+      ),
     );
   }
 
   closePage() {
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveySelection()));
+
   }
 
   questionRetrieval(){

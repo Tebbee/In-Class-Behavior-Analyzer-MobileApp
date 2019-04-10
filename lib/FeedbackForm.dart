@@ -42,27 +42,21 @@ class FeedbackPageState extends State<FeedbackPage> {
   ///should go through Flutter's documentation found online to ensure proper code is created.
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-        backgroundColor: AppResources.buttonBackColor,
-      ),
-      body: SingleChildScrollView(
+    return SingleChildScrollView(
         child: Center(
           child: Column(
             children: <Widget>[
-              new Container(
-                  alignment: Alignment.topRight,
-                  child: new IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: closePage
-                  )
+              new Text("Feedback",
+                style: TextStyle(
+                  fontSize: 30,
+                  color: AppResources.labelTextColor,
+                ),
               ),
               new Container(
                   margin: EdgeInsets.all(10.0),
                   child: new Text(
                     "Your input is important to us. \n\n" +
-                        "If there is anything we can do better, please list it below!",
+                        "If there is anything we can do better, please share it below!",
                     style: new TextStyle(color: AppResources.labelTextColor,fontStyle: FontStyle.italic, fontSize: 20.0),
                     textAlign: TextAlign.center,
                   )),
@@ -86,7 +80,6 @@ class FeedbackPageState extends State<FeedbackPage> {
             ]
         ),
       ),
-    )
     );
   }
 

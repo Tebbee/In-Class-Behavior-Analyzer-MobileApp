@@ -1,26 +1,16 @@
-import 'package:icbaversion2/StudentSurveyForm.dart';
-import 'StudentMainView.dart';
 import 'AppConsts.dart';
 import 'APIManager.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 
-class StudentSurveySelection extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Behavior Analyzer',
-      theme: ThemeData(backgroundColor: AppResources.buttonBackColor
-      ),
-      home: StudentSurveySelectionPage(title: 'Survey Selector'),
-    );
-  }
-}
+
 
 class StudentSurveySelectionPage extends StatefulWidget {
-  StudentSurveySelectionPage({Key key, this.title}) : super(key: key);
+  StudentSurveySelectionPage({Key key, this.title, this.chosenCallback}) : super(key: key);
 
+  final Function chosenCallback;
   final String title;
+
   @override
   StudentSurveySelectionState createState() => StudentSurveySelectionState();
 }
@@ -50,23 +40,17 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
     }
 
     if (buttonCreator.length == 0) {
-      return Scaffold (
-        appBar: AppBar(
-          title: Text(widget.title),
-          backgroundColor: AppResources.buttonBackColor,
-        ),
-
-        body: SingleChildScrollView(
+      return SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                new Container(
-                  alignment: Alignment.topRight,
-                  child: new IconButton(
-                      icon: Icon(Icons.close),
-                      onPressed: closePage
-                  )
+                new Text("Open Surveys",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: AppResources.labelTextColor,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 new Container(
                   padding: EdgeInsets.all(10),
@@ -81,25 +65,19 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
               ],
             )
           ),
-        ),
       );
     } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-          backgroundColor: AppResources.buttonBackColor,
-        ),
-        body: SingleChildScrollView(
+        return SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                new Container(
-                    alignment: Alignment.topRight,
-                    child: new IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: closePage
-                    )
+                new SizedBox(height: 20.0),
+                new Text("Open Surveys",
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: AppResources.labelTextColor,
+                  ),
                 ),
                 new Container(
                     padding: EdgeInsets.all(10),
@@ -112,7 +90,7 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
               ]
             ),
         ),
-      ));
+      );
     }
 
   }
@@ -137,7 +115,7 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
         new ListTile(
           title: Text(className),
           subtitle: Text(dateGenerated),
-          onTap: () => studentClassSurvey(classId),
+          onTap: () => widget.chosenCallback(classId)
         )
     );
     buttonCreator.add(new Divider(
@@ -157,17 +135,12 @@ class StudentSurveySelectionState extends State<StudentSurveySelectionPage> {
       color: AppResources.buttonBackColor
     ));
   }
-  
+
   studentClassSurvey(int id){
     APIManager.CLASS_ID = id.toString();
     setState(() {
       isReady = false;
     });
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentSurveyForm()));
-  }
-
-  void closePage() {
-    Navigator.push(context,new MaterialPageRoute(builder: (context) => StudentMainView()));
   }
 
 }
