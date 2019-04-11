@@ -4,18 +4,17 @@ import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'BluetoothView.dart';
+import 'StudentMainView.dart';
 
 
 class SessionStartForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         resizeToAvoidBottomPadding: false,
         body: SafeArea(
           child: SessionStartPage(title: ''),
         ),
-      ),
     );
   }
 }
@@ -161,47 +160,57 @@ class SessionStartPageState extends State<SessionStartPage> {
         child: CircularProgressIndicator(),
       );
     }
-    return Center(
+    return SingleChildScrollView(
+      //child: Center(
       child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
+            new Container(
+              alignment: Alignment.topLeft,
+              child: new IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => {
+                    //Navigator.push(context, new MaterialPageRoute(builder: (context) => StudentMainView()))
+                    Navigator.pop(context)
+                  }
+              ),
+            ),
             Container(
-              child: Image.asset('assets/Benny2.jpg', fit: BoxFit.contain, alignment: Alignment.center),
+              child: Image.asset('assets/benny-main.png', fit: BoxFit.contain, alignment: Alignment.center),
               height: 200.0,
               alignment: Alignment.center,
 
             ),
             new Container(
-              margin: EdgeInsets.all(20.0),
+              padding: EdgeInsets.all(20.0),
+              alignment: Alignment.center,
               child: new Text("This application requires bluetooth to be activated.",
                 softWrap: true,
-                style: new TextStyle(fontSize: 25.0, color: AppResources.labelTextColor),
+                textAlign: TextAlign.center,
+                style: new TextStyle(fontSize: 25.0, color: AppResources.labelTextColor,),
               ),
             ),
             Text('Select Class:', style: new TextStyle(color: AppResources.labelTextColor),),
-            DropdownButton<String>(
-              //value : null,
-              items: classItems.map((String dropDownStringItem){
-                return DropdownMenuItem<String>(
-                  value: dropDownStringItem,
-                  child: Text(dropDownStringItem),
-                );
-              }).toList(),
-              onChanged: (String newValueSelected){
-                setState((){
-                  currentClassSelected = newValueSelected;
-                });
-              },
-              value : currentClassSelected,
-              iconSize: 50,
+            Container (
+              padding: EdgeInsets.all(20.0),
+              child: DropdownButton<String>(
+                //value : null,
+                items: classItems.map((String dropDownStringItem){
+                  return DropdownMenuItem<String>(
+                    value: dropDownStringItem,
+                    child: Text(dropDownStringItem),
+                  );
+                }).toList(),
+                isExpanded: true,
+                onChanged: (String newValueSelected){
+                  setState((){
+                    currentClassSelected = newValueSelected;
+                  });
+                },
+                value : currentClassSelected,
+                iconSize: 50,
+              )
             ),
-        /*  new Container(
-                margin: EdgeInsets.all(5.0),
-                child: new RaisedButton(
-                  onPressed:refresh,
-                  child: new Text("Refresh", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                  color: AppResources.buttonBackColor,)
-            ),*/
             new Container(
                margin: EdgeInsets.all(25.0),
                 child: new RaisedButton(
@@ -211,8 +220,8 @@ class SessionStartPageState extends State<SessionStartPage> {
             ),
 
           ]
-      ),
-    );
+     // ),
+    ));
   }
 
   ///Activates upon opening, and clears the classItems and classIDs from the application and checks to see if the user

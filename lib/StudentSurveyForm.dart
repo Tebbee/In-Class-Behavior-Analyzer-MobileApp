@@ -17,20 +17,12 @@ class StudentSurveyPage extends StatefulWidget {
 class StudentSurveyState extends State<StudentSurveyPage> {
   static final String MODULE_NAME = 'Survey_Form';
   Map<String, dynamic> formValues = Map();
-  var shortAnswerPrompts = [];
-  var shortAnswerAnswers = [];
-  var longAnswerPrompts = [];
-  var longAnswerAnswers = [];
-  var rangePrompts = [];
-  var rangeResults = [];
-  var sliderValue = 5.0;
-
-  TextEditingController shortAnswerController = new TextEditingController();
-  TextEditingController longAnswerController = new TextEditingController();
   List <Widget> rangeCreator = [];
   List <Widget> shortAnswerCreator = [];
   List <Widget> longAnswerCreator = [];
   bool isReady = true;
+  String className = "";
+  String generatedDate = "";
 
   @override
   initState() {
@@ -57,6 +49,20 @@ class StudentSurveyState extends State<StudentSurveyPage> {
                       icon: Icon(Icons.arrow_back),
                       onPressed: () => widget.returnCallback()
                   )
+              ),
+              new Text(className,
+                style: TextStyle(
+                  fontSize: 24,
+                  color: AppResources.labelTextColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              new Text(generatedDate,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppResources.labelTextColor,
+                  fontStyle: FontStyle.italic
+                ),
               ),
               new Column(
                   children:shortAnswerCreator,),
@@ -85,8 +91,11 @@ class StudentSurveyState extends State<StudentSurveyPage> {
   questionRetrieval(){
     APIManager.surveyRequest().then((response){
       var jsonObj = json.decode(response.body);
+      print(jsonObj);
 
       if (jsonObj['status'] == "success") {
+        className = jsonObj['data']['survey_instance']['class']['title'];
+        generatedDate = jsonObj['data']['survey_instance']['date_generated'];
         formValues['survey_id'] = jsonObj['data']['survey_instance']['id'].toString();
         for (var question in jsonObj['data']['questions']) {
           if (question['question']['type'] == 'SA') {

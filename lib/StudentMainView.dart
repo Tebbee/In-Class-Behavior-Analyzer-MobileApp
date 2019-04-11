@@ -10,6 +10,7 @@ import 'dart:math';
 import 'dart:async';
 import 'AppConsts.dart';
 import 'SurveyMainPage.dart';
+import 'SessionStartForm.dart';
 
 class StudentMainView extends StatelessWidget {
   @override
@@ -169,7 +170,10 @@ class StudentPageState extends State<StudentPage> {
             child: new ListView(
               children: <Widget>[
                 new ListTile(
-                  title: Text("Start New Session"),
+                  title: Text("Session"),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => SessionStartForm()));
+                  },
                 ),
                 new Divider(
                   color: Colors.black,
@@ -192,7 +196,7 @@ class StudentPageState extends State<StudentPage> {
               children: [
                 SurveyMainWidget(),
                 DemographicForm(),
-                FeedbackForm()
+                FeedbackPage()
               ]
           )
         )

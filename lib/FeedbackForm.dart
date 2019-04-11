@@ -46,6 +46,9 @@ class FeedbackPageState extends State<FeedbackPage> {
         child: Center(
           child: Column(
             children: <Widget>[
+              new SizedBox(
+                height: 20.0,
+              ),
               new Text("Feedback",
                 style: TextStyle(
                   fontSize: 30,

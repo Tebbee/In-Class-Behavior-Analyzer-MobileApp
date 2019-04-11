@@ -26,7 +26,7 @@ class APIManager {
   static final String LOG_NAME = "API_Manager";
   static String SESSION_ID = "";
   static String CLASS_ID = "";
-  static final String BASE_URL = "http://172.16.107.182:8000/api/";
+  static final String BASE_URL = "http://icba.us-east-2.elasticbeanstalk.com/api/";
   static bool openSurvey = false;
 
   ///Description: Tests if the user has a SESSION_ID, sending a true/false value to where it is called.
