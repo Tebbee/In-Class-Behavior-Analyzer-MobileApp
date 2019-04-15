@@ -26,8 +26,11 @@ class APIManager {
   static final String LOG_NAME = "API_Manager";
   static String SESSION_ID = "";
   static String CLASS_ID = "";
+  static bool bluetoothActivated = true;
+  static String bluetoothStatus = "Scanning On";
   static final String BASE_URL = "http://icba.us-east-2.elasticbeanstalk.com/api/";
   static bool openSurvey = false;
+  static int scanAttempts = 0;
 
   ///Description: Tests if the user has a SESSION_ID, sending a true/false value to where it is called.
   ///Location of its use: LoginForm, RegistrationForm, SessionStartForm, ForgotPasswordForm,

@@ -74,8 +74,6 @@ class LoginState extends State<LoginForm> {
               color: AppResources.labelTextColor,
               textColor: Colors.white,
               onPressed: loginToServer,
-              //(){Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));},
-
               child: new Text('Submit'),
             ),
 

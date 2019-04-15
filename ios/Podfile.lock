@@ -1,6 +1,14 @@
 PODS:
   - "!ProtoCompiler (3.6.0)":
     - Protobuf (~> 3.0)
+  - AppCenter (1.2.0):
+    - AppCenter/Analytics (= 1.2.0)
+    - AppCenter/Crashes (= 1.2.0)
+  - AppCenter/Analytics (1.2.0):
+    - AppCenter/Core
+  - AppCenter/Core (1.2.0)
+  - AppCenter/Crashes (1.2.0):
+    - AppCenter/Core
   - Flutter (1.0.0)
   - flutter_blue (0.0.1):
     - "!ProtoCompiler"
@@ -13,26 +21,29 @@ PODS:
   - Protobuf (3.6.1)
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - AppCenter
+  - Flutter (from `.symlinks/flutter/ios-release`)
   - flutter_blue (from `.symlinks/plugins/flutter_blue/ios`)
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - "!ProtoCompiler"
+    - AppCenter
     - Protobuf
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: ".symlinks/flutter/ios-release"
   flutter_blue:
     :path: ".symlinks/plugins/flutter_blue/ios"
 
 SPEC CHECKSUMS:
   "!ProtoCompiler": c9526df99fafd398a393def617ae18d3774b7232
-  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
-  flutter_blue: 2552a05424464ae985bc8b28db6c251c7fd9dfe1
+  AppCenter: d0b68b2a7a87ac0aed78e66f36d87fd321d0a29c
+  Flutter: 58dd7d1b27887414a370fcccb9e645c08ffd7a6a
+  flutter_blue: 40ac09c2c18311d99167e3ff7ccefb0b34aac63e
   Protobuf: 1eb9700044745f00181c136ef21b8ff3ad5a0fd5
 
-PODFILE CHECKSUM: ebd43b443038e611b86ede96e613bd6033c49497
+PODFILE CHECKSUM: b2ab1733045b44ba0849f6a92c231501f8c1f714
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.6.1

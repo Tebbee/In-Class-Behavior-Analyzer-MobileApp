@@ -1,10 +1,8 @@
 import 'APIManager.dart';
-import 'StudentMainView.dart';
 import 'package:flutter/material.dart';
 import 'AppConsts.dart';
 import 'package:flutter_blue/flutter_blue.dart';
 import 'BluetoothView.dart';
-import 'StudentMainView.dart';
 
 
 class SessionStartForm extends StatelessWidget {
@@ -44,16 +42,15 @@ class SessionStartPageState extends State<SessionStartPage> {
   String beaconOne = "88:3F:4A:E5:F6:E2";
   String beaconTwo = "88:3F:4A:E5:FA:7C";
   String beaconThree = "88:3F:4A:E5:FD:C5";
-  int scanAttempts = 0;
-  var classItems = ["None"];
-  var classIDs = ["None"];
-  var currentClassSelected;
 
   ///Tests if the users bluetooth is on
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
       if(res.toString() == 'true'){
-        dropDownListTest();
+        if (beaconScan()!=false){
+          BluetoothPageState.test();
+        }
+
       }
     else
       setState(() {
@@ -65,28 +62,14 @@ class SessionStartPageState extends State<SessionStartPage> {
   flutterBlueAvailabilityTest(){
     flutterBlue.isAvailable.then((res){
       if(res.toString() == 'true'){
-        flutterBlueTestOn();
-        }
+        flutterBlueTestOn();}
       else
         setState(() {
           AppResources.showErrorDialog(MODULE_NAME, "WARNING! This device does not support required bluetooth capabilities!", context);
         });
-      return false;
+      return;
     });}
 
-  ///Tests if the user selected a class to pull their survey from.
-  dropDownListTest() {
-    if(currentClassSelected == null){
-      return(AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou have not selected a class!", context));
-    }
-    int counter = 0;
-    for (var item in classItems){
-      if (item == currentClassSelected){
-        APIManager.CLASS_ID=classIDs[counter];
-        beaconScan();
-      }
-      counter++;
-    }}
 
   ///Sets the SetStateReady variable to true, to prevent copying the same code for multiple lines.
   setStateReady(){
@@ -100,6 +83,7 @@ class SessionStartPageState extends State<SessionStartPage> {
     int beaconOneRssiValue = 0;
     int beaconTwoRssiValue = 0;
     int beaconThreeRssiValue = 0;
+
     setState(() {
       isReady = false;
     });
@@ -110,45 +94,67 @@ class SessionStartPageState extends State<SessionStartPage> {
       if (scanResult.device.id.id == BluetoothPageState.beaconTwo){beaconTwoRssiValue = beaconRssiValue;}
       if (scanResult.device.id.id == BluetoothPageState.beaconThree){beaconThreeRssiValue = beaconRssiValue;}
 
-      new Future.delayed(const Duration(seconds: 2), () {
+      new Future.delayed(const Duration(seconds: 1), () {
           bluetoothScan.cancel();
           if (beaconOneRssiValue < 0){
             if(beaconTwoRssiValue < 0){
               if (beaconThreeRssiValue < 0){
                 setState(() {
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
+                  setStateReady();
+                  return true;
                 });
               }
               if(beaconThreeRssiValue == 0){
-                scanAttempts++;
+                APIManager.scanAttempts++;
                 beaconThreeRssiValue++;
                 AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Three wasnt reached. Please try again", context);
-                setStateReady();}
+                setStateReady();
+                setBluetoothScanOff();
+                return false;
+              }
             }
             if(beaconTwoRssiValue == 0){
-              scanAttempts++;
+              APIManager.scanAttempts++;
               beaconTwoRssiValue++;
               AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Two wasnt reached. Please try again", context);
-              setStateReady();}
+              setStateReady();
+              setBluetoothScanOff();
+              return false;
+            }
           }
           if(beaconOneRssiValue == 0){
-            scanAttempts++;
+            APIManager.scanAttempts++;
             beaconOneRssiValue++;
             AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon One wasnt reached. Please try again", context);
             setStateReady();
+            setBluetoothScanOff();
+            return false;
+
           }
-          if (scanAttempts == 5){
+          if (APIManager.scanAttempts == 5){
             setStateReady();
             AppResources.showErrorDialog(MODULE_NAME, "ERROR, A beacon wasn't reached after multiple attempts. Please notify an administrator. You may close the app.", context);
+            setStateReady();
+            setBluetoothScanOff();
+            return false;
+          }
+          else{
+            setStateReady();
+            return false;
           }
       });
       });
   }
 
+  void setBluetoothScanOff() {
+    setState(() {
+      APIManager.bluetoothActivated = false;
+      APIManager.bluetoothStatus = "Scanning OFF";
+    });
+  }
+
   @override
   initState() {
-    isReady = false;
-    refresh();
     super.initState();
   }
 
@@ -157,7 +163,16 @@ class SessionStartPageState extends State<SessionStartPage> {
   Widget build(BuildContext context) {
     if (!isReady) {
       return Center(
-        child: CircularProgressIndicator(),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            new Text("The beacons are being tested for. \nPlease be patient!",
+              style: new TextStyle(color: AppResources.buttonBackColor,fontStyle: FontStyle.italic,fontSize: 25.0,),
+              softWrap: true,
+              textAlign: TextAlign.center,),
+            CircularProgressIndicator(),
+          ],
+        ),
       );
     }
     return SingleChildScrollView(
@@ -169,10 +184,8 @@ class SessionStartPageState extends State<SessionStartPage> {
               alignment: Alignment.topLeft,
               child: new IconButton(
                   icon: Icon(Icons.arrow_back),
-                  onPressed: () => {
-                    //Navigator.push(context, new MaterialPageRoute(builder: (context) => StudentMainView()))
-                    Navigator.pop(context)
-                  }
+                  onPressed: (){
+                    Navigator.pop(context);}
               ),
             ),
             Container(
@@ -190,62 +203,33 @@ class SessionStartPageState extends State<SessionStartPage> {
                 style: new TextStyle(fontSize: 25.0, color: AppResources.labelTextColor,),
               ),
             ),
-            Text('Select Class:', style: new TextStyle(color: AppResources.labelTextColor),),
-            Container (
-              padding: EdgeInsets.all(20.0),
-              child: DropdownButton<String>(
-                //value : null,
-                items: classItems.map((String dropDownStringItem){
-                  return DropdownMenuItem<String>(
-                    value: dropDownStringItem,
-                    child: Text(dropDownStringItem),
-                  );
-                }).toList(),
-                isExpanded: true,
-                onChanged: (String newValueSelected){
-                  setState((){
-                    currentClassSelected = newValueSelected;
-                  });
-                },
-                value : currentClassSelected,
-                iconSize: 50,
-              )
-            ),
-            new Container(
-               margin: EdgeInsets.all(25.0),
-                child: new RaisedButton(
-                  onPressed: flutterBlueAvailabilityTest,
-                  child: new Text("Start Session", style: new TextStyle(color: AppResources.buttonTextColor,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                  color: AppResources.buttonBackColor,)
-            ),
 
+            new RaisedButton(
+              child: new Text(APIManager.bluetoothStatus,style: TextStyle(fontSize: 30.0),),
+              textColor: AppResources.buttonTextColor,
+              color: APIManager.bluetoothActivated ? AppResources.buttonBackColor : Colors.green,
+              onPressed: buttonLabelChanger,
+
+            ),
           ]
-     // ),
     ));
   }
-
-  ///Activates upon opening, and clears the classItems and classIDs from the application and checks to see if the user
-  ///is enlisted in any classes. If not, they are notified.
-  refresh(){
-    classItems.clear();
-    classIDs.clear();
-    APIManager.classRequest().then((response){
-      if (response.body.split("{").length>2) {
-        int counter = 0;
-        for(var section in response.body.split("{")){
-          if(counter >=2){
-            classIDs.add(section.split(",")[0].split(":")[1].replaceAll('"', "").substring(1));
-            classItems.add(section.split(",")[1].split(":")[1].replaceAll('"', "").substring(1));
-            }
-          counter++;
-        }
-      }
-      if (response.body.split("{").length<=2){
-        AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nYou are not in any classes.\nContact administration", context);
-      }
-      setStateReady();
+  buttonLabelChanger(){
+    if(APIManager.bluetoothActivated == true){
+      setState(() {
+        APIManager.bluetoothActivated = !APIManager.bluetoothActivated;
+        APIManager.bluetoothStatus = "Scanning ON";
       });
-    }
+      flutterBlueAvailabilityTest();
+      return;}
 
+    if(APIManager.bluetoothActivated == false){
+      setState(() {
+        APIManager.bluetoothActivated = !APIManager.bluetoothActivated;
+        APIManager.bluetoothStatus = "Scanning OFF";
+        });
+      return;
+    }
+  }
 
 }

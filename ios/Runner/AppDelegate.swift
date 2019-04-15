@@ -4,7 +4,6 @@ import Flutter
 import AppCenter
 import AppCenterAnalytics
 import AppCenterCrashes
-import AppCenter import AppCenterAnalytics import AppCenterCrashes
 
 @UIApplicationMain
 @objc class AppDelegate: FlutterAppDelegate {
