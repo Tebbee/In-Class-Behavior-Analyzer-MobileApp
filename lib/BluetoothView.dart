@@ -5,8 +5,6 @@ import 'package:icbaversion2/APIManager.dart';
 import 'dart:async';
 import 'AppConsts.dart';
 
-
-var x,y;
 ///Description: This file consists of all the testing used throughout the program available in a
 ///commented out subsection within the StudentMainView. This page only requires variables to be kept
 ///within, all functions were required to be present outside of this file and exist within the StudentMainView
@@ -41,21 +39,15 @@ class BluetoothPage extends StatefulWidget {
 }
 
 class BluetoothPageState extends State<BluetoothPage> {
-  String bluetoothDevices = "";
-  String bluetoothOneStatus = "";
-  String bluetoothTwoStatus = "";
-  String bluetoothThreeStatus = "";
   String MODULE_NAME = "Bluetooth Error";
   var ids = new List<String>();
 
   static Object get beaconOne => "88:3F:4A:E5:F6:E2";
   static Object get beaconTwo => "88:3F:4A:E5:FA:7C";
   static Object get beaconThree => "88:3F:4A:E5:FD:C5";
-
-
-  static var beaconOneCoords = [0.0,0.0];
+  static var beaconOneCoords = [2.0,0.0];
   static var beaconTwoCoords = [0.0,0.0];
-  static var beaconThreeCoords = [0.0,0.0];
+  static var beaconThreeCoords = [0.0,4.0];
 
   static double beaconRssiValue;
   static double beaconRssiDistance;
@@ -69,17 +61,6 @@ class BluetoothPageState extends State<BluetoothPage> {
   static List beaconNumberThreeAveragesList = new List<double>();
 
   static var bluetoothScan;
-  static double totalBeaconOneList = 0.0;
-  static double totalBeaconTwoList = 0.0;
-  static double totalBeaconThreeList = 0.0;
-
-  static double beaconOneAverageDistance;
-  static double beaconTwoAverageDistance;
-  static double beaconThreeAverageDistance;
-
-  static var beaconOneTwoCoords;
-  static var beaconOneThreeCoords;
-  static var beaconTwoThreeCoords;
 
   static int counterOne = 0;
   static int counterTwo = 0;
@@ -87,78 +68,14 @@ class BluetoothPageState extends State<BluetoothPage> {
   static FlutterBlue flutterBlue = FlutterBlue.instance;
   static final double EPSILON = 0.000001;
 
+  static List<double> currentPosition = [0.0,0.0];
+
   var r;
   var x;
   var y;
 
-  ///Description: Resets all the values within this page for TEST PURPOSES ONLY
-  reset(){
-   setState(() {
-     ids.clear();
-     counterOne = 0;
-     counterTwo = 0;
-     counterThree = 0;
-     bluetoothDevices = "";
-     totalBeaconOneList = 0.0;
-     totalBeaconTwoList = 0.0;
-     totalBeaconThreeList = 0.0;
-     bluetoothOneStatus = "";
-     bluetoothTwoStatus = "";
-     bluetoothThreeStatus = "";
-     beaconNumberOneValueList.clear();
-     beaconNumberTwoValueList.clear();
-     beaconNumberThreeValueList.clear();
-   });
- }
-
-  ///Creates the total of all the values recorded from scanning the bluetooth devices and adds them together
-  ///This is then used to find an average value
-  void beaconAveraging(){
-   setState(() {
-     for(var value in beaconNumberOneValueList){
-       totalBeaconOneList = totalBeaconOneList + value;
-     }
-     for (var value in beaconNumberTwoValueList){
-       totalBeaconTwoList = totalBeaconTwoList + value;
-     }
-     for (var value in beaconNumberThreeValueList){
-       totalBeaconThreeList = totalBeaconThreeList + value;
-     }
-
-     bluetoothOneStatus = ("Beacon One list = " + totalBeaconOneList.toString().substring(0,3)
-         + "\ncounter was "+ counterOne.toString()
-         + "\nequals: " +(totalBeaconOneList/counterOne).toString());
-     bluetoothTwoStatus = ("Beacon Two list = " + totalBeaconTwoList.toString().substring(0,3)
-         + "\ncounter was "+ counterTwo.toString()
-         + "\nequals: " +(totalBeaconTwoList/counterTwo).toString());
-     bluetoothThreeStatus = ("Beacon Three list = " + totalBeaconThreeList.toString().substring(0,3)
-         + "\ncounter was "+ counterThree.toString()
-         + "\nequals: " +(totalBeaconThreeList/counterThree).toString());
-     return;
-
-   });
-  }
-
-  ///Description: Turns on the bluetooth capabilities, sets their distances, and then initiates the calculations required
-  ///to find the x and y values of where the person is located.
-  button() async{
-    setState((){
-      beaconPositioning();
-      beaconDistance(beaconOneCoords,beaconTwoCoords,beaconThreeCoords,
-     //  4.93,4.14,3.501);
-       totalBeaconOneList/counterOne,
-       totalBeaconTwoList/counterTwo,
-       totalBeaconThreeList/counterThree);
-  });
- }
-
   ///Description: Tests if ANY of the beacons were not able to pull a Distance.
   ///If they did not, they will rerun the scanning protocol
- beaconPositioning(){
-    if ((totalBeaconOneList/counterOne) == 0 || (totalBeaconTwoList/counterTwo) == 0 || (totalBeaconThreeList/counterThree) == 0){
-      beaconScan();
-    }
- }
   ///Description: Tests how beacons intersect one another via the circleCircleIntersectionPoints function.
   ///This function exists for test purposes within the application
   beaconDistance(firstBeacon, secondBeacon, thirdBeacon, beaconOneDistance, beaconTwoDistance, beaconThreeDistance){
@@ -308,119 +225,45 @@ class BluetoothPageState extends State<BluetoothPage> {
         child: new Container(
           margin: EdgeInsets.all(10.0),
 
-          child: new Column(
-
-
-              children: <Widget>[
-                Card(child: Image.asset('assets/Benny2.jpg'),
-                  margin: EdgeInsets.all(10.0),
-                  elevation: 0,
-
-                ),
-                new Text("Ball State University",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-                  textAlign: TextAlign.center,),
-                new Text(bluetoothOneStatus),
-                new Text(bluetoothTwoStatus),
-                new Text(bluetoothThreeStatus),
-                new Text(bluetoothDevices),
-                new Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: new RaisedButton(
-                    onPressed: beaconScan,
-                    child: new Text("Beacon One", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                    color: Colors.red,
-                  ),
-                ),
-                new Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: new RaisedButton(
-                    onPressed: reset,
-                    child: new Text("Clear History", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                    color: Colors.red,
-                  ),
-                ),
-                new Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: new RaisedButton(
-                    onPressed: beaconAveraging,
-                    child: new Text("Refresh", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                    color: Colors.red,
-                  ),
-                ),
-                new Container(
-                  margin: EdgeInsets.all(5.0),
-                  child: new RaisedButton(
-
-                    child: new Text("Submit", style: new TextStyle(color: Colors.white,fontStyle: FontStyle.italic,fontSize: 15.0)),
-                    color: Colors.red,
-                  ),
-                ),
-      ]
-    )
     )
     ));
     }
 
-  ///Description: Clears all fields of all values
-  ///
-  ///Location: StudentMainView
-  static void clearAll() {
-    beaconRssiValue = 0;
-    beaconRssiDistance = 0;
-    beaconNumberOneValueList.clear();
-    beaconNumberTwoValueList.clear();
-    beaconNumberThreeValueList.clear();
-    beaconNumberOneAveragesList.clear();
-    beaconNumberTwoAveragesList.clear();
-    beaconNumberThreeAveragesList.clear();
-    totalBeaconOneList = 0.0;
-    totalBeaconTwoList = 0.0;
-    totalBeaconThreeList = 0.0;
-    beaconOneAverageDistance = 0;
-    beaconTwoAverageDistance = 0;
-    beaconThreeAverageDistance = 0;
-    counterOne = 0;
-    counterTwo = 0;
-    counterThree = 0;
-  }
-
 
   static test(){
-
       Timer timer;
-      int timeLeft = 12;
+      int timeLeft = 15;
       const oneSec = const Duration(seconds: 1);
       timer = new Timer.periodic(
           oneSec,
               (Timer timer) {
-            if (timeLeft == 10){
-              beaconNumberOneValueList.sort;
-              beaconNumberTwoValueList.sort;
-              beaconNumberThreeValueList.sort;
-            }
-
             if (timeLeft == 4){
               print(beaconNumberOneValueList);
-              print(beaconNumberOneValueList.length);
-
               print(beaconNumberTwoValueList);
-              print(beaconNumberTwoValueList.length);
-
               print(beaconNumberThreeValueList);
-              print(beaconNumberThreeValueList.length);
             }
-            if (timeLeft < 1) {
+            if (timeLeft>3){
+              beaconScan();
+            }
+            if (timeLeft == 2){
+              calculateLocation();
+              bluetoothScan.cancel();
               beaconNumberOneValueList.clear();
               beaconNumberTwoValueList.clear();
               beaconNumberThreeValueList.clear();
+            }
+            if(timeLeft ==0){
               timer.cancel();
-              //test();
-            } else {
-              beaconScan();
+              test();
+              return;
+            }
+            if (timeLeft >0) {
               print(timeLeft);
               timeLeft = timeLeft - 1;
             }
+            if(APIManager.bluetoothActivated==false)
+              timer.cancel();
+              //bluetoothScan.cancel();
           });
 
   }
@@ -450,8 +293,7 @@ class BluetoothPageState extends State<BluetoothPage> {
           BluetoothPageState.counterThree++;}
       }
 
-      Future.delayed(const Duration(seconds: 5), () {
-        BluetoothPageState.bluetoothScan.cancel();
+      Future.delayed(const Duration(seconds: 1), () {
         BluetoothPageState.beaconNumberOneValueList.sort();
         BluetoothPageState.beaconNumberTwoValueList.sort();
         BluetoothPageState.beaconNumberThreeValueList.sort();
@@ -460,19 +302,78 @@ class BluetoothPageState extends State<BluetoothPage> {
 
   ///Calculates the intersecting points of the bluetooth beacon circles, and records the results.
   static calculateLocation(){
+    var oneAndTwo;
+    var twoAndThree;
+    var oneAndThree;
     print("One and Two");
-    print(BluetoothPageState.calculateThreeCircleIntersection(
-        BluetoothPageState.beaconOneCoords[0], BluetoothPageState.beaconOneCoords[1], BluetoothPageState.beaconNumberOneValueList[0],
-        BluetoothPageState.beaconTwoCoords[0], BluetoothPageState.beaconTwoCoords[1], BluetoothPageState.beaconNumberTwoValueList[0]));
+    oneAndTwo = BluetoothPageState.calculateThreeCircleIntersection(
+        BluetoothPageState.beaconOneCoords[0], BluetoothPageState.beaconOneCoords[1],
+        BluetoothPageState.beaconNumberOneValueList[0],
+        BluetoothPageState.beaconTwoCoords[0], BluetoothPageState.beaconTwoCoords[1],
+        BluetoothPageState.beaconNumberTwoValueList[0]);
     print("One and Three");
-    print(BluetoothPageState.calculateThreeCircleIntersection(
-        BluetoothPageState.beaconOneCoords[0], BluetoothPageState.beaconOneCoords[1], BluetoothPageState.beaconNumberOneValueList[0],
-        BluetoothPageState.beaconThreeCoords[0], BluetoothPageState.beaconThreeCoords[1], BluetoothPageState.beaconNumberThreeValueList[0]));
+    oneAndThree = BluetoothPageState.calculateThreeCircleIntersection(
+        BluetoothPageState.beaconOneCoords[0], BluetoothPageState.beaconOneCoords[1],
+        BluetoothPageState.beaconNumberOneValueList[0],
+        BluetoothPageState.beaconThreeCoords[0], BluetoothPageState.beaconThreeCoords[1],
+        BluetoothPageState.beaconNumberThreeValueList[0]);
     print("Three and Two");
-    print(BluetoothPageState.calculateThreeCircleIntersection(
-        BluetoothPageState.beaconThreeCoords[0], BluetoothPageState.beaconThreeCoords[1], BluetoothPageState.beaconNumberThreeValueList[0],
-        BluetoothPageState.beaconTwoCoords[0], BluetoothPageState.beaconTwoCoords[1], BluetoothPageState.beaconNumberTwoValueList[0]));
+    twoAndThree = BluetoothPageState.calculateThreeCircleIntersection(
+        BluetoothPageState.beaconThreeCoords[0], BluetoothPageState.beaconThreeCoords[1],
+        BluetoothPageState.beaconNumberThreeValueList[0],
+        BluetoothPageState.beaconTwoCoords[0], BluetoothPageState.beaconTwoCoords[1],
+        BluetoothPageState.beaconNumberTwoValueList[0]);
+
+    if(oneAndTwo.toString().contains("false") || oneAndThree.toString().contains("false") || twoAndThree.toString().contains("false")){
+      print("ONE IS FALSE");
+      return;
+    }
+    else{
+        print("in the setter");
+        APIManager.oneAndTwoX = xSetter(oneAndTwo);
+        APIManager.oneAndTwoY = ySetter(oneAndTwo);
+        APIManager.oneAndThreeX = xSetter(oneAndThree);
+        APIManager.oneAndThreeY = ySetter(oneAndThree);
+        APIManager.twoAndThreeX = xSetter(twoAndThree);
+        APIManager.twoAndThreeY = ySetter(twoAndThree);
+
+        currentPosition[0]=((double.parse(APIManager.oneAndTwoX)+double.parse(APIManager.oneAndThreeX)+double.parse(APIManager.twoAndThreeX))/3);
+        currentPosition[1]=((double.parse(APIManager.oneAndTwoY)+double.parse(APIManager.oneAndThreeY)+double.parse(APIManager.twoAndThreeY))/3);
+        if(APIManager.position.isEmpty)
+          {
+            APIManager.position.add(currentPosition[0]);
+            APIManager.position.add(currentPosition[1]);
+            APIManager.locationSubmission(APIManager.position[0], APIManager.position[1]);
+          }
+        if((max(currentPosition[0],APIManager.position[0])-min(currentPosition[0],APIManager.position[0]) > 1)||
+            (max(currentPosition[1],APIManager.position[1])-min(currentPosition[1],APIManager.position[1]))>1){
+          APIManager.position[0] = currentPosition[0];
+          APIManager.position[1] = currentPosition[1];
+          APIManager.locationSubmission(APIManager.position[0], APIManager.position[1]);
+        }
+        print("****************************************");
+        print("****************************************");
+        print("****************************************");
+        print(currentPosition);
+        print("****************************************");
+        print("****************************************");
+
+
+    }
+
   }
+
+  static xSetter(method) {
+      print(method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[0].replaceAll("-", ""));
+      var x = method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[0].replaceAll("-", "").substring(0,5);
+      return(x);
+  }
+  static ySetter(method) {
+    print(method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[1].replaceAll("-", ""));
+    var y = method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[1].replaceAll("-", "").substring(0,5);
+    return(y);
+  }
+
   ///Tests if the user's bluetooth is on and will tell the user if it is not, connects into beaconScan
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
@@ -497,6 +398,7 @@ class BluetoothPageState extends State<BluetoothPage> {
       return;
     });
   }
+
 
 
 }

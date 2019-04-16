@@ -116,7 +116,7 @@ class LoginState extends State<LoginForm> {
     APIManager.login(username, password).then((res) {
       print(res.body);
       APIManager.parseLoginResponse(res);
-      if (APIManager.SESSION_ID == "104,") {
+      if (APIManager.SESSION_ID == "104") {
         AppResources.showErrorDialog(MODULE_NAME, "ERROR, \nWrong username. Perhaps a misspelling or capitalized letter?", context);
         APIManager.logout();
         setState(() {
@@ -124,7 +124,7 @@ class LoginState extends State<LoginForm> {
         });
         return;
       }
-      if (APIManager.SESSION_ID == "105,") {
+      if (APIManager.SESSION_ID == "105") {
         AppResources.showErrorDialog(MODULE_NAME, "ERROR, wrong password", context);
         APIManager.logout();
         setState(() {
@@ -132,6 +132,8 @@ class LoginState extends State<LoginForm> {
         });
         return;}
       if(APIManager.SESSION_ID != null){
+        APIManager.bluetoothActivated = false;
+        APIManager.bluetoothStatus= "Scanning OFF";
         Navigator.push(context, MaterialPageRoute(builder: (context) => StudentMainView()));
         setState(() {
           isReady = true;

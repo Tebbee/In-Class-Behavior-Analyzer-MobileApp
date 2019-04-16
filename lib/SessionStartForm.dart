@@ -42,15 +42,14 @@ class SessionStartPageState extends State<SessionStartPage> {
   String beaconOne = "88:3F:4A:E5:F6:E2";
   String beaconTwo = "88:3F:4A:E5:FA:7C";
   String beaconThree = "88:3F:4A:E5:FD:C5";
+  int stopper = 0;
 
   ///Tests if the users bluetooth is on
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
+      print(res.toString());
       if(res.toString() == 'true'){
-        if (beaconScan()!=false){
-          BluetoothPageState.test();
-        }
-
+        beaconScan();
       }
     else
       setState(() {
@@ -99,9 +98,13 @@ class SessionStartPageState extends State<SessionStartPage> {
           if (beaconOneRssiValue < 0){
             if(beaconTwoRssiValue < 0){
               if (beaconThreeRssiValue < 0){
+                if(stopper ==0){
+                  BluetoothPageState.test();
+                  stopper++;
+                  APIManager.scanAttempts = 0;
+                }
                 setState(() {
                   setStateReady();
-                  return true;
                 });
               }
               if(beaconThreeRssiValue == 0){
@@ -110,7 +113,6 @@ class SessionStartPageState extends State<SessionStartPage> {
                 AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Three wasnt reached. Please try again", context);
                 setStateReady();
                 setBluetoothScanOff();
-                return false;
               }
             }
             if(beaconTwoRssiValue == 0){
@@ -119,7 +121,6 @@ class SessionStartPageState extends State<SessionStartPage> {
               AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon Two wasnt reached. Please try again", context);
               setStateReady();
               setBluetoothScanOff();
-              return false;
             }
           }
           if(beaconOneRssiValue == 0){
@@ -128,22 +129,18 @@ class SessionStartPageState extends State<SessionStartPage> {
             AppResources.showErrorDialog(MODULE_NAME, "ERROR, Beacon One wasnt reached. Please try again", context);
             setStateReady();
             setBluetoothScanOff();
-            return false;
-
           }
           if (APIManager.scanAttempts == 5){
+            APIManager.scanAttempts++;
             setStateReady();
             AppResources.showErrorDialog(MODULE_NAME, "ERROR, A beacon wasn't reached after multiple attempts. Please notify an administrator. You may close the app.", context);
-            setStateReady();
             setBluetoothScanOff();
-            return false;
           }
           else{
             setStateReady();
-            return false;
           }
       });
-      });
+    });
   }
 
   void setBluetoothScanOff() {
@@ -166,6 +163,14 @@ class SessionStartPageState extends State<SessionStartPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            new Container(
+              alignment: Alignment.topLeft,
+              child: new IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: (){
+                    Navigator.pop(context);}
+              ),
+            ),
             new Text("The beacons are being tested for. \nPlease be patient!",
               style: new TextStyle(color: AppResources.buttonBackColor,fontStyle: FontStyle.italic,fontSize: 25.0,),
               softWrap: true,
@@ -207,26 +212,31 @@ class SessionStartPageState extends State<SessionStartPage> {
             new RaisedButton(
               child: new Text(APIManager.bluetoothStatus,style: TextStyle(fontSize: 30.0),),
               textColor: AppResources.buttonTextColor,
-              color: APIManager.bluetoothActivated ? AppResources.buttonBackColor : Colors.green,
+              color: APIManager.bluetoothActivated ? Colors.green:AppResources.buttonBackColor,
               onPressed: buttonLabelChanger,
 
             ),
           ]
     ));
   }
+
   buttonLabelChanger(){
-    if(APIManager.bluetoothActivated == true){
+    if(APIManager.bluetoothActivated == false){
       setState(() {
-        APIManager.bluetoothActivated = !APIManager.bluetoothActivated;
+        stopper = 0;
+        APIManager.bluetoothActivated = true;
         APIManager.bluetoothStatus = "Scanning ON";
       });
       flutterBlueAvailabilityTest();
       return;}
 
-    if(APIManager.bluetoothActivated == false){
+    if(APIManager.bluetoothActivated == true){
       setState(() {
-        APIManager.bluetoothActivated = !APIManager.bluetoothActivated;
+        APIManager.bluetoothActivated = false;
         APIManager.bluetoothStatus = "Scanning OFF";
+        bluetoothScan.cancel();
+        stopper = 0;
+        isReady=true;
         });
       return;
     }

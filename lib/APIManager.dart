@@ -26,11 +26,21 @@ class APIManager {
   static final String LOG_NAME = "API_Manager";
   static String SESSION_ID = "";
   static String CLASS_ID = "";
-  static bool bluetoothActivated = true;
-  static String bluetoothStatus = "Scanning On";
+  static bool bluetoothActivated = false;
+  static String bluetoothStatus = "Scanning OFF";
   static final String BASE_URL = "http://icba.us-east-2.elasticbeanstalk.com/api/";
   static bool openSurvey = false;
   static int scanAttempts = 0;
+  static String oneAndTwoX;
+  static String oneAndTwoY;
+  static String oneAndThreeX;
+  static String oneAndThreeY;
+  static String twoAndThreeX;
+  static String twoAndThreeY;
+  static List<double> position = [];
+
+
+
 
   ///Description: Tests if the user has a SESSION_ID, sending a true/false value to where it is called.
   ///Location of its use: LoginForm, RegistrationForm, SessionStartForm, ForgotPasswordForm,
@@ -43,8 +53,13 @@ class APIManager {
   ///Location of its use: LoginForm
   static void parseLoginResponse(http.Response res) {
     var jsonObj = json.decode(res.body);
-    SESSION_ID = jsonObj['data']['session_id'].toString();
-    print(SESSION_ID);
+    if(jsonObj.toString().contains("success")){
+      SESSION_ID = jsonObj['data']['session_id'].toString();
+    }
+    if (jsonObj.toString().contains("error")){
+      SESSION_ID = jsonObj['info']['error_id'].toString();
+    }
+
   }
 
   ///Description: Sends the login request to the server to create the SESSION_ID

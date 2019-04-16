@@ -1,3 +1,5 @@
+import 'package:icbaversion2/SurveySubmissionForm.dart';
+
 import 'AppConsts.dart';
 import 'APIManager.dart';
 import 'package:flutter/material.dart';
@@ -189,7 +191,7 @@ class StudentSurveyState extends State<StudentSurveyPage> {
     APIManager.surveySubmission(formValues).then((response) {
       var jsonObj = json.decode(response.body);
       if (jsonObj['status'] == "success") {
-        // Navigate to another page
+        Navigator.push(context,new MaterialPageRoute(builder: (context) => SurveySubmissionForm()));
       } else {
         print(jsonObj);
       }
