@@ -103,7 +103,7 @@ class SessionStartPageState extends State<SessionStartPage> {
             if(beaconTwoRssiValue < 0){
               if (beaconThreeRssiValue < 0){
                 if(stopper ==0){
-                  BluetoothPageState.test();
+                  BluetoothPageState.recordPositionTimer();
                   stopper++;
                   APIManager.scanAttempts = 0;
                 }
@@ -246,17 +246,6 @@ class SessionStartPageState extends State<SessionStartPage> {
   }
 
   buttonLabelChanger(){
-    if(APIManager.bluetoothActivated == false){
-      setState(() {
-        stopper = 0;
-        APIManager.bluetoothActivated = true;
-        APIManager.bluetoothStatus = "Scanning ON";
-       
-      });
-      flutterBlueAvailabilityTest();
-      //BluetoothPageState.Timout();
-      return;}
-
     if(APIManager.bluetoothActivated == true){
       setState(() {
         APIManager.bluetoothActivated = false;
@@ -265,10 +254,30 @@ class SessionStartPageState extends State<SessionStartPage> {
         sessionEnd();
         stopper = 0;
         isReady=true;
-        });
+      });
+      return;
+    }
+    if(classItems.contains(currentClassSelected)){
+    if(APIManager.bluetoothActivated == false){
+      setState(() {
+        stopper = 0;
+        APIManager.bluetoothActivated = true;
+        APIManager.bluetoothStatus = "Scanning ON";
+
+
+      });
+      flutterBlueAvailabilityTest();
+      BluetoothPageState.Timout();
+      return;}
+
+    }
+    else{
+      AppResources.showErrorDialog(MODULE_NAME,
+          "ERROR You need to select a class!", context);
       return;
     }
   }
+
   refresh() {
     classItems.clear();
     classIDs.clear();
@@ -302,7 +311,17 @@ class SessionStartPageState extends State<SessionStartPage> {
   }
 
   void sessionEnd() {
+    int x = 0;
+    for(var item in classItems){
+      if (item == currentClassSelected){
+        APIManager.CLASS_ID = classIDs[x];
+      }
+      x++;
+    }
+
+
     APIManager.endSession().then((res){
       print(res.body);});
+    print(APIManager.SESSION_ID);
     }
 }

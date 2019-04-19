@@ -45,9 +45,9 @@ class BluetoothPageState extends State<BluetoothPage> {
   static Object get beaconOne => "88:3F:4A:E5:F6:E2";
   static Object get beaconTwo => "88:3F:4A:E5:FA:7C";
   static Object get beaconThree => "88:3F:4A:E5:FD:C5";
-  static var beaconOneCoords = [2.0,0.0];
-  static var beaconTwoCoords = [0.0,0.0];
-  static var beaconThreeCoords = [0.0,4.0];
+  static var beaconOneCoords = [0.0,0.0];
+  static var beaconTwoCoords = [3.0,0.0];
+  static var beaconThreeCoords = [3.0,2.0];
 
   static double beaconRssiValue;
   static double beaconRssiDistance;
@@ -239,6 +239,10 @@ class BluetoothPageState extends State<BluetoothPage> {
             timer.cancel();
             APIManager.bluetoothStatus = "Scanning OFF";
             APIManager.bluetoothActivated = false;
+            APIManager.endSession().then((res){
+              print(res.body);});
+
+
             return;
           }
           if (timeLeft >0) {
@@ -249,9 +253,9 @@ class BluetoothPageState extends State<BluetoothPage> {
           //bluetoothScan.cancel();
         });}
 
-  static test(){
+  static recordPositionTimer(){
       Timer timer;
-      int timeLeft = 60; //300 = 5 min
+      int timeLeft = 30; //300 = 5 min
       const oneSec = const Duration(seconds: 1);
       timer = new Timer.periodic(
           oneSec,
@@ -273,7 +277,7 @@ class BluetoothPageState extends State<BluetoothPage> {
             }
             if(timeLeft ==0){
               timer.cancel();
-              test();
+              recordPositionTimer();
               return;
             }
             if (timeLeft >0) {
@@ -395,7 +399,7 @@ class BluetoothPageState extends State<BluetoothPage> {
   flutterBlueTestOn(){
     flutterBlue.isOn.then((res){
       if(res.toString() == 'true'){
-        BluetoothPageState.test();
+        BluetoothPageState.recordPositionTimer();
       }
       else
         setState(() {
