@@ -228,11 +228,30 @@ class BluetoothPageState extends State<BluetoothPage> {
     )
     ));
     }
-
+  static Timout(){
+    Timer timer;
+    int timeLeft = 12000; //300 = 5 min 6000 = 1 hr
+    const oneSec = const Duration(seconds: 1);
+    timer = new Timer.periodic(
+        oneSec,
+            (Timer timer) {
+          if(timeLeft ==0){
+            timer.cancel();
+            APIManager.bluetoothStatus = "Scanning OFF";
+            APIManager.bluetoothActivated = false;
+            return;
+          }
+          if (timeLeft >0) {
+            timeLeft = timeLeft - 1;
+          }
+          if(APIManager.bluetoothActivated==false)
+            timer.cancel();
+          //bluetoothScan.cancel();
+        });}
 
   static test(){
       Timer timer;
-      int timeLeft = 15;
+      int timeLeft = 60; //300 = 5 min
       const oneSec = const Duration(seconds: 1);
       timer = new Timer.periodic(
           oneSec,
@@ -364,13 +383,11 @@ class BluetoothPageState extends State<BluetoothPage> {
   }
 
   static xSetter(method) {
-      print(method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[0].replaceAll("-", ""));
-      var x = method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[0].replaceAll("-", "").substring(0,5);
+      var x = method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[0].replaceAll("-", "").substring(0,2);
       return(x);
   }
   static ySetter(method) {
-    print(method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[1].replaceAll("-", ""));
-    var y = method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[1].replaceAll("-", "").substring(0,5);
+    var y = method.toString().split(" ")[3].replaceAll(")", "").replaceAll("(", "").split(",")[1].replaceAll("-", "").substring(0,2);
     return(y);
   }
 

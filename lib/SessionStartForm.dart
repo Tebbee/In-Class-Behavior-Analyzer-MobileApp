@@ -43,6 +43,9 @@ class SessionStartPageState extends State<SessionStartPage> {
   String beaconTwo = "88:3F:4A:E5:FA:7C";
   String beaconThree = "88:3F:4A:E5:FD:C5";
   int stopper = 0;
+  var classItems = ["None"];
+  var classIDs = ["None"];
+  var currentClassSelected;
 
   ///Tests if the users bluetooth is on
   flutterBlueTestOn(){
@@ -74,6 +77,7 @@ class SessionStartPageState extends State<SessionStartPage> {
   setStateReady(){
     setState(() {
       isReady = true;
+
     });
   }
 
@@ -152,6 +156,7 @@ class SessionStartPageState extends State<SessionStartPage> {
 
   @override
   initState() {
+    refresh();
     super.initState();
   }
 
@@ -208,6 +213,26 @@ class SessionStartPageState extends State<SessionStartPage> {
                 style: new TextStyle(fontSize: 25.0, color: AppResources.labelTextColor,),
               ),
             ),
+            Container (
+                padding: EdgeInsets.all(20.0),
+                child: DropdownButton<String>(
+                  //value : null,
+                  items: classItems.map((String dropDownStringItem){
+                    return DropdownMenuItem<String>(
+                      value: dropDownStringItem,
+                      child: Text(dropDownStringItem),
+                    );
+                  }).toList(),
+                  isExpanded: true,
+                  onChanged: (String newValueSelected){
+                    setState((){
+                      currentClassSelected = newValueSelected;
+                    });
+                  },
+                  value : currentClassSelected,
+                  iconSize: 50,
+                )
+            ),
 
             new RaisedButton(
               child: new Text(APIManager.bluetoothStatus,style: TextStyle(fontSize: 30.0),),
@@ -226,8 +251,10 @@ class SessionStartPageState extends State<SessionStartPage> {
         stopper = 0;
         APIManager.bluetoothActivated = true;
         APIManager.bluetoothStatus = "Scanning ON";
+       
       });
       flutterBlueAvailabilityTest();
+      //BluetoothPageState.Timout();
       return;}
 
     if(APIManager.bluetoothActivated == true){
@@ -235,11 +262,47 @@ class SessionStartPageState extends State<SessionStartPage> {
         APIManager.bluetoothActivated = false;
         APIManager.bluetoothStatus = "Scanning OFF";
         bluetoothScan.cancel();
+        sessionEnd();
         stopper = 0;
         isReady=true;
         });
       return;
     }
   }
+  refresh() {
+    classItems.clear();
+    classIDs.clear();
+    APIManager.classRequest().then((response) {
+      print(response.body);
+      if (response.body
+          .split("{")
+          .length > 2) {
+        int counter = 0;
+        for (var section in response.body.split("{")) {
+          if (counter >= 2) {
+            classIDs.add(section.split(",")[0].split(":")[1]
+                .replaceAll('"', "")
+                .substring(1));
+            classItems.add(section.split(",")[1].split(":")[1]
+                .replaceAll('"', "")
+                .substring(1));
+          }
+          counter++;
+        }
+      }
+      if (response.body
+          .split("{")
+          .length <= 2) {
+        AppResources.showErrorDialog(MODULE_NAME,
+            "ERROR, \nYou are not in any classes.\nContact administration",
+            context);
+      }
+      setStateReady();
+    });
+  }
 
+  void sessionEnd() {
+    APIManager.endSession().then((res){
+      print(res.body);});
+    }
 }

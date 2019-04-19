@@ -40,8 +40,6 @@ class APIManager {
   static List<double> position = [];
 
 
-
-
   ///Description: Tests if the user has a SESSION_ID, sending a true/false value to where it is called.
   ///Location of its use: LoginForm, RegistrationForm, SessionStartForm, ForgotPasswordForm,
   static bool isUserLoggedIn() {
@@ -262,6 +260,11 @@ class APIManager {
     return await http.post(BASE_URL+ "survey/open_surveys?session_id="+SESSION_ID);
   }
 
+  static Future<http.Response> endSession() async{
+    print(LOG_NAME + ': Ending Session, creating survey request...');
+    return await http.post(BASE_URL+ "survey/generate?session_id="+SESSION_ID,
+    body: {'class':CLASS_ID});
+  }
 
 }
 
