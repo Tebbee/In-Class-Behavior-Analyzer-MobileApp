@@ -46,8 +46,8 @@ class BluetoothPageState extends State<BluetoothPage> {
   static Object get beaconTwo => "88:3F:4A:E5:FA:7C";
   static Object get beaconThree => "88:3F:4A:E5:FD:C5";
   static var beaconOneCoords = [0.0,0.0];
-  static var beaconTwoCoords = [3.0,0.0];
-  static var beaconThreeCoords = [3.0,2.0];
+  static var beaconTwoCoords = [2.7,7.6];
+  static var beaconThreeCoords = [6.1,0.0];
 
   static double beaconRssiValue;
   static double beaconRssiDistance;
